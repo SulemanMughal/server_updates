@@ -1,0 +1,85 @@
+{%  extends 'master_app/base.html' %}
+{% load static %}
+{% block title %} Cyber Range {% endblock %}
+
+{% block extra_css %}
+    <!-- Notification CSS -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/notification/noty.css' %}" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+     
+{% endblock extra_css %}
+{% block content %}
+<main id="main" class="main">
+    <section class="section dashboard">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6">
+                <div class="card shadow-none" >
+                    <div class="card-header  border-0">
+                        <h5 class="card-title fs-4 text-center">Login</h5>
+                      </div>
+                    <div class="card-body">
+                        <form class="row g-3 needs-validation" novalidate  action="{% url 'user-login-ajax' %}"  id="login_form" method="POST"> 
+                            {% csrf_token %}
+                            <div class="col-md-12">
+                                <div class="form-floating">
+                                  <input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="Email" autofocus autocapitalize="none" autocomplete="off" maxlength="255" required autofocus="on" tabindex="1">
+                                  <label for="id_username">Email address</label>
+                                  <div class="invalid-feedback">
+                                    Please choose a valid email address.
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-floating">
+                                  <input type="password" name="password" class="form-control" autocomplete="current-password" required id="id_password" placeholder="Password" tabindex="2">
+                                  <label for="id_password">Password</label>
+                                  <div class="invalid-feedback">
+                                    Please provide password.
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="text-center">
+                                <input type="hidden" name="next" value="{{ request.path }}" />
+                                <button type="submit" class="btn btn-primary" id="login_submit_btn" tabindex="3">Login</button>
+                              </div>
+                            
+                            {% comment %}
+                            <div class="">
+                              <div class="row justify-content-center text-center">
+                                  <div class="col">
+                                    <p class="card-text">Don't have an account <a href="#!" target="_self" class="card-link text-watercourse text-decoration-none" tabindex="4">Register</a>
+                                    </p>
+                                  </div>
+                              </div>
+                            </div>
+                            <div class="">
+                              <div class="row justify-content-center text-center">
+                                  <div class="col">
+                                    <a href="#!" target="_self" class="card-link text-watercourse text-decoration-none" tabindex="5">Forgot Pasword ? </a>
+                                  </div>
+                              </div>
+                            </div>
+                            {% endcomment %}
+                          </form>
+                    </div>
+                  </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+{% endblock %}
+{% block extra_js %}
+
+      <!-- Bounch js -->
+      <script src="{% static 'assets/vendor/notification/bounce.js' %}"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+      
+      <!-- mo.js -->
+      <script src="{% static 'assets/vendor/notification/mo.js' %}" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+      
+      <!-- Notification js -->
+      <script src="{% static 'assets/vendor/notification/noty.js' %}"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<script type="text/javascript" src="{% static 'assets/js/login.js' %}"> </script>
+{% endblock  %}

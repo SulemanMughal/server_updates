@@ -1,0 +1,404 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+{{ block.super }}
+{{ form.media }}
+
+    <!-- Notification CSS -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/notification/noty.css' %}" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+{% endblock %}
+
+{% block bodyclass %}{{ block.super }} login{% endblock %}
+
+{% block usertools %}{% endblock %}
+
+{% block nav-global %}
+{% endblock %}
+
+{% block nav-sidebar %}{% endblock %}
+
+{% block content_title %}{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+{% block sidebar %}{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center" >
+  <div class="col-lg-6">
+    <div class="card shadow-none">
+      <div class="card-header border-0">
+        <h5 class="card-title fs-4 text-center">Developer Login</h5>
+      </div>
+      <div class="card-body">
+        <form class="row g-3 needs-validation" novalidate action="{{ app_path }}" method="POST" id="login-form">
+          {% csrf_token %}
+          <div class="col-md-12">
+            <div class="form-floating">
+              <input type="text" name="username" class="form-control" id="id_username" placeholder="Email ddress" autofocus autocapitalize="none" autocomplete="off" maxlength="255" required>
+              <label for="id_username">Email address</label>
+              <div class="invalid-feedback">
+                Please choose a valid email address.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-floating">
+              <input type="password" name="password" class="form-control" autocomplete="current-password" required id="id_password" placeholder="Password">
+              <label for="id_password">Password</label>
+              <div class="invalid-feedback">
+                Please provide password.
+              </div>
+            </div>
+          </div>
+          <input type="hidden" name="next" value="{{ next }}">
+          <div class="text-center">
+            <button type="submit" class="btn btn-primary" >Login</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    </div>
+    </div>
+
+
+    
+
+    
+{% endblock %}
+
+{% block extrascript %}
+
+      <!-- Bounch js -->
+      <script src="{% static 'assets/vendor/notification/bounce.js' %}"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+      
+      <!-- mo.js -->
+      <script src="{% static 'assets/vendor/notification/mo.js' %}" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+      
+      <!-- Notification js -->
+      <script src="{% static 'assets/vendor/notification/noty.js' %}"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+      {% if form.errors and not form.non_field_errors %}
+      
+<script>
+  new Noty({
+  //  alert, success, error, warning, info
+  timeout: 5000 ,
+  type : "error",
+  theme: 'sunset',
+  // container : ".noty_layout",
+  force : false,
+  // layout: 'bottomLeft',
+  text: '{% if form.errors.items|length == 1 %}{% translate "Please correct the error below." %}{% else %}{% translate "Please correct the errors below." %}{% endif %}',
+  animation: {
+  open: function (promise) {
+      var n = this;
+      var Timeline = new mojs.Timeline();
+      var body = new mojs.Html({
+          el        : n.barDom,
+          x         : {500: 0, delay: 0, duration: 500, easing: 'elastic.out'},
+          isForce3d : true,
+          onComplete: function () {
+              promise(function(resolve) {
+                  resolve();
+              })
+          }
+      });
+
+      var parent = new mojs.Shape({
+          parent: n.barDom,
+          width      : 200,
+          height     : n.barDom.getBoundingClientRect().height,
+          radius     : 0,
+          x          : {[150]: -150},
+          duration   : 1.2 * 500,
+          isShowStart: true
+      });
+
+      n.barDom.style['overflow'] = 'visible';
+      parent.el.style['overflow'] = 'hidden';
+
+      var burst = new mojs.Burst({
+          parent  : parent.el,
+          count   : 10,
+          top     : n.barDom.getBoundingClientRect().height + 75,
+          degree  : 90,
+          radius  : 75,
+          angle   : {[-90]: 40},
+          children: {
+              fill     : '#EBD761',
+              delay    : 'stagger(500, -50)',
+              radius   : 'rand(8, 25)',
+              direction: -1,
+              isSwirl  : true
+          }
+      });
+
+      var fadeBurst = new mojs.Burst({
+          parent  : parent.el,
+          count   : 2,
+          degree  : 0,
+          angle   : 75,
+          radius  : {0: 100},
+          top     : '90%',
+          children: {
+              fill     : '#EBD761',
+              pathScale: [.65, 1],
+              radius   : 'rand(12, 15)',
+              direction: [-1, 1],
+              delay    : .8 * 500,
+              isSwirl  : true
+          }
+      });
+
+      Timeline.add(body, burst, fadeBurst, parent);
+      Timeline.play();
+  },
+  close: function (promise) {
+      var n = this;
+      new mojs.Html({
+          el        : n.barDom,
+          x         : {0: 500, delay: 10, duration: 500, easing: 'cubic.out'},
+          skewY     : {0: 10, delay: 10, duration: 500, easing: 'cubic.out'},
+          isForce3d : true,
+          onComplete: function () {
+              promise(function(resolve) {
+                  resolve();
+              })
+          }
+      }).play();
+  }
+  }
+}).show();    
+</script>
+      {% endif %}
+
+
+      {% if form.non_field_errors %}
+      {% for error in form.non_field_errors %}
+          <script>
+              new Noty({
+              //  alert, success, error, warning, info
+              timeout: 5000 ,
+              type : "error",
+              theme: 'sunset',
+              // container : ".noty_layout",
+              force : false,
+              // layout: 'bottomLeft',
+              text: '{{ error }}',
+              animation: {
+              open: function (promise) {
+                  var n = this;
+                  var Timeline = new mojs.Timeline();
+                  var body = new mojs.Html({
+                      el        : n.barDom,
+                      x         : {500: 0, delay: 0, duration: 500, easing: 'elastic.out'},
+                      isForce3d : true,
+                      onComplete: function () {
+                          promise(function(resolve) {
+                              resolve();
+                          })
+                      }
+                  });
+      
+                  var parent = new mojs.Shape({
+                      parent: n.barDom,
+                      width      : 200,
+                      height     : n.barDom.getBoundingClientRect().height,
+                      radius     : 0,
+                      x          : {[150]: -150},
+                      duration   : 1.2 * 500,
+                      isShowStart: true
+                  });
+      
+                  n.barDom.style['overflow'] = 'visible';
+                  parent.el.style['overflow'] = 'hidden';
+      
+                  var burst = new mojs.Burst({
+                      parent  : parent.el,
+                      count   : 10,
+                      top     : n.barDom.getBoundingClientRect().height + 75,
+                      degree  : 90,
+                      radius  : 75,
+                      angle   : {[-90]: 40},
+                      children: {
+                          fill     : '#EBD761',
+                          delay    : 'stagger(500, -50)',
+                          radius   : 'rand(8, 25)',
+                          direction: -1,
+                          isSwirl  : true
+                      }
+                  });
+      
+                  var fadeBurst = new mojs.Burst({
+                      parent  : parent.el,
+                      count   : 2,
+                      degree  : 0,
+                      angle   : 75,
+                      radius  : {0: 100},
+                      top     : '90%',
+                      children: {
+                          fill     : '#EBD761',
+                          pathScale: [.65, 1],
+                          radius   : 'rand(12, 15)',
+                          direction: [-1, 1],
+                          delay    : .8 * 500,
+                          isSwirl  : true
+                      }
+                  });
+      
+                  Timeline.add(body, burst, fadeBurst, parent);
+                  Timeline.play();
+              },
+              close: function (promise) {
+                  var n = this;
+                  new mojs.Html({
+                      el        : n.barDom,
+                      x         : {0: 500, delay: 10, duration: 500, easing: 'cubic.out'},
+                      skewY     : {0: 10, delay: 10, duration: 500, easing: 'cubic.out'},
+                      isForce3d : true,
+                      onComplete: function () {
+                          promise(function(resolve) {
+                              resolve();
+                          })
+                      }
+                  }).play();
+              }
+              }
+          }).show();    
+          </script>
+      {% endfor %}
+      {% endif %}
+
+
+      
+{% if user.is_authenticated %}
+
+
+<script>
+  new Noty({
+  //  alert, success, error, warning, info
+  timeout: 5000 ,
+  type : "error",
+  theme: 'sunset',
+  // container : ".noty_layout",
+  force : false,
+  // layout: 'bottomLeft',
+  text: 'You are authenticated as {{ username }}, but are not authorized to access this page. Would you like to login to a different account?',
+  animation: {
+  open: function (promise) {
+      var n = this;
+      var Timeline = new mojs.Timeline();
+      var body = new mojs.Html({
+          el        : n.barDom,
+          x         : {500: 0, delay: 0, duration: 500, easing: 'elastic.out'},
+          isForce3d : true,
+          onComplete: function () {
+              promise(function(resolve) {
+                  resolve();
+              })
+          }
+      });
+
+      var parent = new mojs.Shape({
+          parent: n.barDom,
+          width      : 200,
+          height     : n.barDom.getBoundingClientRect().height,
+          radius     : 0,
+          x          : {[150]: -150},
+          duration   : 1.2 * 500,
+          isShowStart: true
+      });
+
+      n.barDom.style['overflow'] = 'visible';
+      parent.el.style['overflow'] = 'hidden';
+
+      var burst = new mojs.Burst({
+          parent  : parent.el,
+          count   : 10,
+          top     : n.barDom.getBoundingClientRect().height + 75,
+          degree  : 90,
+          radius  : 75,
+          angle   : {[-90]: 40},
+          children: {
+              fill     : '#EBD761',
+              delay    : 'stagger(500, -50)',
+              radius   : 'rand(8, 25)',
+              direction: -1,
+              isSwirl  : true
+          }
+      });
+
+      var fadeBurst = new mojs.Burst({
+          parent  : parent.el,
+          count   : 2,
+          degree  : 0,
+          angle   : 75,
+          radius  : {0: 100},
+          top     : '90%',
+          children: {
+              fill     : '#EBD761',
+              pathScale: [.65, 1],
+              radius   : 'rand(12, 15)',
+              direction: [-1, 1],
+              delay    : .8 * 500,
+              isSwirl  : true
+          }
+      });
+
+      Timeline.add(body, burst, fadeBurst, parent);
+      Timeline.play();
+  },
+  close: function (promise) {
+      var n = this;
+      new mojs.Html({
+          el        : n.barDom,
+          x         : {0: 500, delay: 10, duration: 500, easing: 'cubic.out'},
+          skewY     : {0: 10, delay: 10, duration: 500, easing: 'cubic.out'},
+          isForce3d : true,
+          onComplete: function () {
+              promise(function(resolve) {
+                  resolve();
+              })
+          }
+      }).play();
+  }
+  }
+}).show();    
+</script>
+
+{% endif %}
+
+
+{% endblock %}
+
+
+
+{% comment %}
+<div id="content-main">
+
+  <form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
+    <div class="form-row">
+      {{ form.username.errors }}
+      {{ form.username.label_tag }} {{ form.username }}
+    </div>
+    <div class="form-row">
+      {{ form.password.errors }}
+      {{ form.password.label_tag }} {{ form.password }}
+      <input type="hidden" name="next" value="{{ next }}">
+    </div>
+    {% url 'admin_password_reset' as password_reset_url %}
+    {% if password_reset_url %}
+    <div class="password-reset-link">
+      <a href="{{ password_reset_url }}">{% translate 'Forgotten your password or username?' %}</a>
+    </div>
+    {% endif %}
+    <div class="submit-row">
+      <input type="submit" value="{% translate 'Log in' %}">
+    </div>
+  </form>
+  </div>
+{% endcomment %}

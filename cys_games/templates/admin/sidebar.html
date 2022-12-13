@@ -1,0 +1,102 @@
+
+<!-- ======= Sidebar ======= -->
+<aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+  
+
+      {% if request.user.is_authenticated %}
+
+      <li class="nav-heading fs-6">Welcome, <strong>{% firstof user.get_short_name user.get_username %}</strong></li>
+  
+  
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'admin:index' %}">
+          <i class="bi bi-grid"></i>
+          <span>Admin</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+  
+      {% endif %}
+
+      <li class="nav-heading">Pages</li> 
+  
+
+      {% if site_url %}
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{{ site_url }}">
+          <i class="bi bi-file-earmark"></i>
+          <span>View Site</span>
+        </a>
+      </li><!-- End View Site Nav -->
+      
+      {% endif %}
+
+
+      {% comment %}
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#!">
+          <i class="bi bi-file-earmark"></i>
+          <span>Recent Actions</span>
+        </a>
+      </li><!-- End Recent Actions Nav -->
+  
+      {% endcomment %}
+
+
+      {% if user.has_usable_password %}
+      
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'admin:password_change' %}">
+          <i class="bi bi-file-earmark"></i>
+          <span>Change Password</span>
+        </a>
+      </li><!-- End Change Password Nav -->
+      
+        {% endif %}
+
+  
+      {% comment %}
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#!">
+          <i class="bi bi-file-earmark"></i>
+          <span>Dashboard</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+      {% endcomment %}
+  
+      
+
+
+      {% if request.user.is_authenticated %}
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'admin:logout' %}">
+          <i class="bi bi-file-earmark"></i>
+          <span>Logout</span>
+        </a>
+      </li><!-- End Logout Nav -->
+      
+
+      {% else %}
+      
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'admin:login' %}">
+          <i class="bi bi-file-earmark"></i>
+          <span>Login</span>
+        </a>
+      </li><!-- End Login Nav -->
+
+      {% endif %}
+
+      
+  
+      
+      
+  
+  
+  
+    </ul>
+  
+  </aside><!-- End Sidebar-->
+  

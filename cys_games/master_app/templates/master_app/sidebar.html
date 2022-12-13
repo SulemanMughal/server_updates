@@ -1,0 +1,158 @@
+
+<!-- ======= Sidebar ======= -->
+<aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+  
+      
+      {% if request.user.is_authenticated %}
+
+      {% if request.user.is_student %}
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'student-dasboard-url' %}">
+          <!-- <i class="bi bi-file-earmark"></i> -->
+          <!-- <i class="fa-regular fa-grid-horizontal me-2"></i> -->
+          <i class="bi bi-grid"></i>
+          <span>Dashboard</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+      <li class="nav-heading">Pages</li>
+  
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'student-profile-url' %}">
+          <i class="bi bi-person"></i>
+          <span>Profile</span>
+        </a>
+      </li><!-- End Profile Page Nav -->
+      {% elif request.user.is_instructor %}
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'instructor-dasboard-url' %}">
+          <!-- <i class="bi bi-file-earmark"></i> -->
+          <!-- <i class="fa-regular fa-grid-horizontal me-2"></i> -->
+          <i class="bi bi-grid"></i>
+          <span>Dashboard</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+      {% else %}
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#!">
+          <!-- <i class="bi bi-file-earmark"></i> -->
+          <!-- <i class="fa-regular fa-grid-horizontal me-2"></i> -->
+          <i class="bi bi-grid"></i>
+          <span>Dashboard</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+      {% endif %}
+      
+
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="{% url 'user-logout' %}">
+            <!-- <i class="bi bi-file-earmark"></i> -->
+            <i class="fa-solid fa-right-from-bracket me-2"></i>
+            <span>Logout</span>
+          </a>
+        </li><!-- End Logout Nav -->
+      
+      {% else %}
+    
+        
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="{% url 'user-login' %}">
+            <!-- <i class="bi bi-file-earmark"></i> -->
+            <i class="fa-solid fa-right-to-bracket me-2"></i>
+            <span>Login</span>
+          </a>
+        </li><!-- End Login Nav -->
+    
+      {% endif %}
+
+      {% comment %}
+      <li class="nav-heading fs-5">Welcome, <strong>User</strong></li>
+      <li class="nav-item">
+        <a class="nav-link " href="#!">
+          <i class="bi bi-grid"></i>
+          <span>Admin</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      
+  
+      <li class="nav-heading">Pages</li>
+  
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#!">
+          <i class="bi bi-person"></i>
+          <span>Profile</span>
+        </a>
+      </li><!-- End Profile Page Nav -->
+  
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#!">
+          <i class="bi bi-file-earmark"></i>
+          <span>Logs</span>
+        </a>
+      </li><!-- End Logs Nav -->
+  
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#!">
+          <i class="bi bi-file-earmark"></i>
+          <span>Docs</span>
+        </a>
+      </li><!-- End Docs Nav -->
+      
+      
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#!">
+          <i class="bi bi-file-earmark"></i>
+          <span>View Site</span>
+        </a>
+      </li><!-- End View Site Nav -->
+      
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#!">
+          <i class="bi bi-file-earmark"></i>
+          <span>Recent Actions</span>
+        </a>
+      </li><!-- End Recent Actions Nav -->
+  
+  
+      
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#!">
+          <i class="bi bi-file-earmark"></i>
+          <span>Change Password</span>
+        </a>
+      </li><!-- End Change Password Nav -->
+      
+  
+  
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#!">
+          <i class="bi bi-file-earmark"></i>
+          <span>Dashboard</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+  
+  
+      
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#!">
+          <i class="bi bi-file-earmark"></i>
+          <span>Logout</span>
+        </a>
+      </li><!-- End Logout Nav -->
+  
+      
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#!">
+          <i class="bi bi-file-earmark"></i>
+          <span>Login</span>
+        </a>
+      </li><!-- End Login Nav -->
+  
+      {% endcomment %}
+  
+    </ul>
+  
+  </aside><!-- End Sidebar-->
+  
