@@ -36,7 +36,7 @@
               </li>
               
             </ul>
-          </li><!-- End Components Nav -->
+          </li><!-- End Courses Nav -->
 
         
         <li class="nav-item">
@@ -45,16 +45,18 @@
           </a>
           <ul id="student-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
             <li>
+              <a href="{% url 'course-students-new-url' %}">
+                <i class="bi bi-circle"></i><span>Add New Student</span>
+              </a>
+            </li>
+            
+            <li>
               <a href="{% url 'students-all-url' %}">
                 <i class="bi bi-circle"></i><span>All Students</span>
               </a>
             </li>
 
-            <li>
-              <a href="{% url 'course-students-new-url' %}">
-                <i class="bi bi-circle"></i><span>Add New Student</span>
-              </a>
-            </li>
+            
             
             
           </ul>
@@ -63,14 +65,25 @@
 
         
         
+
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#!">
-            <!-- <i class="bi bi-file-earmark"></i> -->
-            <!-- <i class="fa-regular fa-grid-horizontal me-2"></i> -->
-            <i class="fas fa-server me-2"></i>
-            <span>Virtual Networks</span>
-            </a>
-        </li><!-- End Dashboard Nav -->
+          <a class="nav-link collapsed" data-bs-target="#networks-nav" data-bs-toggle="collapse" href="#">
+            <i class="fas fa-server me-2"></i><span>Virtual Networks</span><i class="bi bi-chevron-down ms-auto"></i>
+          </a>
+          <ul id="networks-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <li>
+              <a href="#!">
+                <i class="bi bi-circle"></i><span>Create New Network</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'instructor-virtual-network-url' %}">
+                <i class="bi bi-circle"></i><span>All Virtual Networks</span>
+              </a>
+            </li>
+            
+          </ul>
+        </li><!-- End Virtual Networks Nav -->
 
 
     

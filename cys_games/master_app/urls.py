@@ -33,7 +33,7 @@ urlpatterns = [
     path("instructor/profile", views.InsturctorProfile, name="instructor-profile-url"),
     
     # ? Instructor Virutal Networks
-    # path("instructor/virtaul-networks", views.InsturctorProfile, name="instructor-virtual-network-url"),
+    path("instructor/virtaul-networks", views.InstructorVirtualNetworkList, name="instructor-virtual-network-url"),
 
     # ? Instructor Courses List
     path("instructor/courses", views.CoursesList, name="courses-all-url"),

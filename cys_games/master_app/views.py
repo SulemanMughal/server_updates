@@ -246,7 +246,15 @@ def InstructorCourseDetails(request):
     return render(request, template_name, context)
 
 
-from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
+
+# TODO  :   Instructor Virutal Networks List
+@login_required
+@teacher_required
+def InstructorVirtualNetworkList(request):
+    template_name = 'master_app/instructor/virutal_netwroks.html'
+    context = {
+    }
+    return render(request, template_name, context)
 
 
 # TODO  :   Add New Students To A Course
