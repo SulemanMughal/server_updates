@@ -5,6 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">    
     
     {% include 'style.html' %}
+
+
+    <style>
+        textarea:focus, 
+textarea.form-control:focus, 
+input.form-control:focus, 
+input[type=text]:focus, 
+input[type=password]:focus, 
+input[type=email]:focus, 
+input[type=number]:focus, 
+[type=text].form-control:focus, 
+[type=password].form-control:focus, 
+[type=email].form-control:focus, 
+[type=tel].form-control:focus, 
+[contenteditable].form-control:focus,
+.was-validated .form-control:valid,
+.was-validated .form-control:invalid:focus {
+  box-shadow: inset 0 -1px 0 #ddd;
+}
+    </style>
     
     {% block extra_css %}
     {% endblock extra_css %}
@@ -19,12 +39,20 @@
 
 
     {% block sidebar %}
-        {% include 'sidebar.html' %}
+    {% if request.user.is_authenticated  %}
+        {% if request.user.is_instructor %}
+            {% include 'master_app/instructor/sidebar.html' %}
+        {% elif request.user.is_student %}
+            {% include 'master_app/student/sidebar.html' %}
+        {% else %}
+            {% include 'master_app/sidebar.html' %}
+        {% endif %}
+    {% else %}
+        {% include 'master_app/sidebar.html' %}
+    {% endif %}
+        
     {% endblock sidebar %}
 
-
-    {% include 'notification.html' %}
-    {% include 'errors.html' %}
 
     {% block content %}
     {% endblock content %}
@@ -36,5 +64,13 @@
     
     {% block extra_js %}
     {% endblock extra_js %}
+
+    
+
+    
+
+    
+    
+    
 </body>
 </html>

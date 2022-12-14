@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     # local apps
     'master_app',
 
+    "ckeditor",
+
     
 ]
 
@@ -140,3 +142,8 @@ STATICFILES_DIRS=[
 # Media Files
 MEDIA_URL = '/media/'
 MEDIA_ROOT= BASE_DIR.parent / 'media'
+
+
+CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
+
+CKEDITOR_UPLOAD_PATH = "uploads/"

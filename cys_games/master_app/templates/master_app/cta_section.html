@@ -1,7 +1,7 @@
 {% load static %}
 <style>
-    .cta {
-  background: linear-gradient(rgba(40, 58, 90, 0.9), rgba(40, 58, 90, 0.9)), url("{% static 'assets/img/cta-bg.jpg' %}") fixed center center;
+    /* .cta {
+  background: linear-gradient(rgba(40, 58, 90, 0.9), rgba(40, 58, 90, 0.9))fixed center center;
     background-size: auto, auto;
   background-size: cover;
   padding: 120px 0;
@@ -13,7 +13,7 @@
 }
 .cta p {
   color: #fff;
-}
+} */
 @media (min-width: 769px){
 
 .cta .cta-btn-container {
@@ -39,19 +39,122 @@
   border: 2px solid #fff;
   color: #fff;
 }
+
+.cta ul li {
+  list-style: none;
+}
+
+h3.heading {
+  font-weight: 400;
+  font-size: 34px;
+  color: #37517e;
+}
+
 </style>
 
 <!-- ======= Cta Section ======= -->
-<section id="cta" class="cta">
+<section id="cta" class="cta bg-white">
     <div class="container" id="section_cta">
 
       <div class="row">
-        <div class="col-lg-9 text-center text-lg-start">
-          <h3>Call To Action</h3>
-          <p> Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <div class="col-lg-8 text-center text-lg-start">
+          <h3 class="mb-3 heading">KEY LEARNING OUTCOMES</h3>
+          <ul>
+            
+            <li>
+              <p>
+                <i class="ri-check-double-line"></i> Active Directory enumeration and attacks
+              </p>
+            </li>
+            <li>
+              <p>
+                <i class="ri-check-double-line"></i> Evading endpoint protections
+              </p>
+            </li>
+            <li>
+              <p>
+                <i class="ri-check-double-line"></i> Exploit development
+              </p>
+            </li>
+            <li>
+              <p>
+                <i class="ri-check-double-line"></i> Lateral movement
+              </p>
+            </li>
+            <li>
+              <p>
+                <i class="ri-check-double-line"></i> Local privilege escalation
+              </p>
+            </li>
+            <li>
+              <p>
+                <i class="ri-check-double-line"></i> Situational awareness
+              </p>
+            </li>
+            <li>
+              <p>
+                <i class="ri-check-double-line"></i> Web application enumeration and attacks
+              </p>
+            </li>
+          </ul>
         </div>
-        <div class="col-lg-3 cta-btn-container text-center">
-          <a class="cta-btn align-middle" href="#">Call To Action</a>
+        <div class="col-lg-4 cta-btn-container text-center">
+          <div class="card-body pb-0">
+
+            <div id="budgetChart" style="min-height: 400px;" class="echart"></div>
+
+            <script>
+              document.addEventListener("DOMContentLoaded", () => {
+                var budgetChart = echarts.init(document.querySelector("#budgetChart")).setOption({
+                    radar: {
+                      // shape: 'circle',
+                      indicator: [{
+                          name: 'Difficulty',
+                          max: 6
+                        },
+                        {
+                          name: 'RT',
+                          max: 6
+                        },
+                        {
+                          name: 'AD',
+                          max: 6
+                        },
+                        {
+                          name: 'SIZE',
+                          max: 6
+                        },
+                        {
+                          name: 'CVE',
+                          max: 6
+                        }
+                      ]
+                    },
+                    series: [{
+                      type: 'radar',
+                      data: [
+                        {
+                          value: [3,2,4,4,3],
+                          areaStyle: {
+            color: new echarts.graphic.RadialGradient(0.1, 0.6, 1, [
+              {
+                color: 'rgba(2,0,36,0.1)',
+                offset: 0
+              },
+              {
+                color: 'rgba(0  , 212, 255, 0.9)',
+                offset: 1
+              }
+            ])
+          }
+                        }
+                      ]
+                    }]
+                  });
+              });
+            </script>
+
+          </div>
         </div>
       </div>
 

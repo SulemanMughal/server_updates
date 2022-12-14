@@ -1,0 +1,332 @@
+{%  extends 'base.html' %}
+{% load static %}
+{% block title %} Machine Detail {% endblock %}
+
+{% block extra_css %}
+{% endblock %}
+
+
+{% block content %}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>Machine Detail</h1>
+        <nav>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#!">Home</a></li>
+            <li class="breadcrumb-item"><a href="#!">Machines</a></li>
+            <li class="breadcrumb-item active">Machine Detail</li>
+          </ol>
+        </nav>
+      </div><!-- End Page Title -->
+
+
+      <section class="section dashboard">
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow-none bg-transparent">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center my-3">
+                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                              <a href="{% url 'student-machine-detail-url' %}">
+                                <img src="{% static 'assets/img/caac8772de14a769c0bfe95756bceebe.png' %}" width="80" alt="">
+                              </a>
+                            </div>
+                            <div class="ps-4">
+                              <h6 class="mb-0 fs-3 fw-bolder">Mentor</h6>
+                              <span class=" small pt-1 fw-bold">Medium</span>
+        
+                            </div>
+                          </div>
+                    </div>
+                </div>  
+            </div>
+        </div>
+        <div class="row ">
+            <div class="col-md-6 col-lg-4">
+                <div class="card  p-0">
+                    <div class="card-body p-3" style="background: rgba(255, 39, 39, 0.1) !important;">
+                        <p class="text-uppercase text-danger mb-0"><i class="fas fa-circle me-2 "></i> Offline</p>
+                    </div>
+                    <div class="card-body p-3" >
+                        <div class="d-flex align-items-center">
+                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                <i class="fas fa-power-off"></i>
+                            </div>
+                            <div class="ps-3">
+                                <h6 class="mb-0 fw-bold">Create Instance</h6>
+                                <span class=" small pt-1 ">Create release arena instance</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-3" >
+                        <div class="d-flex align-items-center">
+                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                <i class="fa-regular fa-heart"></i>
+                            </div>
+                            <div class="ps-3">
+                                <h6 class="mb-0 fw-bold">Add To-Do List</h6>
+                                <span class=" small pt-1 ">Add this machine to your list</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-3" >
+                        <div class="d-flex align-items-center">
+                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                <i class="fa-regular fa-star"></i>
+                            </div>
+                            <div class="ps-3">
+                                <h6 class="mb-0 fw-bold">Review Machine</h6>
+                                <span class=" small pt-1 ">Rate and send your feedback</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-3" >
+                        <div class="d-flex align-items-center">
+                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                <i class="fa-regular fa-note-sticky"></i>
+                            </div>
+                            <div class="ps-3">
+                                <h6 class="mb-0 fw-bold">Forum Thread</h6>
+                                <span class=" small pt-1 ">Join the Forum discussions</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-8">
+                <div class="card">
+                    <div class="card-body">
+                        <p></p>
+                      <!-- Bordered Tabs -->
+                      <ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                          <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#bordered-home" type="button" role="tab" aria-controls="home" aria-selected="true">Information</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                          <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#bordered-profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Statistics</button>
+                        </li>
+                      </ul>
+                      <div class="tab-content pt-2" id="borderedTabContent">
+                        <div class="tab-pane fade show active" id="bordered-home" role="tabpanel" aria-labelledby="home-tab">
+                          <div class="row mt-3">
+                            <div class="col-12 col-md-4 col-lg-4">
+                                <div class="card shadow-none bg-light">
+                                    <div class="card-body py-4">
+                                        <p class="text-center mb-0"><i class="fa-regular fa-star fs-4 "></i></p>
+                                        <p class="fs-2 text-center mb-0">2.8</p>
+                                        <p class="card-text text-uppercase text-center "><small>Machine Rating</small></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4 col-lg-4">
+                                <div class="card shadow-none bg-light">
+                                    <div class="card-body py-4">
+                                        
+                                        <p class="text-center mb-0"><i class="fa-regular fa-user fs-4 "></i></p>
+                                        <p class="fs-2 text-center mb-0">332</p>
+                                        <p class="card-text text-uppercase text-center "><small>User Owns</small></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4 col-lg-4">
+                                <div class="card shadow-none bg-light">
+                                    <div class="card-body py-4">
+                                        
+                                        <p class="text-center mb-0"><i class="fas fa-hashtag fs-4 "></i></p>
+                                        <p class="fs-2 text-center mb-0">310</p>
+                                        <p class="card-text text-uppercase text-center "><small>System Owns</small></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4 col-lg-4">
+                                <div class="card shadow-none bg-light">
+                                    <div class="card-body py-4">
+                                        <p class="text-center mb-0"><i class="fa-regular fa-calendar fs-4 "></i></p>
+                                        <p class="fs-2 text-center mb-0">3 Days</p>
+                                        <p class="card-text text-uppercase text-center "><small>Release Date</small></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4 col-lg-8">
+                                <div class="card shadow-none bg-light">
+                                    <div class="card-body pt-5  px-5">
+                                        <button class="btn btn-dark rounded-pill px-4">Jhon</button>
+                                        <p class="fs-2 text-start "></p>
+                                        
+                                        <p class="card-text text-uppercase text-start "><small>Machine Creator</small></p>
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="tab-pane fade" id="bordered-profile" role="tabpanel" aria-labelledby="profile-tab">
+                          <div class="card shadow-none bg-transparent mt-3">
+                            <div class="card-body">
+                                <h5>Machine Matrix</h5>
+                                <p>This matrix displays the exploitation characteristics of the Machine. </p>
+                            </div>
+                            <div class="card-body pb-0 mb-3">
+
+                                <div id="budgetChart" style="min-height: 400px;" class="echart"></div>
+                    
+                                <script>
+                                  document.addEventListener("DOMContentLoaded", () => {
+                                    var budgetChart = echarts.init(document.querySelector("#budgetChart")).setOption({
+                                        radar: {
+                                          // shape: 'circle',
+                                          indicator: [{
+                                              name: 'ENUM',
+                                              max: 10
+                                            },
+                                            {
+                                              name: 'CTF',
+                                              max: 10
+                                            },
+                                            {
+                                              name: 'REAL',
+                                              max: 6
+                                            },
+                                            {
+                                              name: 'CUSTOM',
+                                              max: 6
+                                            },
+                                            {
+                                              name: 'CVE',
+                                              max: 6
+                                            }
+                                          ]
+                                        },
+                                        series: [{
+                                          type: 'radar',
+                                          data: [
+                                            {
+                                              value: [6.30,5.20,4.80, 5.30 , 4.70],
+                                              areaStyle: {
+                                color: new echarts.graphic.RadialGradient(0.1, 0.6, 1, [
+                                  {
+                                    color: 'rgba(2,0,36,0.1)',
+                                    offset: 0
+                                  },
+                                  {
+                                    color: 'rgba(0  , 212, 255, 0.9)',
+                                    offset: 1
+                                  }
+                                ])
+                              }
+                                            }
+                                          ]
+                                        }]
+                                      });
+                                  });
+                                </script>
+                    
+                            </div>
+                            <div class="card-body ">
+                                <h5>Machine Difficulty Rating</h5>
+                                <p>This graph displays the difficulty of the Machine based on User Own difficulty and System Own difficulty.</p>
+                            </div>
+                            <div class="card-body">
+                                
+                  
+                                <!-- Column Chart -->
+                                <div id="columnChart"></div>
+                  
+                                <script>
+                                  document.addEventListener("DOMContentLoaded", () => {
+                                    new ApexCharts(document.querySelector("#columnChart"), {
+                                      series: [{
+                                        name: 'User Owns',
+                                        data: [2, 1, 1, 4, 16, 2, 0, 0, 0, 1]
+                                      }, {
+                                        name: 'System Owns',
+                                        data: [3, 2, 3, 4, 12, 1, 0, 0, 0, 0]
+                                      }],
+                                      chart: {
+                                        type: 'bar',
+                                        height: 350
+                                      },
+                                      plotOptions: {
+                                        bar: {
+                                          horizontal: false,
+                                          columnWidth: '55%',
+                                          endingShape: 'rounded'
+                                        },
+                                      },
+                                      dataLabels: {
+                                        enabled: false
+                                      },
+                                      stroke: {
+                                        show: true,
+                                        width: 2,
+                                        colors: ['transparent']
+                                      },
+                                      xaxis: {
+                                        categories: ['Piece of Cake', 'Very Easy', 'Easy', 'Not Too Easy', 'Medium', 'A Bit Hard', 'Hard', 'Extremely Hard', 'Insane', 'BrainFuck'],
+                                      },
+                                      
+                                      fill: {
+                                        opacity: 1
+                                      },
+                                      tooltip: {
+                                        y: {
+                                          formatter: function(val) {
+                                            return  val 
+                                          }
+                                        }
+                                      }
+                                    }).render();
+                                  });
+                                </script>
+                                <!-- End Column Chart -->
+                  
+                            </div>
+                            <div class="card-body">
+                                <h5>Machine Activity</h5>
+                                <p>This graph displays the past activity of the Machine: User Owns, Root Owns, Resets. </p>
+                            </div>
+                            <div class="card-body">
+                  
+                                <!-- Line Chart -->
+                                <div id="lineChart" style="min-height: 400px;" class="echart"></div>
+                  
+                                <script>
+                                  document.addEventListener("DOMContentLoaded", () => {
+                                    echarts.init(document.querySelector("#lineChart")).setOption({
+                                      xAxis: {
+                                        type: 'category',
+                                        data: ['9 DEC', '10 DEC', '11 DEC', '12 DEC', '13 DEC', '14 DEC', '15 DEC']
+                                      },
+                                      yAxis: {
+                                        type: 'value'
+                                      },
+                                      series: [{
+                                        data: [150, 230, 224, 218, 135, 147, 0],
+                                        type: 'line',
+                                        smooth: true
+                                      },
+                                      {
+                                        data: [150, 230, 224, 218, 13, 17, 0],
+                                        type: 'line',
+                                        smooth: true
+                                      }]
+                                    });
+                                  });
+                                </script>
+                                <!-- End Line Chart -->
+                  
+                              </div>
+                          </div>
+                        </div>
+                        
+                      </div><!-- End Bordered Tabs -->
+        
+                    </div>
+                  </div>
+            </div>
+        </div>
+      </section>
+
+</main>
+
+{% endblock %}

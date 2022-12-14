@@ -1,0 +1,94 @@
+
+<!-- ======= Sidebar ======= -->
+<aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+  
+      
+      
+      
+      
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="{% url 'instructor-dasboard-url' %}">
+            <!-- <i class="bi bi-file-earmark"></i> -->
+            <!-- <i class="fa-regular fa-grid-horizontal me-2"></i> -->
+            <i class="fa-solid fa-grip-vertical me-2"></i>
+            <span>Dashboard</span>
+            </a>
+        </li><!-- End Dashboard Nav -->
+
+
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+              <i class="bi bi-menu-button-wide"></i><span>Course Management</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+              <li>
+                <a href="{% url 'course-new-url' %}">
+                  <i class="bi bi-circle"></i><span>Create New Course</span>
+                </a>
+              </li>
+              <li>
+                <a href="{% url 'courses-all-url' %}">
+                  <i class="bi bi-circle"></i><span>All Courses</span>
+                </a>
+              </li>
+              
+            </ul>
+          </li><!-- End Components Nav -->
+
+        
+        <li class="nav-item">
+          <a class="nav-link collapsed" data-bs-target="#student-nav" data-bs-toggle="collapse" href="#">
+            <i class="fa-solid fa-graduation-cap me-2"></i><span>Student Management</span><i class="bi bi-chevron-down ms-auto"></i>
+          </a>
+          <ul id="student-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <li>
+              <a href="{% url 'students-all-url' %}">
+                <i class="bi bi-circle"></i><span>All Students</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="{% url 'course-students-new-url' %}">
+                <i class="bi bi-circle"></i><span>Add New Student</span>
+              </a>
+            </li>
+            
+            
+          </ul>
+        </li><!-- End Components Nav -->
+        
+
+        
+        
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#!">
+            <!-- <i class="bi bi-file-earmark"></i> -->
+            <!-- <i class="fa-regular fa-grid-horizontal me-2"></i> -->
+            <i class="fas fa-server me-2"></i>
+            <span>Virtual Networks</span>
+            </a>
+        </li><!-- End Dashboard Nav -->
+
+
+    
+      
+
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="{% url 'user-logout' %}">
+            <!-- <i class="bi bi-file-earmark"></i> -->
+            <i class="fa-solid fa-right-from-bracket me-2"></i>
+            <span>Sign Out</span>
+          </a>
+        </li><!-- End Logout Nav -->
+      
+
+    
+        
+        
+    </ul>
+  
+  </aside><!-- End Sidebar-->
+  

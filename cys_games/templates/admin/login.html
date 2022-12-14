@@ -1,12 +1,33 @@
 {% extends "admin/base_site.html" %}
 {% load i18n static %}
 
+
+
+
 {% block extrastyle %}
 {{ block.super }}
 {{ form.media }}
 
     <!-- Notification CSS -->
     <link rel="stylesheet" href="{% static 'assets/vendor/notification/noty.css' %}" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+    
+<style>
+    #particles-js {
+    background-color: #002D62;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 0;
+  }
+  
+  </style>
+  
+      <!-- particles.js -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js" integrity="sha512-Kef5sc7gfTacR7TZKelcrRs15ipf7+t+n7Zh6mKNJbmW+/RRdCW9nwfLn4YX0s2nO6Kv5Y2ChqgIakaC6PW09A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 {% endblock %}
 
@@ -24,18 +45,22 @@
 {% block breadcrumbs %}{% endblock %}
 {% block sidebar %}{% endblock %}
 
-{% block content %}
+{% block title %}Sign In | Cyber Range{% endblock %}
 
+{% block content %}
+<div id="particles-js"></div>   
 <div class="row justify-content-center" >
-  <div class="col-lg-6">
+  <div class="col-md-6 col-lg-4">
     <div class="card shadow-none">
       <div class="card-header border-0">
-        <h5 class="card-title fs-4 text-center">Developer Login</h5>
+        <h1 class="card-title fw-bolder text-center fs-2"><img src="{% static 'assets/img/favicon.png' %}" alt=""> Cyber Range</h1>
+        
       </div>
       <div class="card-body">
+        <h5 class="card-title ">Sign in as a developer account</h5>
         <form class="row g-3 needs-validation" novalidate action="{{ app_path }}" method="POST" id="login-form">
           {% csrf_token %}
-          <div class="col-md-12">
+          <div class="col-md-12 mb-3">
             <div class="form-floating">
               <input type="text" name="username" class="form-control" id="id_username" placeholder="Email ddress" autofocus autocapitalize="none" autocomplete="off" maxlength="255" required>
               <label for="id_username">Email address</label>
@@ -44,7 +69,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-12">
+          <div class="col-md-12 mb-3" >
             <div class="form-floating">
               <input type="password" name="password" class="form-control" autocomplete="current-password" required id="id_password" placeholder="Password">
               <label for="id_password">Password</label>
@@ -54,8 +79,8 @@
             </div>
           </div>
           <input type="hidden" name="next" value="{{ next }}">
-          <div class="text-center">
-            <button type="submit" class="btn btn-primary" >Login</button>
+          <div class="d-grid gap-2 mt-3">
+            <button type="submit" class="btn btn-primary" >Sign In</button>
           </div>
         </form>
       </div>
@@ -372,6 +397,129 @@
 
 {% endif %}
 
+
+
+<script>
+    $(function() {
+    particlesJS("particles-js", {
+      "particles": {
+        "number": {
+          "value": 100,
+          "density": {
+            "enable": true,
+            "value_area": 800
+          }
+        },
+        "color": {
+          "value": "#ffffff"
+        },
+        "shape": {
+          "type": "circle",
+          "stroke": {
+            "width": 0,
+            "color": "#000000"
+          },
+          "polygon": {
+            "nb_sides": 5
+          },
+          "image": {
+            "src": "img/github.svg",
+            "width": 100,
+            "height": 100
+          }
+        },
+        "opacity": {
+          "value": 0.5,
+          "random": false,
+          "anim": {
+            "enable": false,
+            "speed": 1,
+            "opacity_min": 0.1,
+            "sync": false
+          }
+        },
+        "size": {
+          "value": 3,
+          "random": true,
+          "anim": {
+            "enable": false,
+            "speed": 40,
+            "size_min": 0.1,
+            "sync": false
+          }
+        },
+        "line_linked": {
+          "enable": true,
+          "distance": 150,
+          "color": "#ffffff",
+          "opacity": 0.4,
+          "width": 1
+        },
+        "move": {
+          "enable": true,
+          "speed": 6,
+          "direction": "none",
+          "random": false,
+          "straight": false,
+          "out_mode": "out",
+          "bounce": false,
+          "attract": {
+            "enable": false,
+            "rotateX": 600,
+            "rotateY": 1200
+          }
+        }
+      },
+      "interactivity": {
+        "detect_on": "canvas",
+        "events": {
+          "onhover": {
+            "enable": true,
+            "mode": "repulse"
+          },
+          "onclick": {
+            "enable": true,
+            "mode": "push"
+          },
+          "resize": true
+        },
+        "modes": {
+          "grab": {
+            "distance": 400,
+            "line_linked": {
+              "opacity": 1
+            }
+          },
+          "bubble": {
+            "distance": 400,
+            "size": 40,
+            "duration": 2,
+            "opacity": 4,
+            "speed": 3
+          },
+          "repulse": {
+            "distance": 200,
+            "duration": 0.4
+          },
+          "push": {
+            "particles_nb": 4
+          },
+          "remove": {
+            "particles_nb": 2
+          }
+        }
+      },
+      "retina_detect": true
+    });
+    var update;
+    update = function() {
+      if (window.pJSDom[0].pJS.particles && window.pJSDom[0].pJS.particles.array) {}
+      requestAnimationFrame(update);
+    };
+    requestAnimationFrame(update);
+  });
+  
+  </script>
 
 {% endblock %}
 

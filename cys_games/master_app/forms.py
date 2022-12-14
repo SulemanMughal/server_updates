@@ -3,9 +3,31 @@ from django import forms
 from django.contrib.auth import get_user_model
 User  = get_user_model()
 
+from .models import Course, AssignedStudents
 
 
 # ? User Login Form
 class loginForm(forms.Form):
     email = forms.EmailField(label='Email Address', widget=forms.TextInput())
     password = forms.CharField(widget=forms.PasswordInput())
+
+
+# ? Course Create Form
+class CreateCourseForm(forms.ModelForm):
+    # name = forms.CharField()
+    # start_time = forms.DateTimeField()
+    # end_time = forms.DateTimeField()
+    class Meta:
+        model = Course
+        fields  = [
+            "name",
+            "start_time",
+            "end_time",
+            "description"
+        ]
+
+
+class AddNewStudent(forms.ModelForm):
+    class Meta:
+        model = AssignedStudents
+        fields =  "__all__"

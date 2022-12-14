@@ -12,8 +12,8 @@
   
       <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'admin:index' %}">
-          <i class="bi bi-grid"></i>
-          <span>Admin</span>
+          <i class="fa-solid fa-grip-vertical me-2"></i>
+          <span>Developer</span>
         </a>
       </li><!-- End Dashboard Nav -->
   
@@ -22,19 +22,20 @@
       <li class="nav-heading">Pages</li> 
   
 
+      
+
+
+      {% comment %}
       {% if site_url %}
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="{{ site_url }}">
-          <i class="bi bi-file-earmark"></i>
+          <i class="fa-solid fa-eye me-2"></i>
           <span>View Site</span>
         </a>
       </li><!-- End View Site Nav -->
       
       {% endif %}
-
-
-      {% comment %}
       <li class="nav-item">
         <a class="nav-link collapsed" href="#!">
           <i class="bi bi-file-earmark"></i>
@@ -49,7 +50,7 @@
       
       <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'admin:password_change' %}">
-          <i class="bi bi-file-earmark"></i>
+          <i class="fa-solid fa-lock me-2"></i>
           <span>Change Password</span>
         </a>
       </li><!-- End Change Password Nav -->
@@ -72,8 +73,8 @@
       {% if request.user.is_authenticated %}
       <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'admin:logout' %}">
-          <i class="bi bi-file-earmark"></i>
-          <span>Logout</span>
+          <i class="fa-solid fa-right-from-bracket me-2"></i>
+          <span>Sign Out</span>
         </a>
       </li><!-- End Logout Nav -->
       
@@ -82,8 +83,8 @@
       
       <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'admin:login' %}">
-          <i class="bi bi-file-earmark"></i>
-          <span>Login</span>
+          <i class="fa-solid fa-right-to-bracket me-2"></i>
+          <span>Sign In</span>
         </a>
       </li><!-- End Login Nav -->
 

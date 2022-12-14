@@ -21,10 +21,36 @@ urlpatterns = [
     # ? Admin Dashbaord
     path("admin/", views.AdminDashboard, name="admin-dasboard-url"),
 
+    # ? Admin Profile
+    path("admin/profile", views.AdminProfile, name="admin-profile-url"),
+
 
     # ==========================================================
     # ? Instructor Dashbaord
     path("instructor/", views.InstructorDashboard, name="instructor-dasboard-url"),
+
+    # ? Instructor Profile
+    path("instructor/profile", views.InsturctorProfile, name="instructor-profile-url"),
+    
+    # ? Instructor Virutal Networks
+    # path("instructor/virtaul-networks", views.InsturctorProfile, name="instructor-virtual-network-url"),
+
+    # ? Instructor Courses List
+    path("instructor/courses", views.CoursesList, name="courses-all-url"),
+
+    # ? Instructor Students List
+    path("instructor/students", views.StudentList, name="students-all-url"),
+
+    # ? Instructor Create New Course
+    path("instructor/course/new", views.CreateCourse, name="course-new-url"),
+
+    # ? Instructor Courses Detials
+    path("instructor/courses/details", views.InstructorCourseDetails, name="instructor-courses-details-url"),
+
+    # ? Instructor Add New Student
+    path("instructor/course/students/new", views.AddNewStudents, name="course-students-new-url"),
+
+    
 
 
     # ==========================================================
@@ -33,6 +59,18 @@ urlpatterns = [
     
     # ? Student Profile
     path("student/profile", views.StudentProfile, name="student-profile-url"),
+
+    # ? Student Courses
+    path("student/courses", views.StudentCourses, name="student-courses-url"),
+
+    # ? Student Courses Detials
+    path("student/courses/details", views.StudentCourseDetails, name="student-courses-details-url"),
+
+    # ? Student Machines
+    path("student/machines", views.StudentMachines, name="student-machines-url"),
+    
+    # ? Student Machine Details
+    path("student/machine/detail", views.StudentMachineDetail, name="student-machine-detail-url"),
 
 ]
 

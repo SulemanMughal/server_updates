@@ -1,3 +1,5 @@
+{% load static %}
+
 <style>
     .services .icon-box {
   box-shadow: 0px 0 25px 0 rgba(0, 0, 0, 0.1);
@@ -32,46 +34,39 @@
 
 
 <!-- ======= Services Section ======= -->
-<section id="services" class="services section-bg bg-white">
+<section id="services" class="services ">
     <div class="container" id="section_services">
 
       <div class="section-title">
         <h2>Services</h2>
-        <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
+        <p>A portfolio of cybersecurity training services and products, constantly enriched to help our users augment their skills in the most engaging and rewarding way possible.</p>
       </div>
 
       <div class="row">
-        <div class="col-xl-3 col-md-6 d-flex align-items-stretch"  >
+        <div class="col-xl-4 col-md-4 d-flex align-items-stretch"  >
           <div class="icon-box">
-            <div class="icon"><i class="bx bxl-dribbble"></i></div>
-            <h4><a href="">Lorem Ipsum</a></h4>
-            <p>Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi</p>
+            <div class="icon text-center pb-3 "><img src="{% static 'assets/img/ic-menu-ctf.svg' %}" alt="" width="50"></div>
+            <h4 class="text-center"><a href="">Capture The Flag</a></h4>
+            <p class="text-center">Hacking challenges that will enable you to compete with others and advance your skills. From Jeopardy-style to Full Pwn and AD, we have it all!</p>
           </div>
         </div>
 
-        <div class="col-xl-3 col-md-6 d-flex align-items-stretch mt-4 mt-md-0"  >
+        <div class="col-xl-4 col-md-4 d-flex align-items-stretch mt-4 mt-md-0"  >
           <div class="icon-box">
-            <div class="icon"><i class="bx bx-file"></i></div>
-            <h4><a href="">Sed ut perspici</a></h4>
-            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</p>
+            <div class="icon text-center pb-3"><img src="{% static 'assets/img/ic-menu-battlegrounds.svg' %}" alt="" width="50"></div>
+            <h4 class="text-center"><a href="">Battlegrounds</a></h4>
+            <p class="text-center">Real-time multiplayer hacking games! Invite friends, choose any of the different Game Modes, form a team, and join the battlefield!</p>
           </div>
         </div>
 
-        <div class="col-xl-3 col-md-6 d-flex align-items-stretch mt-4 mt-xl-0"  >
+        <div class="col-xl-4 col-md-4 d-flex align-items-stretch mt-4 mt-xl-0"  >
           <div class="icon-box">
-            <div class="icon"><i class="bx bx-tachometer"></i></div>
-            <h4><a href="">Magni Dolores</a></h4>
-            <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia</p>
+            <div class="icon text-center pb-3"><img src="{% static 'assets/img/ic-menu-careers.svg' %}" alt="" width="50"></div>
+            <h4 class="text-center"><a href="">InfoSec Careers</a></h4>
+            <p class="text-center">Looking for a new job in cybersecurity? Visit Careers. Set up your preferences, see all the available job openings, apply, nail the interview, get hired.</p>
           </div>
         </div>
 
-        <div class="col-xl-3 col-md-6 d-flex align-items-stretch mt-4 mt-xl-0"  >
-          <div class="icon-box">
-            <div class="icon"><i class="bx bx-layer"></i></div>
-            <h4><a href="">Nemo Enim</a></h4>
-            <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis</p>
-          </div>
-        </div>
 
       </div>
 

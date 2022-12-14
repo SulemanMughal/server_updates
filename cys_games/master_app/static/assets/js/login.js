@@ -214,11 +214,6 @@ $(function(){
       
       
     });
-    ls_capslock.init({
-      element: '#exampleInputPassword1',
-      message: 'Caps Lock is pressed!',
-      customClasses: ['text-danger', 'fw-bolder','mb-5'],
-      position: 'top'
-    });
+    
 
 });

@@ -1,8 +1,16 @@
 {% extends 'admin/base_site.html' %}
 {% load static i18n admin_urls  %}
-{% block title %}Admin{% endblock title %}
+{% block title %}Developer | Cyber Range{% endblock title %}
 
-{% block extra_style %}{% endblock extra_style %}
+{% block extra_style %}
+
+
+
+
+
+
+
+{% endblock extra_style %}
 
 
 
@@ -16,60 +24,74 @@
 {% block content_title %}{% endblock %}
 
 
+<style>
+  .services .icon-box {
+box-shadow: 0px 0 25px 0 rgba(0, 0, 0, 0.1);
+padding: 50px 30px;
+transition: all ease-in-out 0.4s;
+background: #fff;
+}
+.services .icon-box .icon {
+margin-bottom: 10px;
+}
+.services .icon-box:hover {
+transform: translateY(-10px);
+}
+.services .icon-box .icon i {
+color: #47b2e4;
+font-size: 36px;
+transition: 0.3s;
+}
+.services .icon-box h4 {
+font-weight: 500;
+margin-bottom: 15px;
+font-size: 24px;
+}
+.services .icon-box h4 a {
+color: #37517e;
+transition: ease-in-out 0.3s;
+}
+.services .icon-box:hover h4 a {
+color: #47b2e4;
+}
+</style>
+
 <!-- <div class="container-fluid py-4"> -->
 
+  
+
+<!-- ======= Services Section ======= -->
+<section id="services" class="services ">
+  <div class="container" >
+
     
-      <div class="row justify-content-center">
-        <div class="col-md-8 ">
-          <div class="card shadow-none">
-            <div class="card-body pt-4 p-3">
-              <ul class="list-group">
-                {% if app_list %}
-                  {% for app in app_list %}
-                  <li class="list-group-item border-0  p-4 mb-2 bg-gray-100 border-radius-lg">
-                    <div class="d-flex flex-column">
-                      <h3 class="mb-3 ">{{ app.name }}</h3>
-                    </div>
-                    <div class="table-responsive p-0">
-                      <table class="table align-items-center mb-0">
-                        <tbody>
-                          {% for model in app.models %}
-                            <tr >
-                              {% if model.admin_url %}
-                                <td scope="row" style="width: 120%;">
-                                    <a href="{{ model.admin_url }}"{% if model.admin_url in request.path %} aria-current="page"{% endif %} class="card-link text-decoration-none h4 ">{{ model.name }}</a>
-                              </td>
-                              {% else %}
-                                <td scope="row">{{ model.name }}</td>
-                              {% endif %}
-                              {% if model.add_url %}
-                              <td class="text-end"><a href="{{ model.add_url }}" class="card-link text-decoration-none text-end">{% translate 'Add' %}</a></td>
-                            {% else %}
-                              <td></td>
-                            {% endif %}
-                  
-                            {% if model.admin_url and True %}
-                              {% if model.view_only %}
-                                <td class="text-end"><a href="{{ model.admin_url }}" class="card-link text-decoration-none text-end">{% translate 'View' %}</a></td>
-                              {% else %}
-                                <td class="text-end"><a href="{{ model.admin_url }}" class="card-link text-decoration-none text-end">{% translate 'Change' %}</a></td>
-                              {% endif %}
-                            {% elif True %}
-                              <td></td>
-                            {% endif %}
-                            </tr>
-                          {% endfor %}
-                        </tbody>
-                      </table>
-                    </div>
-                  </li>
-                  {% endfor %}
-                {% endif %}
-              </ul>
-            </div>
-          </div>
+
+    <div class="row justify-content-center">
+      <div class="col-xl-3 col-md-4 d-flex align-items-stretch"  >
+        <div class="icon-box">
+          <h4 class="text-center"><a href="{% url 'admin:accounts_user_changelist' %}">Users Management</a></h4>
         </div>
       </div>
+
+      <div class="col-xl-3 col-md-4 d-flex align-items-stretch mt-4 mt-md-0"  >
+        <div class="icon-box">
+          <h4 class="text-center"><a href="{% url 'admin:master_app_course_changelist' %}">Course Management</a></h4>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-4 d-flex align-items-stretch mt-4 mt-md-0"  >
+        <div class="icon-box">
+          <h4 class="text-center"><a href="{% url 'admin:master_app_virtualnetwork_changelist' %}">Virtual Networks Management</a></h4>
+        </div>
+      </div>
+
+
+
+    </div>
+
+  </div>
+</section><!-- End Services Section -->
+
+
         
 
 {% endblock content %}

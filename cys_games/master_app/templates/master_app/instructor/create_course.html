@@ -1,0 +1,130 @@
+{%  extends 'base.html' %}
+{% load static %}
+{% block title %} Instructor Dashboard {% endblock %}
+
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link href="{% static 'assets/vendor/quill/quill.snow.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/quill/quill.bubble.css' %}" rel="stylesheet">
+  <script src="{% static 'assets/vendor/quill/quill.min.js' %}"></script>
+
+{% endblock extra_css %}
+
+{% block sidebar %}
+  {% include 'master_app/instructor/sidebar.html' %}
+{% endblock sidebar %}
+
+
+{% block content %}
+
+<style>
+  .dashboard .news h4 , .dashboard .news p{
+    margin-left: 0px;
+}
+</style>
+
+
+<main id="main" class="main pb-5">
+    <div class="pagetitle">
+        <h1>Add New Course</h1>
+        <nav>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#!">Home</a></li>
+            <li class="breadcrumb-item active">Add New Course</li>
+          </ol>
+        </nav>
+      </div><!-- End Page Title -->
+
+
+    <section class="section dashboard">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6 ">
+              <div class="card shadow-none" >
+
+                <div class="card-body p-5">
+                  {% include 'errors.html' %}
+                  <form class="row g-3 needs-validation" novalidate  action="{% url 'course-new-url' %}"  id="identifier"  method="POST">
+                    {% csrf_token %}
+
+                    <!-- Course Name -->
+                    <div class="col-md-12 mb-3">
+                      <div class="form-floating">
+                        <input type="text" name="name" class="form-control" id="id_name" placeholder="Course Name" autofocus autocapitalize="none" autocomplete="off" maxlength="255" required autofocus="on" tabindex="1">
+                        <label for="id_name">Course Name</label>
+                        <div class="invalid-feedback">
+                          Please choose a valid course name.
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <!-- Course Starting Date -->
+                    <div class="col-md-12 mb-3">
+                      <div class="form-floating">
+                        <input type="text" name="start_time" class="form-control datepicker" id="id_start_time" placeholder="Course Start Date" data-provide="datepicker" autofocus autocapitalize="none" autocomplete="off" maxlength="255" required autofocus="on" tabindex="2">
+                        <label for="id_start_time">Course Start Date</label>
+                        <div class="invalid-feedback">
+                          Please choose a valid start date.
+                        </div>
+                      </div>
+                    </div>
+                    
+
+                    <!-- Course Ending Date -->
+                    <div class="col-md-12 mb-3">
+                      <div class="form-floating">
+                        <input type="text" name="end_time" class="form-control datepicker" id="id_end_time" placeholder="Course End Date" data-provide="datepicker" autofocus autocapitalize="none" autocomplete="off" maxlength="255" required autofocus="on" tabindex="3">
+                        <label for="id_end_time">Course End Date</label>
+                        <div class="invalid-feedback">
+                          Please choose a valid end date.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="quill-editor-full mb-3">
+                      
+                    </div>
+
+                    <textarea  style="display:none" id="id_description" name="description"></textarea>
+
+                    <div class="d-grid gap-2 mt-3">
+                      <button type="submit" class="btn btn-primary"  tabindex="4">Create</button>
+                    </div>
+
+                    
+
+                  </form>
+                </div>
+              </div> 
+            </div>
+        </div>
+    </section>  
+</main>    
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js" integrity="sha512-K/oyQtMXpxI4+K0W7H25UopjM8pzq0yrVdFdG21Fh5dBe91I40pDd9A4lzNlHPHBIP2cwZuoxaUSX0GJSObvGA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+  $(".datepicker").flatpickr(
+    {
+    enableTime: true,
+    
+    dateFormat: "Y-m-d H:i",
+}
+  );
+
+  $(function(){
+    
+
+$("#identifier").on("submit",function(event) {
+  $("#id_description").val($(".quill-editor-full").html());
+})
+  });
+</script>
+
+
+{% endblock extra_js %}

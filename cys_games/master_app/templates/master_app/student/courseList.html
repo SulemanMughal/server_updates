@@ -1,0 +1,110 @@
+{%  extends 'base.html' %}
+{% load static %}
+{% block title %} Courses {% endblock %}
+
+{% block extra_css %}
+{% endblock %}
+
+
+{% block content %}
+
+<main id="main" class="main">
+    <section class="section dashboard">
+    <div class="container">
+        <div class="pagetitle">
+            <h1>Courses</h1>
+            <nav>
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#!">Home</a></li>
+                <li class="breadcrumb-item active">Courses</li>
+              </ol>
+            </nav>
+          </div><!-- End Page Title -->
+    
+        <div class="row">
+            <div class="col-12 col-md-4 col-lg-4">
+                    <div class="card shadow-none bg-transparent ">
+                        <div class="card-header p-0 border-0 ">
+                            <img class="card-img-top" src="{% static 'assets/img/course.png' %}" alt="">
+                        </div>
+                        <div class="card-body p-3 bg-white">
+                            <h5><a href="{% url 'student-courses-details-url' %}">Learning Process</a></h5>
+                            <p>
+                                The learning process is one of the essential and most important components that is often overlooked. This module does not teach you techniques to lear...
+                            </p>
+                        </div>
+                    </div>
+            </div>
+            <div class="col-12 col-md-4 col-lg-4">
+                    <div class="card shadow-none bg-transparent ">
+                        <div class="card-header p-0 border-0 ">
+                            <img class="card-img-top" src="{% static 'assets/img/Ad.png' %}" alt="">
+                        </div>
+                        <div class="card-body p-3 bg-white">
+                            <h5><a href="{% url 'student-courses-details-url' %}">Active Directory LDAP</a></h5>
+                            <p>
+                                This module provides an overview of Active Directory (AD), introduces core AD enumeration concepts, and covers enumeration with built-in tools.
+                            </p>
+                        </div>
+                    </div>
+            </div>
+            <div class="col-12 col-md-4 col-lg-4">
+                    <div class="card shadow-none bg-transparent ">
+                        <div class="card-header p-0 border-0 ">
+                            <img class="card-img-top" src="{% static 'assets/img/course.png' %}" alt="">
+                        </div>
+                        <div class="card-body p-3 bg-white">
+                            <h5><a href="{% url 'student-courses-details-url' %}">Learning Process</a></h5>
+                            <p>
+                                The learning process is one of the essential and most important components that is often overlooked. This module does not teach you techniques to lear...
+                            </p>
+                        </div>
+                    </div>
+            </div>
+            <div class="col-12 col-md-4 col-lg-4">
+                    <div class="card shadow-none bg-transparent ">
+                        <div class="card-header p-0 border-0 ">
+                            <img class="card-img-top" src="{% static 'assets/img/course.png' %}" alt="">
+                        </div>
+                        <div class="card-body p-3 bg-white">
+                            <h5><a href="{% url 'student-courses-details-url' %}">Learning Process</a></h5>
+                            <p>
+                                The learning process is one of the essential and most important components that is often overlooked. This module does not teach you techniques to lear...
+                            </p>
+                        </div>
+                    </div>
+            </div>
+            <div class="col-12 col-md-4 col-lg-4">
+                    <div class="card shadow-none bg-transparent ">
+                        <div class="card-header p-0 border-0 ">
+                            <img class="card-img-top" src="{% static 'assets/img/course.png' %}" alt="">
+                        </div>
+                        <div class="card-body p-3 bg-white">
+                            <h5><a href="{% url 'student-courses-details-url' %}">Learning Process</a></h5>
+                            <p>
+                                The learning process is one of the essential and most important components that is often overlooked. This module does not teach you techniques to lear...
+                            </p>
+                        </div>
+                    </div>
+            </div>
+            <div class="col-12 col-md-4 col-lg-4">
+                    <div class="card shadow-none bg-transparent ">
+                        <div class="card-header p-0 border-0 ">
+                            <img class="card-img-top" src="{% static 'assets/img/course.png' %}" alt="">
+                        </div>
+                        <div class="card-body p-3 bg-white">
+                            <h5><a href="{% url 'student-courses-details-url' %}">Learning Process</a></h5>
+                            <p>
+                                The learning process is one of the essential and most important components that is often overlooked. This module does not teach you techniques to lear...
+                            </p>
+                        </div>
+                    </div>
+            </div>
+        </div>  
+    </div>
+    </section>  
+
+    </main>
+
+
+{% endblock %}
