@@ -32,6 +32,10 @@ urlpatterns = [
     # ? Instructor Profile
     path("instructor/profile", views.InsturctorProfile, name="instructor-profile-url"),
     
+
+    # ? Instructor Create New Virtual Network
+    path("instructor/virtual-network/create/new" , views.InstructorVirturalNetworkNew, name="instructor-virutal-network-create-url"),
+
     # ? Instructor Virutal Networks
     path("instructor/virtaul-networks", views.InstructorVirtualNetworkList, name="instructor-virtual-network-url"),
 

@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 User  = get_user_model()
 
-from .models import Course, AssignedStudents
+from .models import Course, AssignedStudents, VirtualNetwork
 
 
 # ? User Login Form
@@ -31,3 +31,9 @@ class AddNewStudent(forms.ModelForm):
     class Meta:
         model = AssignedStudents
         fields =  "__all__"
+
+
+class NewVirtualNetworkForm(forms.ModelForm):
+    class Meta:
+        model = VirtualNetwork
+        fields = "__all__"

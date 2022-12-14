@@ -1,32 +1,30 @@
 {%  extends 'base.html' %}
 {% load static %}
-{% block title %} Instructor Dashboard {% endblock %}
+{% block title %} Add New Course {% endblock %}
 
 
 {% block extra_css %}
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <link href="{% static 'assets/vendor/quill/quill.snow.css' %}" rel="stylesheet">
-  <link href="{% static 'assets/vendor/quill/quill.bubble.css' %}" rel="stylesheet">
-  <script src="{% static 'assets/vendor/quill/quill.min.js' %}"></script>
-
-{% endblock extra_css %}
-
-{% block sidebar %}
-  {% include 'master_app/instructor/sidebar.html' %}
-{% endblock sidebar %}
-
-
-{% block content %}
-
+<link href="{% static 'assets/vendor/quill/quill.bubble.css' %}" rel="stylesheet">
+<script src="{% static 'assets/vendor/quill/quill.min.js' %}"></script>
 <style>
   .dashboard .news h4 , .dashboard .news p{
     margin-left: 0px;
 }
 </style>
 
+{% endblock extra_css %}
 
-<main id="main" class="main pb-5">
+
+
+{% block content %}
+
+
+
+
+<main id="main" class="main ">
     <div class="pagetitle">
         <h1>Add New Course</h1>
         <nav>
@@ -35,7 +33,7 @@
             <li class="breadcrumb-item active">Add New Course</li>
           </ol>
         </nav>
-      </div><!-- End Page Title -->
+      </div>
 
 
     <section class="section dashboard">

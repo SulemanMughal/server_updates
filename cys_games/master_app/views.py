@@ -8,7 +8,7 @@ from django.utils.decorators import method_decorator
 from django.contrib import messages
 
 # ? forms
-from .forms import loginForm, CreateCourseForm, AddNewStudent
+from .forms import loginForm, CreateCourseForm, AddNewStudent, NewVirtualNetworkForm
 
 
 # ? Models
@@ -247,6 +247,24 @@ def InstructorCourseDetails(request):
 
 
 
+# TODO  :   Instructor Virutal Networks Create New
+@login_required
+@teacher_required
+def InstructorVirturalNetworkNew(request):
+    template_name = 'master_app/instructor/virutal_netwroks_new.html'
+    if request.method == "POST":
+        form = NewVirtualNetworkForm(request.POST)
+        print(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "New Network Machine Has been added")
+            return redirect(reverse("instructor-virtual-network-url"))
+    form = NewVirtualNetworkForm()
+    context = {
+        "form" : form
+    }
+    return render(request, template_name, context)
+
 # TODO  :   Instructor Virutal Networks List
 @login_required
 @teacher_required
@@ -257,6 +275,9 @@ def InstructorVirtualNetworkList(request):
     return render(request, template_name, context)
 
 
+
+
+
 # TODO  :   Add New Students To A Course
 @login_required
 @teacher_required
@@ -264,6 +285,7 @@ def AddNewStudents(request):
     template_name = 'master_app/instructor/add_new_student.html'
     if request.method == "POST":
         form = AddNewStudent(request.POST)
+        
         if form.is_valid():
             new_student = form.save()
             messages.success(request, "New Student has been added")

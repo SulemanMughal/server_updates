@@ -24,6 +24,11 @@ input[type=number]:focus,
 .was-validated .form-control:invalid:focus {
   box-shadow: inset 0 -1px 0 #ddd;
 }
+
+#main {
+  margin-top: 0;
+}
+
     </style>
     
     {% block extra_css %}
@@ -69,7 +74,7 @@ input[type=number]:focus,
 
     
 
-    
+    {% include 'notification.html' %}
     
     
 </body>
