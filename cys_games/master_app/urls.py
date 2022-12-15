@@ -42,6 +42,9 @@ urlpatterns = [
     # ? Instructor Courses List
     path("instructor/courses", views.CoursesList, name="courses-all-url"),
 
+    # ? Instructor Courses Detials
+    path("instructor/courses/<int:course_id>/details", views.InstructorCourseDetails, name="instructor-courses-details-url"),
+
     # ? Instructor Students List
     path("instructor/students", views.StudentList, name="students-all-url"),
 
@@ -51,8 +54,7 @@ urlpatterns = [
     # ? Instructor Create New Challenge
     path("instructor/course/challenge/new", views.InstructorCreateNewChallenge, name="instructor-create-new-challenge-url"),
 
-    # ? Instructor Courses Detials
-    path("instructor/courses/details", views.InstructorCourseDetails, name="instructor-courses-details-url"),
+    
 
     # ? Instructor Add New Student
     path("instructor/course/students/new", views.AddNewStudents, name="course-students-new-url"),

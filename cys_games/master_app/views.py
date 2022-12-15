@@ -259,9 +259,24 @@ def InstructorCreateNewChallenge(request):
 # TODO  :   Instructor Course Details
 @login_required
 @teacher_required
-def InstructorCourseDetails(request):
+def InstructorCourseDetails(request, course_id):
+    try:
+        course = Course.objects.get(id = course_id)
+        easy_challenges = course.coursechallenge_set.filter(levels = 1)
+        medium_challenges = course.coursechallenge_set.filter(levels = 2)
+        hard_challenges = course.coursechallenge_set.filter(levels = 3)
+    except Course.DoesNotExist:
+        messages.error(request, "Invalid Course URL")
+        return redirect(reverse("courses-all-url"))
+    except Exception as e:
+        messages.error(request, "Plase try again after some time or contact admin.")
+        return redirect(reverse("master_index"))
     template_name = 'master_app/instructor/courseDetails.html'
     context = {
+        "course"  : course,
+        "easy_challenges" : easy_challenges,
+        "medium_challenges" : medium_challenges,
+        "hard_challenges" : hard_challenges
     }
     return render(request, template_name, context)
 
@@ -274,12 +289,13 @@ def InstructorVirturalNetworkNew(request):
     template_name = 'master_app/instructor/virutal_netwroks_new.html'
     if request.method == "POST":
         form = NewVirtualNetworkForm(request.POST)
-        print(request.POST)
+        # print(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, "New Network Machine Has been added")
             return redirect(reverse("instructor-virtual-network-url"))
-    form = NewVirtualNetworkForm()
+    else:
+        form = NewVirtualNetworkForm()
     context = {
         "form" : form
     }

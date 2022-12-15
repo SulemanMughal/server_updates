@@ -36,10 +36,15 @@ class Course(models.Model):
     description = RichTextField()
     is_approved = models.CharField(max_length=10, choices=APPROVED_CHOICES, default="Pending")
     
-
-
     def __str__(self):
         return self.name
+
+
+    def get_virtual_network(self):
+        try:
+            return VirtualNetwork.objects.get(course__id = self.id)
+        except:
+            return None
 
 
 class AssignedStudents(models.Model):
@@ -73,8 +78,16 @@ class VirtualNetwork(models.Model):
     ip_address = models.GenericIPAddressField(blank=True, null=True)
 
 
+    def clean(self):
+        if self.course.get_virtual_network() :
+            raise ValidationError("Virtual Network already exists for this course.")
+
+
     def __str__(self):
         return self.name
+
+    
+        
 
 
 
