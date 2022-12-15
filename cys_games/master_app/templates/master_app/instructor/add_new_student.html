@@ -12,26 +12,18 @@
 <main id="main" class="main">
 
 
-    <div class="pagetitle">
-        <h1>Add New Students</h1>
-        <nav>
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#!">Home</a></li>
-            <li class="breadcrumb-item"><a href="#!">Students</a></li>
-            <li class="breadcrumb-item active">Add New Student</li>
-          </ol>
-          
-        </nav>
-        
-      </div><!-- End Page Title -->
 
 
       <section class="section dashboard">
-        <div class="row justify-content-center">
+
+        <div class="container">
+
+        <div class="row justify-content-center  my-5">
             <div class="col-12 col-md-6">
 
-                <div class="card shadow-none" >
-                    <div class="card-body p-5">
+                <div class="card " >
+                    <div class="card-body px-5 py-3">
+                      <h5 class="card-title ">Add a new student</h5>
                         {% include 'errors.html' %}
                         {% if messages %}
                           {% for message in messages %}
@@ -65,8 +57,11 @@
                                 </select>
                               </div>
 
-                              <div class="d-grid gap-2 mt-3">
-                                <button type="submit" class="btn btn-primary"  >Add New Student</button>
+                              
+
+                              <div class="text-end">
+                                <a href="{% url 'students-all-url' %}" type="button" class="btn btn-danger "  tabindex="4"><i class="fa-solid fa-chevron-left me-2"></i> Back to Students</a>
+                              <button type="submit" class="btn btn-primary "  tabindex="4">Create <i class="fa-solid fa-chevron-right ms-2"></i></button>
                               </div>
                         </form>
                     </div>
@@ -75,8 +70,31 @@
             </div>
 
         </div>
+
+        </div>  
       </section>
 
 </main>
 
 {% endblock %}
+
+{% comment %}
+
+<div class="pagetitle">
+  <h1>Add New Students</h1>
+  <nav>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#!">Home</a></li>
+      <li class="breadcrumb-item"><a href="#!">Students</a></li>
+      <li class="breadcrumb-item active">Add New Student</li>
+    </ol>
+    
+  </nav>
+  
+</div><!-- End Page Title -->
+
+
+<div class="d-grid gap-2 mt-3">
+  <button type="submit" class="btn btn-primary"  >Add New Student</button>
+</div>
+{% endcomment %}

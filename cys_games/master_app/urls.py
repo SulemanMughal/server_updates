@@ -89,5 +89,9 @@ urlpatterns = [
     # ? Student Machine Details
     path("student/machine/detail", views.StudentMachineDetail, name="student-machine-detail-url"),
 
+
+    # ? Student Challenge Details
+    path("student/courses/<int:course_id>/challenge/<int:challenge_id>/", views.StudentChallengeDetails, name="student-challenge-details-url"),
+
 ]
 

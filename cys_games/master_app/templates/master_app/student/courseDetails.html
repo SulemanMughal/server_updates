@@ -40,7 +40,7 @@
               </div><!-- End Page Title -->
         
             <div class="row">
-                <div class="col-12">
+                <div class="col-12 col-md-8">
                     <!-- Card with an image on left -->
               <div class="card mb-3">
                 <div class="row g-0">
@@ -58,22 +58,37 @@
                     </div>
                   </div>
                 </div>
-              </div><!-- End Card with an image on left -->
+              </div>
+              <div class="card">
+                <div class="card-body p-3">
+                  <h3>Summary</h3>
+                  {{ course.description|safe }}
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-8">
-                  <div class="card">
-                    <div class="card-body p-3">
-                      <h3>Summary</h3>
-                      {{ course.description|safe }}
-                    </div>
-                  </div>
+              </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-12 col-md-4">
                   <div class="card  p-0 ">
-                    <div class="card-body p-0 shadow-none">
-                        <a class="btn btn-primary py-3 shadow-lg w-100 " href="#!">Start instance for {{ course.get_virtual_network }}</a>
+                    
+                    <div class="card-body  px-0">
+                      <a class="btn btn-primary py-3 shadow-lg w-100 " href="#!">Start instance for {{ course.get_virtual_network }}</a>
+                      <ul class="list-group list-group-flush">
+                        
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                          <div class="ms-2 me-auto">
+                            <div class="fw-bold">Name</div>
+                          </div>
+                          {{ course.get_virtual_network.name }}
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                          <div class="ms-2 me-auto">
+                            <div class="fw-bold">OS</div>
+                          </div>{{ course.get_virtual_network.get_operating_system }}</li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                          <div class="ms-2 me-auto">
+                            <div class="fw-bold">Scenario</div>
+                          </div>{{ course.get_virtual_network.get_scenarios }}</li>
+                        <li class="list-group-item text-center" aria-disabled="true"><a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">See Details<i class="fas fa-chevron-right fs-5 ms-3 pt-2"></i></a></li>
+                      </ul><!-- End Clean list group -->
                     </div>
                   </div>
                   <div class="card">
@@ -87,7 +102,7 @@
                           <div class="activite-label"></div>
                           <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
                           <div class="activity-content">
-                            <a href="#!" class="fw-bold "  >{{ ch.title }}</a>
+                            <a href="{% url 'student-challenge-details-url' course.id ch.id  %}" class="fw-bold "  >{{ ch.title }}</a>
                             
                           </div>
                         </div><!-- End activity item-->
@@ -100,7 +115,7 @@
                               <div class="activite-label"></div>
                               <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
                               <div class="activity-content">
-                                <a href="#!" class="fw-bold " >{{ ch.title }}</a>
+                                <a href="{% url 'student-challenge-details-url' course.id ch.id  %}" class="fw-bold " >{{ ch.title }}</a>
                               </div>
                             </div><!-- End activity item-->
                             {% endfor %}
@@ -113,7 +128,7 @@
                               <div class="activite-label"></div>
                               <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
                               <div class="activity-content">
-                                <a href="#!" class="fw-bold " >{{ ch.title }}</a>
+                                <a href="{% url 'student-challenge-details-url' course.id ch.id  %}" class="fw-bold " >{{ ch.title }}</a>
                               </div>
                             </div><!-- End activity item-->
                             {% endfor %}
@@ -122,21 +137,95 @@
                       </div>
                     </div>
                   </div>
-
                   
-                      
-                    
-  
-                    
-                    
-                    
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">Challenges Results</h5>
+        
+                      <!-- Bar Chart -->
+                      <div id="barChart"></div>
+        
+                      <script>
+                        document.addEventListener("DOMContentLoaded", () => {
+                          new ApexCharts(document.querySelector("#barChart"), {
+                            series: [{
+                              data: [400, 430, 448, 470, 540]
+                            }],
+                            chart: {
+                              type: 'bar',
+                              height: 200
+                            },
+                            plotOptions: {
+                              bar: {
+                                borderRadius: 2,
+                                horizontal: true,
+                                width : 2
+                              }
+                            },
+                            dataLabels: {
+                              enabled: false
+                            },
+                            xaxis: {
+                              categories: ['A', 'B', 'C', 'D', 'E'
+                              ],
+                            }
+                          }).render();
+                        });
+                      </script>
+                      <!-- End Bar Chart -->
+        
                     </div>
+                  </div>
+                  
+                  
+                </div>
             </div>
+            
             
         </div>
     </section>
 </main>
+
+<div class="offcanvas offcanvas-end " tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+  <div class="offcanvas-header " style="background-color: #012970;">
+    <h5 class="offcanvas-title mx-auto text-white fw-bolder" id="offcanvasExampleLabel">Description</h5>
+  </div>
+  <div class="offcanvas-body bg-light">
+      <div class="d-flex align-items-center mt-3 mb-2 ">
+          <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+            <img src="{% static 'assets/img/caac8772de14a769c0bfe95756bceebe.png' %}" width="60" alt="">
+          </div>
+          <div class="ps-3">
+            <h4 class="mb-0">{{ course.get_virtual_network }}</h4>
+            <span class=" small pt-1 fw-bold h5">{{ course.get_virtual_network.rating }} Rating</span>
+
+          </div>
+        </div>
+
+
+    <div class="row justify-content-center my-3">
+      <div class="col-12">
+          <h6 class="">{{ course.get_virtual_network.description|safe }}</h6>
+      </div>
+    </div>
+    
+    
+    
+    
+  </div>
+</div>
 {% endblock %}
+
+
+{% block extra_js %}
+
+<script>
+  $(".ql-editor").attr('contenteditable', false);
+  $(".ql-clipboard, .ql-tooltip").hide();
+
+  </script>
+
+  {% endblock %}
 
 
 {% comment %}
@@ -232,55 +321,40 @@
     </li>
     </ul>
 
+    <div class="card p-0 bg-transparent shadow-none">
+      <div class="card-body p-0">
+        <div data-flickity='{"pageDots":false,"cellAlign": "left", "wrapAround": true, "imagesLoaded": true, "prevNextButtons": true}' class="flickity-viewport-visible py-3">
+          
+          {% if easy_challenges %}
+          {% for ch in easy_challenges %}
+          <div class="col-12 "  aria-hidden="true">
+    
+            <!-- Card -->
+            <div class="card card-border " style="border-top-color: #B81D24;border-top-style: solid; border-top-width: 5px;">
+              <div class="card-body text-center">
 
+                <!-- Icon -->
+                
 
-    <!-- flickity
-    <div data-flickity='{"pageDots":false,"cellAlign": "left", "wrapAround": true, "imagesLoaded": true, "prevNextButtons": false}' class="flickity-viewport-visible py-3">
-                        <div class="col-12 "  aria-hidden="true">
-                  
-                          <!-- Card -->
-                          <div class="card card-border shadow-light-lg lift lift-lg" style="border-top-color: #B81D24;border-top-style: solid; border-top-width: 5px;">
-                            <div class="card-body text-center">
+                <!-- Text -->
+                <h5 class=" mb-5 mt-3">
+                  {% lorem %}
+                </h5>
+
+                <!-- Link -->
+                <a href="{% url 'student-challenge-details-url' course.id ch.id  %}" style="color: #B81D24;">See Details</a>
+                
+              </div>
+            </div>
+            
+
+          </div>
+          {% endfor %}
+          {% endif %}
           
-                              <!-- Icon -->
-                              
-          
-                              <!-- Text -->
-                              <p class="text-gray-700 mb-5">
-                                Uses Landkit to document their processes for acquiring shows.
-                              </p>
-          
-                              <!-- Link -->
-                              <a href="#!" style="color: #B81D24;">Read more</a>
-                              
-                            </div>
-                          </div>
-                          
-          
-                        </div>
-                        <div class="col-12 "  aria-hidden="true">
-                  
-                          <!-- Card -->
-                          <div class="card card-border  lift lift-lg" style="border-top-color: #B81D24;">
-                            <div class="card-body text-center">
-          
-                              <!-- Icon -->
-                              <div class="img-fluid mb-5 w-50 svg-shim" style="color: #B81D24;">
-                                <svg viewBox="0 0 2761 991" xmlns="http://www.w3.org/2000/svg"><path d="M2140.629 749.008c29.915 2.896 59.815 6.007 89.644 9.225l65.859-162.412 62.6 177.393a7894.176 7894.176 0 0196.232 12.643l-109.75-311.073L2455 204.021h-92.981l-.967 1.33-59.307 146.273-52.068-147.581h-91.807l94.779 268.625-112.013 276.34h-.007zm-69.432-6.364V204.02h-91.77v531.064c30.609 2.36 61.233 4.892 91.77 7.552v.007zm-689.374-30.12c24.774 0 49.52.186 74.222.386V515.03h110.244v-84.267h-110.237V288.388h126.97v-84.367h-219.099v508.575c5.95 0 11.929-.093 17.9-.072zm-284.928 5.149a8147.87 8147.87 0 0191.82-2.746V288.402h85.779v-84.36h-263.377v84.36h85.792v429.27h-.014zm-701.862 56.793V453.568l108.662 307.94a7954.136 7954.136 0 01100.442-10.605V204.03h-88.055v332.396L398.828 204.03H307V786h.551c29.092-4.019 58.284-7.837 87.482-11.534zM922.625 288.38v-84.352h-219.12v537.757a7890.227 7890.227 0 01218.941-15.81v-84.432a7642.138 7642.138 0 00-126.805 8.445V515.066h110.244v-84.317H795.64V288.38h126.984zm842.27 349.13V204h-92.171v513.98c73.32 2.69 146.352 6.436 219.142 11.156v-84.481a8007.367 8007.367 0 00-126.97-7.151v.007z" fill="currentColor" fill-rule="nonzero"></path></svg>
-                              </div>
-          
-                              <!-- Text -->
-                              <p class="text-gray-700 mb-5">
-                                Uses Landkit to document their processes for acquiring shows.
-                              </p>
-          
-                              <!-- Link -->
-                              <a href="#!" style="color: #B81D24;">Read more</a>
-                              
-                            </div>
-                          </div>
-                          
-          
-                        </div>
-                        </div> -->
+          </div>
+      </div>
+    </div>
+
+    
 {% endcomment %}

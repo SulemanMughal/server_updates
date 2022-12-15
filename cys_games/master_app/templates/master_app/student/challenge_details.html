@@ -1,0 +1,52 @@
+{%  extends 'base.html' %}
+{% load static %}
+{% block title %} {{ course.name }} {% endblock %}
+
+{% block extra_css %}
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<main id="main" class="main">
+    <section class="section dashboard">
+        <div class="container">
+            <div class="pagetitle">
+                <h1>Course Details</h1>
+                <nav>
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'student-dasboard-url' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item "><a href="{% url 'student-courses-url' %}">Courses</a></li>
+                    <li class="breadcrumb-item "><a href="{% url 'student-courses-details-url' course.id %}">{{ course.name }}</a></li>
+                    <li class="breadcrumb-item active">{{ challenge.title }}</li>
+                  </ol>
+                </nav>
+              </div><!-- End Page Title -->
+
+              <div class="row justify-content-center">
+                <div class="col-12 col-md-6">
+                    <div class="card">
+                        <div class="card-body py-3">
+                            <h5 class="card-title fs-5">
+                                {{ challenge.title }}
+                            </h5>
+                            <p>
+                                Course Name : {{ course.name }}
+                            </p>
+                            <p>
+                                Difficulty Level  : {{ challenge.get_difficulty_level }}
+                            </p>
+                            <p>
+                                Decription : {{ course.name }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+              </div>
+
+        </div>
+        </section>
+        </main>
+{% endblock %}

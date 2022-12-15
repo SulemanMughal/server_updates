@@ -404,6 +404,7 @@ def StudentCourses(request):
 @login_required
 @student_required
 def StudentCourseDetails(request , course_id):
+    template_name = 'master_app/student/courseDetails.html'
     try:
         course = Course.objects.get(id=course_id, is_approved = "Approved")
         easy_challenges = course.coursechallenge_set.filter(levels = 1)
@@ -412,7 +413,7 @@ def StudentCourseDetails(request , course_id):
     except:
         messages.error(request, "Requested course does not exist")
         return redirect(reverse("student-courses-url"))
-    template_name = 'master_app/student/courseDetails.html'
+    
     context = {
         "course" : course,
         "easy_challenges" : easy_challenges,
@@ -450,5 +451,26 @@ def StudentMachines(request):
 def StudentMachineDetail(request):
     template_name = 'master_app/student/machine_detail.html'
     context = {
+    }
+    return render(request, template_name, context)
+
+
+# TODO  :   Student Challenge Details
+@login_required
+@student_required
+def StudentChallengeDetails(request, course_id, challenge_id):
+    template_name = 'master_app/student/challenge_details.html'
+    try:
+        course = Course.objects.get(id = course_id)
+        challenge = CourseChallenge.objects.get(id = challenge_id)
+    except (Course.DoesNotExist, CourseChallenge.DoesNotExist):
+        messages.error(request, "Invalid URL")
+        return redirect(reverse("courses-all-url"))
+    except Exception as e:
+        messages.error(request, "Plase try again after some time or contact admin.")
+        return redirect(reverse("master_index"))
+    context = {
+        "course" : course,
+        "challenge" : challenge
     }
     return render(request, template_name, context)

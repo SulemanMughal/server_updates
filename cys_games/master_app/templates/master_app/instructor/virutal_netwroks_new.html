@@ -10,6 +10,14 @@
 <link href="{% static 'assets/vendor/quill/quill.bubble.css' %}" rel="stylesheet">
 <script src="{% static 'assets/vendor/quill/quill.min.js' %}"></script>
 
+
+<style>
+   .ql-editor {
+ overflow-y: scroll;
+ min-height: 150px;
+ }
+</style>
+
 {% endblock extra_css %}
 
 
@@ -19,19 +27,12 @@
 
 <main id="main" class="main ">
     <section class="section dashboard">
-        <div class="pagetitle">
-            <h1>Add New Virtual Network</h1>
-            <nav>
-              <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#!">Home</a></li>
-                <li class="breadcrumb-item active">Add New Virtual Network</li>
-              </ol>
-            </nav>
-          </div>
-          <div class="row justify-content-center">
+      <div class="container">
+          <div class="row justify-content-center  my-5">
             <div class="col-12 col-md-6 ">
                 <div class="card" >
-                    <div class="card-body p-5">
+                    <div class="card-body px-5 py-3">
+                      <h5 class="card-title ">Add a new virtual network</h5>
                         {% include 'master_app/errors.html' %}
                         {% if messages %}
                           {% for message in messages %}
@@ -113,14 +114,18 @@
 
                             
 
-                            <div class="d-grid gap-2 mt-3">
-                                <button type="submit" class="btn btn-primary"  tabindex="4">Create</button>
+                            
+
+                            <div class="text-end">
+                              <a href="{% url 'instructor-virtual-network-url' %}" type="button" class="btn btn-danger "  ><i class="fa-solid fa-chevron-left me-2"></i> Back to Virtual Networks</a>
+                            <button type="submit" class="btn btn-primary "  >Create <i class="fa-solid fa-chevron-right ms-2"></i></button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
           </div>
+      </div>
     </section>
 </main>   
 
@@ -136,3 +141,21 @@
     });
 </script>
 {% endblock %}
+
+
+{% comment %}
+<div class="pagetitle">
+  <h1>Add New Virtual Network</h1>
+  <nav>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#!">Home</a></li>
+      <li class="breadcrumb-item active">Add New Virtual Network</li>
+    </ol>
+  </nav>
+</div>
+
+
+<div class="d-grid gap-2 mt-3">
+  <button type="submit" class="btn btn-primary"  tabindex="4">Create</button>
+</div>
+{% endcomment %}

@@ -14,6 +14,46 @@
   .dashboard .news h4 , .dashboard .news p{
     margin-left: 0px;
 }
+.gradient-1 {
+  color: #fff !important;
+}
+
+.gradient-1 {
+  background-image: linear-gradient(230deg, #759bff, #843cf6);
+}
+
+.gradient-2 {
+  color: #fff !important;
+}
+
+.gradient-2 {
+  background-image: linear-gradient(230deg, #fc5286, #fbaaa2);
+}
+
+.gradient-3 {
+  color: #fff !important;
+}
+
+.gradient-3 {
+  background-image: linear-gradient(230deg, #ffc480, #ff763b);
+}
+
+
+.gradient-4 {
+  color: #fff !important;
+}
+
+.gradient-4 {
+  background-image: linear-gradient(230deg, #0e4cfd, #6a8eff);
+}
+
+
+.new .card-body {
+  flex: 1 1 auto;
+  padding: 1.88rem 1.81rem;
+}
+
+
 </style>
 
 <main id="main" class="main">
@@ -22,7 +62,7 @@
       <h1>Dashboard</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="#!">Home</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'master_index' %}">Home</a></li>
           <li class="breadcrumb-item active">Dashboard</li>
         </ol>
       </nav>
@@ -35,115 +75,69 @@
         <div class="col-lg-8">
           <div class="row">
 
-            <!-- Sales Card -->
-            <div class="col-xxl-4 col-md-4">
-              <div class="card info-card sales-card">
-
-                <div class="filter d-none">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
-
-                    <li><a class="dropdown-item" href="#">Today</a></li>
-                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-                </div>
-
+            <!-- Courses -->
+            <div class="col-xll-3 col-lg-6 col-md-4 new">
+              <div class="card gradient-1">
                 <div class="card-body">
-                  <h5 class="card-title">Courses <span>| Total</span></h5>
-
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="fas fa-book-reader"></i>
+                    <h3 class="card-title text-white py-0">Courses</h3>
+                    <div class="d-inline-block">
+                        <h2 class="text-white fw-bolder fs-1">8541</h2>
+                        <p class="text-white mb-0">Jan - March 2019</p>
                     </div>
-                    <div class="ps-3">
-                      <h6>145</h6>
-                      
-
-                    </div>
-                  </div>
+                    <span class="float-end display-5 opacity-5"><i class="bi bi-menu-button-wide"></i></span>
                 </div>
+            </div>
+            </div>
 
-              </div>
-            </div><!-- End Sales Card -->
 
 
-            <!-- Sales Card -->
-            <div class="col-xxl-4 col-md-4">
-              <div class="card info-card revenue-card">
-
-                <div class="filter d-none">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
-
-                    <li><a class="dropdown-item" href="#">Today</a></li>
-                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-                </div>
-
+            <!-- Students -->
+            <div class="col-xll-3 col-lg-6 col-md-4 new">
+              <div class="card gradient-2">
                 <div class="card-body">
-                  <h5 class="card-title">Students <span>| Total</span></h5>
-
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="fas fa-user-graduate"></i>
+                    <h3 class="card-title text-white py-0">Students</h3>
+                    <div class="d-inline-block">
+                        <h2 class="text-white fw-bolder fs-1">8541</h2>
+                        <p class="text-white mb-0">Jan - March 2019</p>
                     </div>
-                    <div class="ps-3">
-                      <h6>145</h6>
-                      
-
-                    </div>
-                  </div>
+                    <span class="float-end display-5 opacity-5"><i class="fa-solid fa-graduation-cap "></i></span>
                 </div>
+            </div>
+            </div>
+            
 
-              </div>
-            </div><!-- End Sales Card -->
-
-
-            <!-- Sales Card -->
-            <div class="col-xxl-4 col-md-4">
-              <div class="card info-card customers-card">
-
-                <div class="filter d-none">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
-
-                    <li><a class="dropdown-item" href="#">Today</a></li>
-                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-                </div>
-
+            <!-- challenges -->
+            <div class="col-xll-3 col-lg-6 col-md-4 new">
+              <div class="card gradient-3">
                 <div class="card-body">
-                  <h5 class="card-title">Virtual Machines <span>| Total</span></h5>
-
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="fas fa-laptop-code"></i>
+                    <h3 class="card-title text-white py-0">Challenges</h3>
+                    <div class="d-inline-block">
+                        <h2 class="text-white fw-bolder fs-1">8541</h2>
+                        <p class="text-white mb-0">Jan - March 2019</p>
                     </div>
-                    <div class="ps-3">
-                      <h6>145</h6>
-                      
-
-                    </div>
-                  </div>
+                    <span class="float-end display-5 opacity-5"><i class="fas fa-tasks" aria-hidden="true"></i>
+                    </span>
                 </div>
+            </div>
+            </div>
 
-              </div>
-            </div><!-- End Sales Card -->
+            <!-- Virtual Networks -->
+            <div class="col-xll-3 col-lg-6 col-md-4 new">
+              <div class="card gradient-4">
+                <div class="card-body">
+                    <h3 class="card-title text-white py-0">Virtual Networks</h3>
+                    <div class="d-inline-block">
+                        <h2 class="text-white fw-bolder fs-1">8541</h2>
+                        <p class="text-white mb-0">Jan - March 2019</p>
+                    </div>
+                    <span class="float-end display-5 opacity-5"><i class="fas fa-server"></i></span>
+                </div>
+            </div>
+            </div>
 
+            
             <!-- Reports -->
-            <div class="col-12 d-none">
+            <div class="col-12 ">
               <div class="card">
 
                 <div class="filter">
@@ -169,13 +163,13 @@
                     document.addEventListener("DOMContentLoaded", () => {
                       new ApexCharts(document.querySelector("#reportsChart"), {
                         series: [{
-                          name: 'Sales',
+                          name: 'Course A',
                           data: [31, 40, 28, 51, 42, 82, 56],
                         }, {
-                          name: 'Revenue',
+                          name: 'Course B',
                           data: [11, 32, 45, 32, 34, 52, 41]
                         }, {
-                          name: 'Customers',
+                          name: 'Course C',
                           data: [15, 11, 32, 18, 9, 24, 11]
                         }],
                         chart: {
@@ -225,7 +219,7 @@
             </div><!-- End Reports -->
 
             <!-- Recent Sales -->
-            <div class="col-12">
+            <div class="col-12 d-none">
               <div class="card recent-sales overflow-auto">
 
                 <div class="filter">
@@ -311,28 +305,33 @@
                       <tr>
                         <th scope="col">Course</th>
                         <th scope="col">Students</th>
+                        <th scope="col">Challenges</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <td><a href="#" class="text-primary fw-bold">Ut inventore ipsa voluptas nulla</a></td>
+                        <td><a href="#" class="text-primary fw-bold">Course A</a></td>
                         <td class="fw-bold">124</td>
+                        <td class="fw-bold">12</td>
                       </tr>
                       <tr>
-                        <td><a href="#" class="text-primary fw-bold">Exercitationem similique doloremque</a></td>
+                        <td><a href="#" class="text-primary fw-bold">Course B</a></td>
                         <td class="fw-bold">98</td>
                       </tr>
                       <tr>
-                        <td><a href="#" class="text-primary fw-bold">Doloribus nisi exercitationem</a></td>
+                        <td><a href="#" class="text-primary fw-bold">Course C</a></td>
                         <td class="fw-bold">74</td>
+                        <td class="fw-bold">7</td>
                       </tr>
                       <tr>
-                        <td><a href="#" class="text-primary fw-bold">Officiis quaerat sint rerum error</a></td>
+                        <td><a href="#" class="text-primary fw-bold">Course D</a></td>
                         <td class="fw-bold">63</td>
+                        <td class="fw-bold">5</td>
                       </tr>
                       <tr>
-                        <td><a href="#" class="text-primary fw-bold">Sit unde debitis delectus repellendus</a></td>
+                        <td><a href="#" class="text-primary fw-bold">Course E</a></td>
                         <td class="fw-bold">41</td>
+                        <td class="fw-bold">9</td>
                       </tr>
                     </tbody>
                   </table>
@@ -348,8 +347,82 @@
         <!-- Right side columns -->
         <div class="col-lg-4">
 
+          <!-- Website Traffic -->
+          <div class="card ">
+            <div class="filter">
+              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <li class="dropdown-header text-start">
+                  <h6>Filter</h6>
+                </li>
+
+                <li><a class="dropdown-item" href="#">Today</a></li>
+                <li><a class="dropdown-item" href="#">This Month</a></li>
+                <li><a class="dropdown-item" href="#">This Year</a></li>
+              </ul>
+            </div>
+
+            <div class="card-body pb-0">
+              <h5 class="card-title">Information <span>| Today</span></h5>
+
+              <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
+
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  echarts.init(document.querySelector("#trafficChart")).setOption({
+                    tooltip: {
+                      trigger: 'item'
+                    },
+                    legend: {
+                      top: '5%',
+                      left: 'center'
+                    },
+                    series: [{
+                      name: 'Access From',
+                      type: 'pie',
+                      radius: ['40%', '70%'],
+                      avoidLabelOverlap: false,
+                      label: {
+                        show: false,
+                        position: 'center'
+                      },
+                      emphasis: {
+                        label: {
+                          show: true,
+                          fontSize: '18',
+                          fontWeight: 'bold'
+                        }
+                      },
+                      labelLine: {
+                        show: false
+                      },
+                      data: [{
+                          value: 1048,
+                          name: 'Courses'
+                        },
+                        {
+                          value: 735,
+                          name: 'Students'
+                        },
+                        {
+                          value: 580,
+                          name: 'Virtual Challenges'
+                        },
+                        {
+                          value: 520,
+                          name: 'Challenges'
+                        }
+                      ]
+                    }]
+                  });
+                });
+              </script>
+
+            </div>
+          </div><!-- End Website Traffic -->
+
           <!-- News & Updates Traffic -->
-          <div class="card">
+          <div class="card d-none">
             <div class="filter">
               <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
               <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
@@ -392,7 +465,7 @@
           </div><!-- End News & Updates -->
 
           <!-- Recent Activity -->
-          <div class="card d-none">
+          <div class="card ">
             <div class="filter">
               <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
               <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
@@ -538,75 +611,63 @@
             </div>
           </div><!-- End Budget Report -->
 
-          <!-- Website Traffic -->
-          <div class="card ">
-            <div class="filter">
-              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <li class="dropdown-header text-start">
-                  <h6>Filter</h6>
-                </li>
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Column Chart</h5>
 
-                <li><a class="dropdown-item" href="#">Today</a></li>
-                <li><a class="dropdown-item" href="#">This Month</a></li>
-                <li><a class="dropdown-item" href="#">This Year</a></li>
-              </ul>
-            </div>
-
-            <div class="card-body pb-0">
-              <h5 class="card-title">Information <span>| Today</span></h5>
-
-              <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
+              <!-- Column Chart -->
+              <div id="columnChart"></div>
 
               <script>
                 document.addEventListener("DOMContentLoaded", () => {
-                  echarts.init(document.querySelector("#trafficChart")).setOption({
-                    tooltip: {
-                      trigger: 'item'
-                    },
-                    legend: {
-                      top: '5%',
-                      left: 'center'
-                    },
+                  new ApexCharts(document.querySelector("#columnChart"), {
                     series: [{
-                      name: 'Access From',
-                      type: 'pie',
-                      radius: ['40%', '70%'],
-                      avoidLabelOverlap: false,
-                      label: {
-                        show: false,
-                        position: 'center'
+                      name: 'Students',
+                      data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
+                    }, {
+                      name: 'Challenges',
+                      data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
+                    }],
+                    chart: {
+                      type: 'bar',
+                      height: 350
+                    },
+                    plotOptions: {
+                      bar: {
+                        horizontal: false,
+                        columnWidth: '55%',
+                        endingShape: 'rounded'
                       },
-                      emphasis: {
-                        label: {
-                          show: true,
-                          fontSize: '18',
-                          fontWeight: 'bold'
+                    },
+                    dataLabels: {
+                      enabled: false
+                    },
+                    stroke: {
+                      show: true,
+                      width: 2,
+                      colors: ['transparent']
+                    },
+                    xaxis: {
+                      categories: ['Course A', 'Course B', 'Course C', 'Course D', 'Course E', 'Course F', 'Course G', 'Course H', 'Course I'],
+                    },
+                    
+                    fill: {
+                      opacity: 1
+                    },
+                    tooltip: {
+                      y: {
+                        formatter: function(val) {
+                          return val 
                         }
-                      },
-                      labelLine: {
-                        show: false
-                      },
-                      data: [{
-                          value: 1048,
-                          name: 'Courses'
-                        },
-                        {
-                          value: 735,
-                          name: 'Students'
-                        },
-                        {
-                          value: 580,
-                          name: 'Virtual Machines'
-                        }
-                      ]
-                    }]
-                  });
+                      }
+                    }
+                  }).render();
                 });
               </script>
+              <!-- End Column Chart -->
 
             </div>
-          </div><!-- End Website Traffic -->
+          </div>
 
           
 
@@ -634,4 +695,43 @@
     </section>
 </main>
     
+
+<!-- virtual networks -->
+
+
+            <!-- Sales Card -->
+            <div class="col-xxl-4 col-md-4">
+              <div class="card info-card customers-card">
+
+                <div class="filter d-none">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                      <h6>Filter</h6>
+                    </li>
+
+                    <li><a class="dropdown-item" href="#">Today</a></li>
+                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                  </ul>
+                </div>
+
+                <div class="card-body">
+                  <h5 class="card-title">Virtual Machines <span>| Total</span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>145</h6>
+                      
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div><!-- End Sales Card -->
+
 {% endcomment %}
