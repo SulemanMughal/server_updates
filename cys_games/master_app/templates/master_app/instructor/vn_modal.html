@@ -1,0 +1,103 @@
+<style>
+   #modalEditor  .ql-editor {
+overflow-y: scroll;
+min-height: 150px;
+}
+</style>
+
+<div class="modal fade" id="virutal_network_modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Challenge Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="row g-3 needs-validation" novalidate  
+                        action="{% url 'instructor-virutal-network-create-url' %}"  id="identifier"   method="POST">
+                            {% csrf_token %}
+
+
+
+ <!-- Virtual Network Name -->
+ <div class="col-12  mb-3">
+    <div class="form-floating">
+      <input type="text" name="name" class="form-control" id="id_name" placeholder="Virutal Network Name"  autocapitalize="none" autocomplete="off" maxlength="100" required >
+      <label for="id_name">Virutal Network Name</label>
+      <div class="invalid-feedback">
+        Please choose a valid network name.
+      </div>
+    </div>
+  </div>
+
+<!-- Course Name -->
+<div class="col-12 col-md-6 mb-3">
+    <label for="id_course" class="form-label">Course </label>
+    <select class="form-select" id="id_course" required="" name="course">
+        {% for course in form.course  %}
+            {{ course }}
+        {% endfor %}
+    </select>
+  </div>
+
+<!-- Operating System -->
+<div class="col-12 col-md-6 mb-3">
+    <label for="id_operating_system" class="form-label">Operating System </label>
+    <select class="form-select" id="id_operating_system" required="" name="operating_system">
+        {% for os in form.operating_system  %}
+            {{ os }}
+        {% endfor %}
+    </select>
+  </div>
+ 
+
+
+  <!-- Description -->
+  <div class="quill-editor-full mb-3" id="modalEditor">
+                      
+  </div>
+
+  <textarea  style="display:none" id="id_description" name="description"></textarea>
+
+
+  
+
+
+<!-- Scenarios -->
+<div class="col-md-12 mb-3">
+    <label for="id_scenarios" class="form-label">Scenarios </label>
+    <select class="form-select" id="id_scenarios" required="" name="scenarios">
+        {% for scenario in form.scenarios  %}
+            {{ scenario }}
+        {% endfor %}
+    </select>
+</div>
+
+
+
+<!-- Rating -->
+<div class="col-md-12 mb-3">
+    <label for="id_rating" class="form-label">Rating </label>
+    <select class="form-select" id="id_rating" required="" name="rating">
+        {% for rate in form.rating  %}
+            {{ rate }}
+        {% endfor %}
+    </select>
+</div>
+
+
+
+                            
+
+                            <div class="d-grid gap-2 mt-3">
+                                <button type="submit" class="btn btn-primary"  tabindex="4">Create</button>
+                            </div>
+                        </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+

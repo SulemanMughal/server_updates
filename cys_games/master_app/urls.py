@@ -33,31 +33,39 @@ urlpatterns = [
     path("instructor/profile", views.InsturctorProfile, name="instructor-profile-url"),
     
 
-    # ? Instructor Create New Virtual Network
-    path("instructor/virtual-network/create/new" , views.InstructorVirturalNetworkNew, name="instructor-virutal-network-create-url"),
+    
 
-    # ? Instructor Virutal Networks
-    path("instructor/virtaul-networks", views.InstructorVirtualNetworkList, name="instructor-virtual-network-url"),
-
-    # ? Instructor Courses List
-    path("instructor/courses", views.CoursesList, name="courses-all-url"),
-
-    # ? Instructor Courses Detials
-    path("instructor/courses/<int:course_id>/details", views.InstructorCourseDetails, name="instructor-courses-details-url"),
-
-    # ? Instructor Students List
-    path("instructor/students", views.StudentList, name="students-all-url"),
+    
 
     # ? Instructor Create New Course
     path("instructor/course/new", views.CreateCourse, name="course-new-url"),
 
+    # ? Instructor Add New Student
+    path("instructor/course/students/new", views.AddNewStudents, name="course-students-new-url"),
+
     # ? Instructor Create New Challenge
     path("instructor/course/challenge/new", views.InstructorCreateNewChallenge, name="instructor-create-new-challenge-url"),
 
+    # ? Instructor Create New Virtual Network
+    path("instructor/virtual-network/create/new" , views.InstructorVirturalNetworkNew, name="instructor-virutal-network-create-url"),
+
+    # ? Instructor Courses List
+    path("instructor/courses", views.CoursesList, name="courses-all-url"),
+
+    # ? Instructor Students List
+    path("instructor/students", views.StudentList, name="students-all-url"),
+
+    # ? Instructor Virutal Networks
+    path("instructor/virtaul-networks", views.InstructorVirtualNetworkList, name="instructor-virtual-network-url"),
+
+    # ? Instructor Courses Detials
+    path("instructor/courses/<int:course_id>/details", views.InstructorCourseDetails, name="instructor-courses-details-url"),
+
+    # ? Instructor Challenge Details
+    path("instructor/courses/<int:course_id>/challenge/<int:challenge_id>/", views.InstructorChallengeDetails, name="instructor-challenge-details-url"),
     
 
-    # ? Instructor Add New Student
-    path("instructor/course/students/new", views.AddNewStudents, name="course-students-new-url"),
+    
 
     
 

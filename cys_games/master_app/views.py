@@ -12,7 +12,7 @@ from .forms import loginForm, CreateCourseForm, AddNewStudent, NewVirtualNetwork
 
 
 # ? Models
-from .models import Course, AssignedStudents
+from .models import Course, AssignedStudents, CourseChallenge
 
 # ? Decorators
 from .decorators import (
@@ -260,23 +260,48 @@ def InstructorCreateNewChallenge(request):
 @login_required
 @teacher_required
 def InstructorCourseDetails(request, course_id):
+    template_name = 'master_app/instructor/courseDetails.html'
     try:
         course = Course.objects.get(id = course_id)
         easy_challenges = course.coursechallenge_set.filter(levels = 1)
         medium_challenges = course.coursechallenge_set.filter(levels = 2)
         hard_challenges = course.coursechallenge_set.filter(levels = 3)
+        students = course.assignedstudents_set.all()
     except Course.DoesNotExist:
         messages.error(request, "Invalid Course URL")
         return redirect(reverse("courses-all-url"))
     except Exception as e:
         messages.error(request, "Plase try again after some time or contact admin.")
         return redirect(reverse("master_index"))
-    template_name = 'master_app/instructor/courseDetails.html'
+    
     context = {
         "course"  : course,
         "easy_challenges" : easy_challenges,
         "medium_challenges" : medium_challenges,
-        "hard_challenges" : hard_challenges
+        "hard_challenges" : hard_challenges,
+        "students" : students,
+        "form" :  NewVirtualNetworkForm(),
+    }
+    return render(request, template_name, context)
+
+
+# TODO  :   Instructor Course Challenge Details
+@login_required
+@teacher_required
+def InstructorChallengeDetails(request, course_id, challenge_id):
+    template_name = 'master_app/instructor/challenge_details.html'
+    try:
+        course = Course.objects.get(id = course_id)
+        challenge = CourseChallenge.objects.get(id = challenge_id)
+    except (Course.DoesNotExist, CourseChallenge.DoesNotExist):
+        messages.error(request, "Invalid URL")
+        return redirect(reverse("courses-all-url"))
+    except Exception as e:
+        messages.error(request, "Plase try again after some time or contact admin.")
+        return redirect(reverse("master_index"))
+    context = {
+        "course" : course,
+        "challenge" : challenge
     }
     return render(request, template_name, context)
 
@@ -305,8 +330,10 @@ def InstructorVirturalNetworkNew(request):
 @login_required
 @teacher_required
 def InstructorVirtualNetworkList(request):
+    networks = [i for x in Course.objects.filter(instructor = request.user) for i in x.virtualnetwork_set.all() if len(x.virtualnetwork_set.all())>0 ]
     template_name = 'master_app/instructor/virutal_netwroks.html'
     context = {
+        "networks" : networks
     }
     return render(request, template_name, context)
 

@@ -12,6 +12,19 @@
 
 
 {% block content %}
+
+{% if not course.get_virtual_network %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link href="{% static 'assets/vendor/quill/quill.snow.css' %}" rel="stylesheet">
+<link href="{% static 'assets/vendor/quill/quill.bubble.css' %}" rel="stylesheet">
+<script src="{% static 'assets/vendor/quill/quill.min.js' %}"></script>
+
+{% include 'master_app/instructor/vn_modal.html' %}
+{%  endif %}
+
+
+
 <main id="main" class="main">
     <section class="section dashboard">
         <div class="container">
@@ -19,8 +32,8 @@
                 <h1>Course Details</h1>
                 <nav>
                   <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#!">Home</a></li>
-                    <li class="breadcrumb-item "><a href="#!">Courses</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'instructor-dasboard-url' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item "><a href="{% url 'courses-all-url' %}">Courses</a></li>
                     <li class="breadcrumb-item active">{{ course.name }}</li>
                   </ol>
                 </nav>
@@ -56,63 +69,99 @@
             </div>
             <div class="row">
                 <div class="col-lg-8">
-                    <h3>Summary</h3>
-                    {{ course.description|safe }}
-                    <div class="card ">
-                      <a class="btn btn-primary py-3 fs-4" href="#!">Create instance for {{ course.get_virtual_network }}</a>
+                  <div class="card">
+                    <div class="card-body p-3">
+                      <h3>Summary</h3>
+                      {{ course.description|safe }}
                     </div>
+                  </div>
                 </div>
                 <div class="col-lg-4">
-                    <h3>Challenges</h3>
-                    
-                    <div class="activity">
-                    {% if easy_challenges %}
-                      
-                          {% for ch in easy_challenges %}
-                          <div class="activity-item d-flex">
-                            <div class="activite-label"></div>
-                            <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
-                            <div class="activity-content">
-                              {{ ch.title }}
-                            </div>
-                          </div><!-- End activity item-->
-                          {% endfor %}
-                        
-                    {% endif %}
-                    {% if medium_challenges %}
-                      
-                          {% for ch in medium_challenges %}
-                          <div class="activity-item d-flex">
-                            <div class="activite-label"></div>
-                            <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
-                            <div class="activity-content">
-                              {{ ch.title }}
-                            </div>
-                          </div><!-- End activity item-->
-                          {% endfor %}
-                      
-                    {% endif %}
-                    {% if medium_challenges %}
-                      
-                          {% for ch in hard_challenges %}
-                          <div class="activity-item d-flex">
-                            <div class="activite-label"></div>
-                            <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
-                            <div class="activity-content">
-                              {{ ch.title }}
-                            </div>
-                          </div><!-- End activity item-->
-                          {% endfor %}
-                      
-                    {% endif %}
-                  </div>
+                  <div class="card bg-transparent p-0 ">
+                    <div class="card-body p-0 shadow-none">
+                      {% if course.get_virtual_network %}
+                        <a class="btn btn-primary py-3 shadow-lg w-100 " href="#!">Start instance for {{ course.get_virtual_network }}</a>
+                      {% else %}
+                        <a class="btn btn-primary py-3 shadow-lg w-100 " href="#virutal_network_modal" data-bs-toggle="modal">Create Virutal Network</a>
+                      {% endif %}
                     </div>
+                  </div>
+                  <div class="card">
+                    <div class="card-body p-3">
+                      <h3>Challenges</h3>
+                    
+                      <div class="activity">
+                      
+                        {% if easy_challenges %}
+                        
+                            {% for ch in easy_challenges %}
+                            {% include 'master_app/instructor/challenges_modals.html' with ch=ch %}
+                            <div class="activity-item d-flex">
+                              <div class="activite-label"></div>
+                              <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
+                              <div class="activity-content">
+                                <a href="#verticalycentered_{{ ch.course.id }}_{{ ch.id }}" class="fw-bold " data-bs-toggle="modal" >{{ ch.title }}</a>
+                                
+                              </div>
+                            </div><!-- End activity item-->
+                            {% endfor %}
+                          
+                      {% endif %}
+                      {% if medium_challenges %}
+                        
+                            {% for ch in medium_challenges %}
+                            {% include 'master_app/instructor/challenges_modals.html' with ch=ch %}
+                            <div class="activity-item d-flex">
+                              <div class="activite-label"></div>
+                              <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
+                              <div class="activity-content">
+                                <a href="#verticalycentered_{{ ch.course.id }}_{{ ch.id }}" class="fw-bold " data-bs-toggle="modal" >{{ ch.title }}</a>
+                              </div>
+                            </div><!-- End activity item-->
+                            {% endfor %}
+                        
+                      {% endif %}
+                      {% if medium_challenges %}
+                        
+                            {% for ch in hard_challenges %}
+                            {% include 'master_app/instructor/challenges_modals.html' with ch=ch %}
+                            <div class="activity-item d-flex">
+                              <div class="activite-label"></div>
+                              <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
+                              <div class="activity-content">
+                                <a href="#verticalycentered_{{ ch.course.id }}_{{ ch.id }}" class="fw-bold " data-bs-toggle="modal" >{{ ch.title }}</a>
+                              </div>
+                            </div><!-- End activity item-->
+                            {% endfor %}
+                        
+                      {% endif %}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card">
+                    <div class="card-body p-3">
+                      <h3>Students</h3>
+                      <ul class="list-group list-group-flush">
+                        {% if students %}
+                          {% for std in students %}
+                            <li class="list-group-item">{{std.student.email }}</li>
+                          {% endfor %}
+                        {% endif %}
+                      </ul><!-- End Clean list group -->
+                    </div>
+                  </div>
+                    
+
+
+
+                </div>
             </div>
             
 
 
             {% comment %}
-            <div class="row">
+            <div class="row ">
                 <div class="col-lg-12">
                 <h3>Relevant Paths</h3>
                 <p>This module progresses you towards the following Paths</p>
@@ -144,4 +193,24 @@
         </div>
     </section>
 </main>
+{% endblock %}
+
+{% block extra_js %}
+
+<script>
+  $(".ql-editor").attr('contenteditable', false);
+  $(".ql-clipboard, .ql-tooltip").hide();
+  
+  if($("#modalEditor").length){
+    
+    $("#modalEditor .ql-editor").attr('contenteditable', true);
+    $("#modalEditor .ql-clipboard, #modalEditor .ql-tooltip").hide();
+    $(function(){
+        $("#identifier").on("submit",function(event) {
+        $("#id_description").val($(".quill-editor-full").html());
+        })
+    });
+  }
+  
+</script>
 {% endblock %}

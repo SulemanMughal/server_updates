@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'rest_framework',
+
     # Custom Django User Model
     'accounts',
 
@@ -46,6 +48,8 @@ INSTALLED_APPS = [
     'master_app',
 
     "ckeditor",
+
+    'api',
 
     
 ]

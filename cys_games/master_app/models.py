@@ -10,7 +10,7 @@ from ckeditor.fields import RichTextField
 
 from django.core.exceptions import ValidationError
 
-from .choices import OPERATING_SYSTEM_CHOICES,  SCENARIOS_CATEGORYIES, RATING_CHOICES, CHALLENGE_LEVELS
+from .choices import OPERATING_SYSTEM_CHOICES,  SCENARIOS_CATEGORYIES, RATING_CHOICES, CHALLENGE_LEVELS, CHALLENGE_LEVELS_TEXT, OPERATING_SYSTEM_CHOICES_TEXT, SCENARIOS_CATEGORYIES_TEXT
 
 
 # Create your models here.
@@ -86,6 +86,20 @@ class VirtualNetwork(models.Model):
     def __str__(self):
         return self.name
 
+
+    def get_operating_system(self):
+        try:
+            return OPERATING_SYSTEM_CHOICES_TEXT[self.operating_system]
+        except:
+            return None
+
+    def get_scenarios(self):
+        try:
+            return SCENARIOS_CATEGORYIES_TEXT[self.scenarios]
+        except:
+            return None
+
+
     
         
 
@@ -103,3 +117,9 @@ class CourseChallenge(models.Model):
             course = self.course,
             title = self.title
         )
+
+    def get_difficulty_level(self):
+        try:
+            return CHALLENGE_LEVELS_TEXT[self.levels]
+        except:
+            return None
