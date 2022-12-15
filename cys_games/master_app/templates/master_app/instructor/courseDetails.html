@@ -8,6 +8,8 @@
 <link href="{% static 'assets/vendor/quill/quill.snow.css' %}" rel="stylesheet">
 <link href="{% static 'assets/vendor/quill/quill.bubble.css' %}" rel="stylesheet">
 <script src="{% static 'assets/vendor/quill/quill.min.js' %}"></script>
+<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
 
 <style>
   .dashboard .activity .activity-item .activite-label{
@@ -42,8 +44,8 @@
               </div><!-- End Page Title -->
         
             <div class="row">
-                <div class="col-12">
-                    <!-- Card with an image on left -->
+                <div class="col-12 col-md-8">
+                    
               <div class="card mb-3">
                 <div class="row g-0">
                   <div class="col-md-4">
@@ -66,26 +68,44 @@
                     </div>
                   </div>
                 </div>
-              </div><!-- End Card with an image on left -->
+                
+              </div>
+              <div class="card">
+                <div class="card-body p-3">
+                  <h3>Summary</h3>
+                  {{ course.description|safe }}
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-8">
-                  <div class="card">
-                    <div class="card-body p-3">
-                      <h3>Summary</h3>
-                      {{ course.description|safe }}
-                    </div>
-                  </div>
+              </div>
                 </div>
-                <div class="col-lg-4">
-                  <div class="card bg-transparent p-0 ">
-                    <div class="card-body p-0 shadow-none">
+                <div class="col-12 col-md-4 mb-5">
+                  <div class="card  p-0 ">
+                    
+                    <div class="card-body  px-0">
                       {% if course.get_virtual_network %}
                         <a class="btn btn-primary py-3 shadow-lg w-100 " href="#!">Start instance for {{ course.get_virtual_network }}</a>
+                        <ul class="list-group list-group-flush">
+                        
+                          <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                              <div class="fw-bold">Name</div>
+                            </div>
+                            {{ course.get_virtual_network.name }}
+                          </li>
+                          <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                              <div class="fw-bold">OS</div>
+                            </div>{{ course.get_virtual_network.get_operating_system }}</li>
+                          <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                              <div class="fw-bold">Scenario</div>
+                            </div>{{ course.get_virtual_network.get_scenarios }}</li>
+                          <li class="list-group-item text-center" aria-disabled="true"><a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">See Details<i class="fas fa-chevron-right fs-5 ms-3 pt-2"></i></a></li>
+                        </ul>
                       {% else %}
                         <a class="btn btn-primary py-3 shadow-lg w-100 " href="#virutal_network_modal" data-bs-toggle="modal">Create Virutal Network</a>
                       {% endif %}
+                      
+                      
                     </div>
                   </div>
                   <div class="card">
@@ -144,7 +164,6 @@
                       </div>
                     </div>
                   </div>
-
                   <div class="card">
                     <h5 class="card-header d-flex justify-content-between align-items-center">
                       <span class="h3">Students</span>
@@ -162,12 +181,153 @@
                       </ul><!-- End Clean list group -->
                     </div>
                   </div>
-                    
+                  <div class="card mb-0 px-0">
+                    <div class="card-body pb-0 px-0">
+                      <h5 class="card-title px-3">Challenges Results</h5>
+        
 
+                      <div data-flickity='{"pageDots":true,"cellAlign": "left", "wrapAround": true, "imagesLoaded": true, "prevNextButtons": false, "adaptiveHeight" : true}' class="flickity-viewport-visible">
+                        <div class="col-12 "  aria-hidden="true">
+                          <div class="card shadow-none bg-transparent mb-0 pb-0">
+                            <div class="card-body pb-0">
+                        <!-- Bar Chart -->
+                      <div id="barChart"></div>
+        
+                      <script>
+                        document.addEventListener("DOMContentLoaded", () => {
+                          new ApexCharts(document.querySelector("#barChart"), {
+                            series: [
+                            {
+                      name: 'Student A',
+                      data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
+                    }, {
+                      name: 'Student B',
+                      data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
+                    },
+                    {
+                      name: 'Student C',
+                      data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
+                    }
+                            ],
+                            chart: {
+                              type: 'bar',
+                              height: 400
 
+                            },
+                            plotOptions: {
+                              bar: {
+                                borderRadius: 2,
+                                horizontal: true,
+                                width : 2
+                              }
+                            },
+                            dataLabels: {
+                              enabled: false
+                            },
+                            legend: {
+            position: 'top',
+          },
+                            xaxis: {
+                              categories: ['Challenge A', 'Challenge B', 'Challenge C', 'Challenge D', 'Challenge E'
+                              ],
+                            }
+                          }).render();
+                        });
+                      </script>
+                      <!-- End Bar Chart -->  
+                      </div>
+                      </div>
+                        </div>
+                        <div class="col-12" aria-hidden="true">
+<div class="card shadow-none bg-transparent mb-0 pb-0">
+  <div class="card-body pb-0">
+<!-- Donut Chart -->
+<div id="donutChart" ></div>
 
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    new ApexCharts(document.querySelector("#donutChart"), {
+      series: [44, 55, 13, 43, 22],
+      chart: {
+        
+        type: 'donut',
+        height: 300,
+        toolbar: {
+          show: true
+        }
+      },
+      legend: {
+            position: 'top',
+          },
+          plotOptions: {
+      pie: {
+        donut: {
+          size: '50%'
+        }
+      }
+    },
+      labels: ['Student A', 'Student B', 'Student C', 'Student D', 'Student E'],
+    }).render();
+  });
+</script>
+<!-- End Donut Chart -->
+  </div>
+</div>
+                        </div>
+                        <div class="col-12" aria-hidden="true">
+                          <div class="card shadow-none bg-transparent mb-0 pb-0 px-0">
+                            <div class="card-body pb-0 px-0">
+                
+                              <!-- Radar Chart -->
+                              <div id="radarChart"></div>
+                
+                              <script>
+                                document.addEventListener("DOMContentLoaded", () => {
+                                  new ApexCharts(document.querySelector("#radarChart"), {
+                                    series: [{
+                                      name: 'Student A',
+                                      data: [80, 50, 30, 40, 100],
+                                    },
+                                    {
+                                      name: 'Student B',
+                                      data: [50, 60, 40, 30, 95],
+                                    },
+                                    {
+                                      name: 'Student C',
+                                      data: [30, 80, 60, 10, 75],
+                                    }],
+                                    chart: {
+                                      height: 350,
+                                      type: 'radar',
+                                      toolbar: {
+          show: true
+        }
+                                    },
+                                    legend: {
+            position: 'top',
+          },
+                                    xaxis: {
+                                      categories: ['Challenge A', 'Challenge B', 'Challenge C', 'Challenge D', 'Challenge E']
+                                    }
+                                  }).render();
+                                });
+                              </script>
+                              <!-- End Radar Chart -->
+                
+                            </div>
+                          </div>
+                        </div>
+                        
+                        
+                        </div>
+
+                      
+        
+                    </div>
+                  </div>
                 </div>
             </div>
+            
             
 
 
@@ -204,11 +364,45 @@
         </div>
     </section>
 </main>
+
+<div class="offcanvas offcanvas-end " tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+  <div class="offcanvas-header " style="background-color: #012970;">
+    <h5 class="offcanvas-title mx-auto text-white fw-bolder" id="offcanvasExampleLabel">Description</h5>
+  </div>
+  <div class="offcanvas-body bg-light">
+      <div class="d-flex align-items-center mt-3 mb-2 ">
+          <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+            <img src="{% static 'assets/img/caac8772de14a769c0bfe95756bceebe.png' %}" width="60" alt="">
+          </div>
+          <div class="ps-3">
+            <h4 class="mb-0">{{ course.get_virtual_network }}</h4>
+            <span class=" small pt-1 fw-bold h5">{{ course.get_virtual_network.rating }} Rating</span>
+
+          </div>
+        </div>
+
+
+    <div class="row justify-content-center my-3">
+      <div class="col-12">
+          <h6 class="">{{ course.get_virtual_network.description|safe }}</h6>
+      </div>
+    </div>
+    
+    
+    
+    
+  </div>
+</div>
 {% endblock %}
 
 {% block extra_js %}
 
+
+
 <script>
+  $(function(){
+    window.dispatchEvent(new Event('resize'));
+  });
   $(".ql-editor").attr('contenteditable', false);
   $(".ql-clipboard, .ql-tooltip").hide();
   
@@ -243,3 +437,101 @@
   
 </script>
 {% endblock %}
+
+
+{% comment %}
+<div class="row">
+  <div class="col-lg-8">
+    
+  </div>
+  <div class="col-lg-4">
+    <div class="card bg-transparent p-0 ">
+      <div class="card-body p-0 shadow-none">
+        {% if course.get_virtual_network %}
+          <a class="btn btn-primary py-3 shadow-lg w-100 " href="#!">Start instance for {{ course.get_virtual_network }}</a>
+        {% else %}
+          <a class="btn btn-primary py-3 shadow-lg w-100 " href="#virutal_network_modal" data-bs-toggle="modal">Create Virutal Network</a>
+        {% endif %}
+      </div>
+    </div>
+    <div class="card">
+      <h5 class="card-header d-flex justify-content-between align-items-center">
+        <span class="h3">Challenges</span>
+        <button type="button" class="btn btn-sm btn-primary rounded-circle " style="margin-top: -60px;margin-right: -30px;" data-bs-target="#create_challenge_modal" data-bs-toggle="modal"><i class="bi bi-plus fs-5 "></i></button>
+      
+        <!-- Wrap with <div>...buttons...</div> if you have multiple buttons -->
+      </h5>
+      <div class="card-body p-3">
+        <div class="activity">
+        
+          {% if easy_challenges %}
+          
+              {% for ch in easy_challenges %}
+              {% include 'master_app/instructor/challenges_modals.html' with ch=ch %}
+              <div class="activity-item d-flex">
+                <div class="activite-label"></div>
+                <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
+                <div class="activity-content">
+                  <a href="#verticalycentered_{{ ch.course.id }}_{{ ch.id }}" class="fw-bold " data-bs-toggle="modal" >{{ ch.title }}</a>
+                  
+                </div>
+              </div><!-- End activity item-->
+              {% endfor %}
+            
+        {% endif %}
+        {% if medium_challenges %}
+          
+              {% for ch in medium_challenges %}
+              {% include 'master_app/instructor/challenges_modals.html' with ch=ch %}
+              <div class="activity-item d-flex">
+                <div class="activite-label"></div>
+                <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
+                <div class="activity-content">
+                  <a href="#verticalycentered_{{ ch.course.id }}_{{ ch.id }}" class="fw-bold " data-bs-toggle="modal" >{{ ch.title }}</a>
+                </div>
+              </div><!-- End activity item-->
+              {% endfor %}
+          
+        {% endif %}
+        {% if hard_challenges %}
+          
+              {% for ch in hard_challenges %}
+              {% include 'master_app/instructor/challenges_modals.html' with ch=ch %}
+              <div class="activity-item d-flex">
+                <div class="activite-label"></div>
+                <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
+                <div class="activity-content">
+                  <a href="#verticalycentered_{{ ch.course.id }}_{{ ch.id }}" class="fw-bold " data-bs-toggle="modal" >{{ ch.title }}</a>
+                </div>
+              </div><!-- End activity item-->
+              {% endfor %}
+          
+        {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h5 class="card-header d-flex justify-content-between align-items-center">
+        <span class="h3">Students</span>
+        <button type="button" class="btn btn-sm btn-primary rounded-circle " style="margin-top: -60px;margin-right: -30px;" data-bs-target="#create_student_modal" data-bs-toggle="modal"><i class="bi bi-plus fs-5 "></i></button>
+      
+        <!-- Wrap with <div>...buttons...</div> if you have multiple buttons -->
+      </h5>
+      <div class="card-body p-3">
+        <ul class="list-group list-group-flush">
+          {% if students %}
+            {% for std in students %}
+              <li class="list-group-item">{{std.student.email }}</li>
+            {% endfor %}
+          {% endif %}
+        </ul><!-- End Clean list group -->
+      </div>
+    </div>
+      
+
+
+
+  </div>
+</div>
+{% endcomment %}

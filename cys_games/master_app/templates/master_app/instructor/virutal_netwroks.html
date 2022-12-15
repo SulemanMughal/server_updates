@@ -45,14 +45,17 @@
                                 <li class="nav-item" role="presentation">
                                   <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#bordered-home" type="button" role="tab" aria-controls="home" aria-selected="true">Active Networks</button>
                                 </li>
+
+                                {% comment %}
                                 <li class="nav-item" role="presentation">
                                   <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#bordered-profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Retired Networks</button>
                                 </li>
+                                {% endcomment %}
                                 
                               </ul>
                               <div class="tab-content pt-2" id="borderedTabContent">
                                 <div class="tab-pane fade show active" id="bordered-home" role="tabpanel" aria-labelledby="home-tab">
-                                    <div class="card shadow-none bg-transparent mt-3">
+                                    <div class="card  mt-3">
                                         <div class="card-body px-0">
                             
                                           <!-- Default Table -->
@@ -64,7 +67,6 @@
                                                 <th scope="col" class="p-3">Course</th>
                                                 <th scope="col" class="p-3">Scenarios</th>
                                                 
-                                                <th scope="col"></th>
                                                 
                                               </tr>
                                             </thead>
@@ -74,7 +76,7 @@
                                                   <td class="py-3">
                                                       <div class="d-flex align-items-center">
                                                           <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                                            <a href="{% url 'student-machine-detail-url' %}">
+                                                            <a href="#offcanvasExample{{ network.name|slugify  }}" aria-controls="offcanvasExample{{ network.name|slugify  }}" data-bs-toggle="offcanvas"  role="button">
                                                               <img src="{% static 'assets/img/caac8772de14a769c0bfe95756bceebe.png' %}" width="50" alt="">
                                                             </a>
                                                           </div>
@@ -89,15 +91,17 @@
                                                       <i class="fas fa-star circle-icon fs-5 me-2"></i> {{ network.rating }}
                                                   </td>
                                                   <td class="align-middle">
-                                                    {{ network.course }}
+                                                    
+                                                    <a href="{% url 'instructor-courses-details-url' network.course.id %}">{{ network.course }}</a>
                                                   </td>
                                                   <td class="align-middle">
                                                     {{ network.get_scenarios }}
                                                   </td>
                                                   
-                                                  
+                                                  {% comment %}
                                                   
                                                   <td class="align-middle"><a data-bs-toggle="offcanvas" href="#offcanvasExample{{ network.name|slugify  }}" role="button" aria-controls="offcanvasExample{{ network.name|slugify  }}"><i class="fas fa-chevron-right fs-5"></i></a></td>
+                                                  {% endcomment %}
                                                 </tr>
                                               {% endfor %}
                                               
