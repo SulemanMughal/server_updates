@@ -54,12 +54,14 @@
                   <div class="col-md-8">
                     <div class="card-body">
                       <h5 class="card-title">{{ course.name }} 
-                        {% if course.is_approved == "Pending" %}
-                    <span class="badge bg-warning text-white fw-bolder">Pending</span>
-                  {% elif course.is_approved == "Approved" %}
-                    <span class="badge bg-success text-white fw-bolder">Approved</span>
-                  {% elif course.is_approved == "Rejected"  %}
-                    <span class="badge bg-danger text-white fw-bolder">Rejected</span>
+                        {% if course.is_approved == "1" %}
+                    <span class="badge bg-warning text-white">Pending</span>
+                  {% elif course.is_approved == "2" %}
+                    <span class="badge bg-primary text-white">Sent Admin for Approval</span>
+                  {% elif course.is_approved == "3" %}
+                    <span class="badge bg-success text-white">Approved</span>
+                  {% elif course.is_approved == "4"  %}
+                    <span class="badge bg-danger text-white">Rejected</span>
                   {% endif %}</h5> 
                       <p>Start Date&Time : {{ course.start_time }}</p>
                       <p>End Date&Time : {{ course.end_time }}</p>
@@ -78,11 +80,22 @@
               </div>
                 </div>
                 <div class="col-12 col-md-4 mb-5">
-                  <div class="card  p-0 ">
+                  <div class="card {% if not course.get_virtual_network %} bg-transparent shadow-none {% endif %} p-0 ">
                     
                     <div class="card-body  px-0">
                       {% if course.get_virtual_network %}
-                        <button class="btn btn-primary py-3 shadow-lg w-100 "  id="start_network">Start instance for {{ course.get_virtual_network }}</button>
+                      {% if course.is_approved == "1" %}
+                      <a class="btn btn-warning py-3 shadow-lg w-100 "    href="{% url 'instructor-approve-course-url' course.id   %}">Send Request for Approval</a>
+                  {% elif course.is_approved == "2" %}
+                    <button class="btn btn-primary py-3 shadow-lg w-100 "    >Sent Admin for Approval</button>
+                  {% elif course.is_approved == "3" %}
+                  <button class="btn btn-success py-3 shadow-lg w-100 ">Get Virtual Network</button>
+                    
+                  {% elif course.is_approved == "4"  %}
+                    
+                    <button class="btn btn-danger py-3 shadow-lg w-100 ">Contact Admin</button>
+                  {% endif %}
+                        
                         <ul class="list-group list-group-flush">
                         
                           <li class="list-group-item d-flex justify-content-between align-items-start">
@@ -435,34 +448,6 @@
     });
   }
 
-
-  $("#start_network").on("click", function(event){
-    event.preventDefault();
-    event.stopPropagation();
-    var fd = new FormData();
-    fd.append("name" , "testing");
-              $.ajaxSetup({
-                beforeSend: function(xhr, settings){
-                  xhr.setRequestHeader(
-                    'X-CSRFToken', '{{ csrf_token }}'
-                  )
-                }
-              });
-              $.ajax({
-                url : "{% url 'instructor-create-network-url' %}",
-                type  : "POST",
-                data: fd,
-                processData: false,
-                contentType: false,
-                success : function(response){
-                  console.debug("Login Successfully");
-                },
-                error : function(response){
-                  console.debug(response["responseJSON"]["error"]);
-                }
-              });
-    });
-  
 </script>
 {% endblock %}
 
@@ -562,4 +547,215 @@
 
   </div>
 </div>
+
+<script>
+  
+
+  $("#start_network").on("click", function(event){
+    event.preventDefault();
+    event.stopPropagation();
+    var request_url = $("#start_network").attr("data-accept");
+              $.ajaxSetup({
+                beforeSend: function(xhr, settings){
+                  xhr.setRequestHeader(
+                    'X-CSRFToken', '{{ csrf_token }}'
+                  )
+                }
+              });
+              $.ajax({
+                url : request_url,
+                type  : "POST",
+                processData: false,
+                contentType: false,
+                success : function(response){
+
+
+                  new Noty({
+        //  alert, success, error, warning, info
+        timeout: 4000 ,
+        type : "success",
+        theme: 'sunset',
+        // container : ".noty_layout",
+        force : false,
+        // layout: 'bottomLeft',
+        text: '<i class="fas fa-check-circle"></i>&nbsp;Approval Request to admin has been sent successfully.',
+        animation: {
+        open: function (promise) {
+            var n = this;
+            var Timeline = new mojs.Timeline();
+            var body = new mojs.Html({
+                el        : n.barDom,
+                x         : {500: 0, delay: 0, duration: 500, easing: 'elastic.out'},
+                isForce3d : true,
+                onComplete: function () {
+                    promise(function(resolve) {
+                        resolve();
+                    })
+                }
+            });
+
+            var parent = new mojs.Shape({
+                parent: n.barDom,
+                width      : 200,
+                height     : n.barDom.getBoundingClientRect().height,
+                radius     : 0,
+                x          : {[150]: -150},
+                duration   : 1.2 * 500,
+                isShowStart: true
+            });
+
+            n.barDom.style['overflow'] = 'visible';
+            parent.el.style['overflow'] = 'hidden';
+
+            var burst = new mojs.Burst({
+                parent  : parent.el,
+                count   : 10,
+                top     : n.barDom.getBoundingClientRect().height + 75,
+                degree  : 90,
+                radius  : 75,
+                angle   : {[-90]: 40},
+                children: {
+                    fill     : '#EBD761',
+                    delay    : 'stagger(500, -50)',
+                    radius   : 'rand(8, 25)',
+                    direction: -1,
+                    isSwirl  : true
+                }
+            });
+
+            var fadeBurst = new mojs.Burst({
+                parent  : parent.el,
+                count   : 2,
+                degree  : 0,
+                angle   : 75,
+                radius  : {0: 100},
+                top     : '90%',
+                children: {
+                    fill     : '#EBD761',
+                    pathScale: [.65, 1],
+                    radius   : 'rand(12, 15)',
+                    direction: [-1, 1],
+                    delay    : .8 * 500,
+                    isSwirl  : true
+                }
+            });
+
+            Timeline.add(body, burst, fadeBurst, parent);
+            Timeline.play();
+        },
+        close: function (promise) {
+            var n = this;
+            new mojs.Html({
+                el        : n.barDom,
+                x         : {0: 500, delay: 10, duration: 500, easing: 'cubic.out'},
+                skewY     : {0: 10, delay: 10, duration: 500, easing: 'cubic.out'},
+                isForce3d : true,
+                onComplete: function () {
+                    promise(function(resolve) {
+                        resolve();
+                    })
+                }
+            }).play();
+        }
+        }
+    }).show();    
+    
+                },
+                error : function(response){
+                  new Noty({
+        //  alert, success, error, warning, info
+        timeout: 4000 ,
+        type : "error",
+        theme: 'sunset',
+        // container : ".noty_layout",
+        force : false,
+        // layout: 'bottomLeft',
+        text: '<i class="fas fa-exclamation-circle"></i>&nbsp;' + response["responseJSON"]["error"],
+        animation: {
+        open: function (promise) {
+            var n = this;
+            var Timeline = new mojs.Timeline();
+            var body = new mojs.Html({
+                el        : n.barDom,
+                x         : {500: 0, delay: 0, duration: 500, easing: 'elastic.out'},
+                isForce3d : true,
+                onComplete: function () {
+                    promise(function(resolve) {
+                        resolve();
+                    })
+                }
+            });
+
+            var parent = new mojs.Shape({
+                parent: n.barDom,
+                width      : 200,
+                height     : n.barDom.getBoundingClientRect().height,
+                radius     : 0,
+                x          : {[150]: -150},
+                duration   : 1.2 * 500,
+                isShowStart: true
+            });
+
+            n.barDom.style['overflow'] = 'visible';
+            parent.el.style['overflow'] = 'hidden';
+
+            var burst = new mojs.Burst({
+                parent  : parent.el,
+                count   : 10,
+                top     : n.barDom.getBoundingClientRect().height + 75,
+                degree  : 90,
+                radius  : 75,
+                angle   : {[-90]: 40},
+                children: {
+                    fill     : '#EBD761',
+                    delay    : 'stagger(500, -50)',
+                    radius   : 'rand(8, 25)',
+                    direction: -1,
+                    isSwirl  : true
+                }
+            });
+
+            var fadeBurst = new mojs.Burst({
+                parent  : parent.el,
+                count   : 2,
+                degree  : 0,
+                angle   : 75,
+                radius  : {0: 100},
+                top     : '90%',
+                children: {
+                    fill     : '#EBD761',
+                    pathScale: [.65, 1],
+                    radius   : 'rand(12, 15)',
+                    direction: [-1, 1],
+                    delay    : .8 * 500,
+                    isSwirl  : true
+                }
+            });
+
+            Timeline.add(body, burst, fadeBurst, parent);
+            Timeline.play();
+        },
+        close: function (promise) {
+            var n = this;
+            new mojs.Html({
+                el        : n.barDom,
+                x         : {0: 500, delay: 10, duration: 500, easing: 'cubic.out'},
+                skewY     : {0: 10, delay: 10, duration: 500, easing: 'cubic.out'},
+                isForce3d : true,
+                onComplete: function () {
+                    promise(function(resolve) {
+                        resolve();
+                    })
+                }
+            }).play();
+        }
+        }
+    }).show();    
+    
+                  
+                }
+              });
+    });
+  
+</script>
 {% endcomment %}

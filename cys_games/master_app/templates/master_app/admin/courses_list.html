@@ -1,36 +1,31 @@
 {%  extends 'base.html' %}
 {% load static %}
-{% block title %} Courses {% endblock %}
-
-
-
+{% block title %} Dashboard {% endblock %}
 
 
 
 {% block content %}
-
 <main id="main" class="main">
-  <section class="section dashboard">
-  <div class="container">
-      <div class="pagetitle">
+    <section class="section dashboard">
+      <div class="container">
+        <div class="pagetitle">
           <h1>Courses</h1>
           <nav>
             <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="{% url 'instructor-dasboard-url' %}">Dashboard</a></li>
+              <li class="breadcrumb-item"><a href="{% url 'admin-dasboard-url' %}">Dashboard</a></li>
               <li class="breadcrumb-item active">Courses</li>
             </ol>
           </nav>
-        </div><!-- End Page Title ---->
-
+        </div>
         <div class="row">
-          {% for course in all_courses %}
-            <div class="col-12 col-md-4 col-lg-4">
+          {% for course in courses %}
+            <div class="col-12 col-md-4 col-lg-4 d-flex align-items-stretch">
               <div class="card shadow-none bg-transparent ">
                   <div class="card-header p-0 border-0 ">
                       <img class="card-img-top" src="{% static 'assets/img/Ad.png' %}" alt="">
                   </div>
                   <div class="card-body p-3 bg-white">
-                      <h5><a href="{% url 'instructor-courses-details-url' course.id %}">{{ course.name }}</a></h5>
+                      <h5><a href="{% url 'admin-courses-details-url' course.id %}">{{ course.name }}</a></h5>
                       <p>
                           {{ course.description|safe|truncatechars_html:150 }}
                       </p>
@@ -49,11 +44,10 @@
               </div>
             </div>
           {% endfor %}
-        </div> 
-
-
-
-
+        </div>
+      </div>
+    </section>
+</main>
 {% endblock %}
 
 {% block extra_js %}

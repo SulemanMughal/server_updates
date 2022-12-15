@@ -69,3 +69,12 @@ CHALLENGE_LEVELS_TEXT = {
     "2" : "MEDIUM",
     "3" : "HARD"
 }
+
+
+
+APPROVED_CHOICES = (
+    ("1", "Pending"),
+    ("2" , "Sent Admin for Approval"),
+    ("3", "Approved"),
+    ("4", "Rejected"),
+)

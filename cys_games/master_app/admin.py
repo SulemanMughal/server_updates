@@ -9,9 +9,17 @@ from .models import Course, AssignedStudents, VirtualNetwork, CourseChallenge
 class AssignedStudentInline(admin.TabularInline):
     model = AssignedStudents
 
+
+class VirtualNetworkInline(admin.TabularInline):
+    model = VirtualNetwork
+    min_num = 1
+    max_num = 1
+    extra = 0
+
 class CourseAdmin(admin.ModelAdmin):
     inlines = [
-        AssignedStudentInline
+        AssignedStudentInline,
+        VirtualNetworkInline
     ]
 
 

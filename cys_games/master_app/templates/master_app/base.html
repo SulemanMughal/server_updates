@@ -55,6 +55,8 @@ input[type=number]:focus,
             {% include 'master_app/instructor/sidebar.html' %}
         {% elif request.user.is_student %}
             {% include 'master_app/student/sidebar.html' %}
+        {% elif request.user.is_admin %}
+            {% include 'master_app/admin/sidebar.html' %}
         {% else %}
             {% include 'master_app/sidebar.html' %}
         {% endif %}

@@ -19,10 +19,16 @@ urlpatterns = [
 
     # ==========================================================
     # ? Admin Dashbaord
-    path("admin/", views.AdminDashboard, name="admin-dasboard-url"),
+    path("admininstrator/", views.AdminDashboard, name="admin-dasboard-url"),
 
     # ? Admin Profile
-    path("admin/profile", views.AdminProfile, name="admin-profile-url"),
+    path("admininstrator/profile", views.AdminProfile, name="admin-profile-url"),
+
+    # ? Admin Course List
+    path("admininstrator/course/all", views.AdminCourseList, name="admin-course-list-url"),
+    
+    # ? Admin Course Details
+    path("admininstrator/course/<int:course_id>/details", views.AdminCourseDetails, name="admin-courses-details-url"),
 
 
     # ==========================================================
@@ -66,7 +72,7 @@ urlpatterns = [
 
 
     # ? Instructor Virutal Network
-    path("instructor/network/create", views.InstructorNetworkCreate, name="instructor-create-network-url"),
+    path("instructor/course/approval/<int:course_id>/", views.InstructorApproveCourse, name="instructor-approve-course-url"),
     
 
     

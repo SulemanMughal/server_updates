@@ -151,3 +151,12 @@ MEDIA_ROOT= BASE_DIR.parent / 'media'
 CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
+
+
+# ? Login Redirect
+
+from django.urls import reverse_lazy
+
+LOGIN_REDIRECT_URL = reverse_lazy('master_index')
+LOGIN_URL = reverse_lazy('user-login')
+LOGOUT_URL = reverse_lazy('user-logout')

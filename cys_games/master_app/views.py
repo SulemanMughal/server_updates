@@ -165,6 +165,46 @@ def AdminProfile(request):
     return render(request, template_name, context)
 
 
+# TODO  :   Admin Courses List
+@login_required
+@admin_required
+def AdminCourseList(request):
+    template_name = 'master_app/admin/courses_list.html'
+    courses = Course.objects.all()
+    context = {
+        "courses" : courses
+    }
+    return render(request, template_name, context)
+
+
+# TODO  :   Admin Course Details
+@login_required
+@admin_required
+def AdminCourseDetails(request, course_id):
+    template_name = 'master_app/admin/course_details.html'
+    try:
+        course = Course.objects.get(id=course_id)
+        easy_challenges = course.coursechallenge_set.filter(levels = 1)
+        medium_challenges = course.coursechallenge_set.filter(levels = 2)
+        hard_challenges = course.coursechallenge_set.filter(levels = 3)
+        students = course.assignedstudents_set.all()
+    except Course.DoesNotExist:
+        messages.error(request, "Requested course does not exist.")
+        return redirect(reverse("admin-course-list-url"))
+    except:
+        messages.error(request, "Requested page does not exist.")
+        return redirect(reverse("admin-dasboard-url"))
+    
+    context = {
+        "course" : course, 
+        "easy_challenges" : easy_challenges,
+        "medium_challenges" :medium_challenges,
+        "hard_challenges" :hard_challenges,
+        "students":students
+    }
+    return render(request, template_name, context)
+
+
 # TODO  :   Instructor Dashboard
 @login_required
 @teacher_required
@@ -311,27 +351,41 @@ def InstructorChallengeDetails(request, course_id, challenge_id):
     return render(request, template_name, context)
 
 
-def InstructorNetworkCreate(request):
+def InstructorApproveCourse(request, course_id):
+
+    try:
+        course = Course.objects.get(id=course_id)
+        course.is_approved = "2"
+        course.save()
+        messages.success(request, "Approval Request to admin has been sent successfully.")
+        return redirect(reverse("instructor-courses-details-url", args=[course_id]))
+    # except Course.DoesNotExist:
+    #     messages.error(request, "Requested URL Does not Exist")
+    #     return redirect(reverse("courses-all-url"))
+    except:
+        messages.error(request, "Requested URL Does not Exist")
+        return redirect(reverse("courses-all-url"))
     
-    if request.method == "POST" :
-        return JsonResponse(
-            json.loads(
-                json.dumps({
-                    "text" : "Valid method"
-                })
-            ),
-            status =200
-        )
+    
+    # if request.method == "POST" :
+    #     return JsonResponse(
+    #         json.loads(
+    #             json.dumps({
+    #                 "text" : "Valid method"
+    #             })
+    #         ),
+    #         status =200
+    #     )
         
-    else:
-        return JsonResponse(
-            json.loads(
-                json.dumps({
-                    "error" : "Invalid request method"
-                })
-            ),
-            status =400
-        )
+    # else:
+    #     return JsonResponse(
+    #         json.loads(
+    #             json.dumps({
+    #                 "error" : "Invalid request method"
+    #             })
+    #         ),
+    #         status =400
+    #     )
 
 
 
@@ -414,7 +468,7 @@ def StudentDashboard(request):
 @student_required
 def StudentCourses(request):
     template_name = 'master_app/student/courseList.html'
-    courses = AssignedStudents.objects.filter(student__id = request.user.id).filter(course__is_approved="Approved")
+    courses = AssignedStudents.objects.filter(student__id = request.user.id).filter(course__is_approved="3")
     # print(courses)
     
     context = {
@@ -429,7 +483,7 @@ def StudentCourses(request):
 def StudentCourseDetails(request , course_id):
     template_name = 'master_app/student/courseDetails.html'
     try:
-        course = Course.objects.get(id=course_id, is_approved = "Approved")
+        course = Course.objects.get(id=course_id, is_approved = "3")
         easy_challenges = course.coursechallenge_set.filter(levels = 1)
         medium_challenges = course.coursechallenge_set.filter(levels = 2)
         hard_challenges = course.coursechallenge_set.filter(levels = 3)

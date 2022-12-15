@@ -10,7 +10,7 @@ from ckeditor.fields import RichTextField
 
 from django.core.exceptions import ValidationError
 
-from .choices import OPERATING_SYSTEM_CHOICES,  SCENARIOS_CATEGORYIES, RATING_CHOICES, CHALLENGE_LEVELS, CHALLENGE_LEVELS_TEXT, OPERATING_SYSTEM_CHOICES_TEXT, SCENARIOS_CATEGORYIES_TEXT
+from .choices import OPERATING_SYSTEM_CHOICES,  SCENARIOS_CATEGORYIES, RATING_CHOICES, CHALLENGE_LEVELS, CHALLENGE_LEVELS_TEXT, OPERATING_SYSTEM_CHOICES_TEXT, SCENARIOS_CATEGORYIES_TEXT, APPROVED_CHOICES
 
 
 # Create your models here.
@@ -20,11 +20,7 @@ from .choices import OPERATING_SYSTEM_CHOICES,  SCENARIOS_CATEGORYIES, RATING_CH
 #     is_student = models.BooleanField(default=False)
 #     is_teacher = models.BooleanField(default=False)
 
-APPROVED_CHOICES = (
-    ("Pending", "Pending"),
-    ("Approved", "Approved"),
-    ("Rejected", "Rejected")
-)
+
 
 
 class Course(models.Model):
@@ -34,7 +30,7 @@ class Course(models.Model):
     end_time = models.DateTimeField(auto_now_add=False, default=timezone.now)
     created_timestamp = models.DateTimeField( auto_now_add=True )
     description = RichTextField()
-    is_approved = models.CharField(max_length=10, choices=APPROVED_CHOICES, default="Pending")
+    is_approved = models.CharField(max_length=2, choices=APPROVED_CHOICES, default="1")
     
     def __str__(self):
         return self.name
@@ -75,6 +71,7 @@ class VirtualNetwork(models.Model):
     operating_system = models.CharField(max_length=3, default=1 , choices=OPERATING_SYSTEM_CHOICES)
     scenarios = models.CharField(max_length=50, default="1" , choices=SCENARIOS_CATEGORYIES)
     rating  = models.CharField(max_length=1 , default="1", choices=RATING_CHOICES)
+    config_file_url = models.URLField(max_length=300 , default="" , blank=True, null=True)
     ip_address = models.GenericIPAddressField(blank=True, null=True)
 
 
