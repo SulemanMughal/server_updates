@@ -246,8 +246,12 @@ def InstructorCreateNewChallenge(request):
     template_name = 'master_app/instructor/create_new_challenge.html'
     if request.method  == "POST":
         form = CourseChallengeForm(request.POST)
+        # print(request.POST["next"])
+        # print(request.POST)
         form.save()
         messages.success(request, "New Challenge has been added.")
+        if request.POST.get("next", None):
+            return redirect(request.POST.get("next", None))
         return redirect("courses-all-url")
 
     form = CourseChallengeForm()
@@ -281,6 +285,7 @@ def InstructorCourseDetails(request, course_id):
         "hard_challenges" : hard_challenges,
         "students" : students,
         "form" :  NewVirtualNetworkForm(),
+        "form_2" :  AddNewStudent(),
     }
     return render(request, template_name, context)
 
@@ -318,6 +323,8 @@ def InstructorVirturalNetworkNew(request):
         if form.is_valid():
             form.save()
             messages.success(request, "New Network Machine Has been added")
+            if request.POST.get("next" , None):
+                return redirect(request.POST.get("next" , None))
             return redirect(reverse("instructor-virtual-network-url"))
     else:
         form = NewVirtualNetworkForm()
@@ -348,10 +355,12 @@ def AddNewStudents(request):
     template_name = 'master_app/instructor/add_new_student.html'
     if request.method == "POST":
         form = AddNewStudent(request.POST)
-        
+        # print(request.POST)
         if form.is_valid():
-            new_student = form.save()
+            form.save()
             messages.success(request, "New Student has been added")
+            if request.POST.get("next", None):
+                return redirect(request.POST.get("next", None))
             return redirect(reverse("students-all-url"))
         # else:
         #     print(form.errors)

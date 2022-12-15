@@ -1,0 +1,77 @@
+
+<style>
+    #challengeEditor  .ql-editor {
+ overflow-y: scroll;
+ min-height: 150px;
+ }
+ </style>
+
+<div class="modal fade" id="create_challenge_modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Create A New Challenge</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            
+<form class="row g-3 needs-validation" novalidate  action="{% url 'instructor-create-new-challenge-url' %}"  id="identifier_challenge"  method="POST">
+    {% csrf_token %}
+
+
+
+<!-- Title  -->
+<div class="col-md-12 mb-3">
+    <div class="form-floating">
+    <input type="text" name="title" class="form-control" id="id_title" placeholder="Challenge Statement"  autocapitalize="none" autocomplete="off" maxlength="255" required >
+    <label for="id_title">Challenge Statement</label>
+    <div class="invalid-feedback">
+    Please choose a valid statement.
+    </div>
+    </div>
+    </div>
+
+<!-- Course Name -->
+<div class=" col-12 col-md-6 mb-3">
+<label for="id_course" class="form-label">Course </label>
+<select class="form-select" id="id_course" required="" name="course"  >
+    <option value="{{ course.id }}" selected="">{{ course.name }}</option>
+</select>
+</div>
+
+<!-- Levels -->
+<div class="col-12 col-md-6 mb-3">
+    <label for="id_levels" class="form-label">Level </label>
+    <select class="form-select" id="id_levels" required="" name="levels">
+        <option value="1" selected="">EASY</option>
+        
+        <option value="2">MEDIUM</option>
+    
+        <option value="3">HARD</option>
+    </select>
+    </div>
+
+
+<!-- Desctiption -->
+<div class="quill-editor-full mb-3" id="challengeEditor"></div>
+<textarea  style="display:none" id="id_description" name="description"></textarea>
+
+
+    <input type="hidden" name="next" value="{{ request.path }}">
+
+    <div class="d-grid gap-2 mt-3">
+        <button type="submit" class="btn btn-primary"  tabindex="4">Create</button>
+    </div>
+</form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+

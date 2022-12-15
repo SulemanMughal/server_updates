@@ -36,13 +36,17 @@ OPERATING_SYSTEM_CHOICES_TEXT = {
 
 SCENARIOS_CATEGORYIES = (
     ("1", "Active Directory Attack"),
-    ("2", "OS Exploitation")
+    ("2", "OS Exploitation"),
+    ("3", "Privilege Escalation on Linux OS"),
+    ("4", "Privilege Escalation / RCE-Command Injection / Brute Force"),
 )
 
 
 SCENARIOS_CATEGORYIES_TEXT = {
     "1": "Active Directory Attack",
-    "2": "OS Exploitation"
+    "2": "OS Exploitation",
+    "3" : "Privilege Escalation on Linux OS",
+    "4" : "Privilege Escalation / RCE-Command Injection / Brute Force"
 }
 
 

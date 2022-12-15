@@ -1,0 +1,47 @@
+<style>
+    #modalEditor  .ql-editor {
+ overflow-y: scroll;
+ min-height: 150px;
+ }
+ </style>
+ 
+ <div class="modal fade" id="create_student_modal" tabindex="-1">
+     <div class="modal-dialog modal-dialog-scrollable ">
+       <div class="modal-content">
+         <div class="modal-header">
+           <h5 class="modal-title">Add a new student</h5>
+           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+            <form class="row g-3 needs-validation" novalidate action="{% url 'course-students-new-url' %}" method="POST">
+                {% csrf_token %}
+
+                <!-- Course Name -->
+                <div class="col-md-12 mb-3">
+                    <label for="id_course" class="form-label">Course </label>
+                    <select class="form-select" id="id_course" required="" name="course">
+                        <option value="{{ course.id }}" selected="">{{ course.name }}</option>
+                    </select>
+                  </div>
+
+
+                  <!-- Student Name -->
+                  <div class="col-md-12 mb-3">
+                    <label for="id_student" class="form-label">Student</label>
+                    <select class="form-select" id="id_student" required="" name="student">
+                        {% for student in form_2.student  %}
+                            {{ student }}
+                        {% endfor %}
+                    </select>
+                  </div>
+                  <input type="hidden" name="next" value="{{ request.path }}">
+                  <div class="d-grid gap-2 mt-3">
+                    <button type="submit" class="btn btn-primary"  >Add New Student</button>
+                  </div>
+            </form>
+         </div>
+       </div>
+     </div>
+   </div>
+ 
+ 

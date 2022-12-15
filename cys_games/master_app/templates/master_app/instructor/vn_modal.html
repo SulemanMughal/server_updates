@@ -34,9 +34,7 @@ min-height: 150px;
 <div class="col-12 col-md-6 mb-3">
     <label for="id_course" class="form-label">Course </label>
     <select class="form-select" id="id_course" required="" name="course">
-        {% for course in form.course  %}
-            {{ course }}
-        {% endfor %}
+      <option value="{{ course.id }}" selected="">{{ course.name }}</option>
     </select>
   </div>
 
@@ -88,14 +86,11 @@ min-height: 150px;
 
 
                             
-
+<input type="hidden" name="next" value="{{ request.path }}">
                             <div class="d-grid gap-2 mt-3">
                                 <button type="submit" class="btn btn-primary"  tabindex="4">Create</button>
                             </div>
                         </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
