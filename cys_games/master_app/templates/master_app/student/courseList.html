@@ -3,8 +3,84 @@
 {% block title %} Courses {% endblock %}
 
 {% block extra_css %}
-{% endblock %}
+<style>
+    
+.profile-card-4 {
+    max-width: 300px;
+    background-color: #FFF;
+    border-radius: 5px;
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    position: relative;
+    margin: 10px auto;
+    cursor: pointer;
+}
 
+.profile-card-4 img {
+    transition: all 0.25s linear;
+}
+
+.profile-card-4 .profile-content {
+    position: relative;
+    padding: 15px;
+    background-color: #FFF;
+}
+
+.profile-card-4 .profile-name {
+    font-weight: bold;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: -70px;
+    color: #FFF;
+    font-size: 17px;
+}
+
+.profile-card-4 .profile-name p {
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+}
+
+.profile-card-4 .profile-description {
+    color: #777;
+    font-size: 12px;
+    padding: 10px;
+}
+
+.profile-card-4 .profile-overview {
+    padding: 15px 0px;
+}
+
+.profile-card-4 .profile-overview p {
+    font-size: 10px;
+    font-weight: 600;
+    color: #777;
+}
+
+.profile-card-4 .profile-overview h4 {
+    color: #273751;
+    font-weight: bold;
+}
+
+.profile-card-4 .profile-content::before {
+    content: "";
+    position: absolute;
+    height: 20px;
+    top: -10px;
+    left: 0px;
+    right: 0px;
+    background-color: #FFF;
+    z-index: 0;
+    transform: skewY(3deg);
+}
+
+.profile-card-4:hover img {
+    transform: rotate(5deg) scale(1.1, 1.1);
+    filter: brightness(110%);
+}
+</style>
+{% endblock %}
 
 {% block content %}
 
@@ -15,91 +91,29 @@
             <h1>Courses</h1>
             <nav>
               <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#!">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'student-dasboard-url' %}">Dashboard</a></li>
                 <li class="breadcrumb-item active">Courses</li>
               </ol>
             </nav>
           </div><!-- End Page Title -->
     
         <div class="row">
-            <div class="col-12 col-md-4 col-lg-4">
-                    <div class="card shadow-none bg-transparent ">
-                        <div class="card-header p-0 border-0 ">
-                            <img class="card-img-top" src="{% static 'assets/img/course.png' %}" alt="">
+            {% for course in courses %}
+                <div class="col-12 col-md-4 col-lg-4 d-flex align-items-stretch">
+                        <div class="card  ">
+                            <div class="card-header p-0 border-0 ">
+                                <img class="card-img-top" src="{% static 'assets/img/course.png' %}" alt="">
+                            </div>
+                            <div class="card-body p-3 bg-white">
+                                <h5><a href="{% url 'student-courses-details-url' course.course.id %}">{{ course.course.name }}</a></h5>
+                                <p>
+                                    {{ course.course.description|safe|truncatechars_html:150 }}
+                                </p>
+                            </div>
                         </div>
-                        <div class="card-body p-3 bg-white">
-                            <h5><a href="{% url 'student-courses-details-url' %}">Learning Process</a></h5>
-                            <p>
-                                The learning process is one of the essential and most important components that is often overlooked. This module does not teach you techniques to lear...
-                            </p>
-                        </div>
-                    </div>
-            </div>
-            <div class="col-12 col-md-4 col-lg-4">
-                    <div class="card shadow-none bg-transparent ">
-                        <div class="card-header p-0 border-0 ">
-                            <img class="card-img-top" src="{% static 'assets/img/Ad.png' %}" alt="">
-                        </div>
-                        <div class="card-body p-3 bg-white">
-                            <h5><a href="{% url 'student-courses-details-url' %}">Active Directory LDAP</a></h5>
-                            <p>
-                                This module provides an overview of Active Directory (AD), introduces core AD enumeration concepts, and covers enumeration with built-in tools.
-                            </p>
-                        </div>
-                    </div>
-            </div>
-            <div class="col-12 col-md-4 col-lg-4">
-                    <div class="card shadow-none bg-transparent ">
-                        <div class="card-header p-0 border-0 ">
-                            <img class="card-img-top" src="{% static 'assets/img/course.png' %}" alt="">
-                        </div>
-                        <div class="card-body p-3 bg-white">
-                            <h5><a href="{% url 'student-courses-details-url' %}">Learning Process</a></h5>
-                            <p>
-                                The learning process is one of the essential and most important components that is often overlooked. This module does not teach you techniques to lear...
-                            </p>
-                        </div>
-                    </div>
-            </div>
-            <div class="col-12 col-md-4 col-lg-4">
-                    <div class="card shadow-none bg-transparent ">
-                        <div class="card-header p-0 border-0 ">
-                            <img class="card-img-top" src="{% static 'assets/img/course.png' %}" alt="">
-                        </div>
-                        <div class="card-body p-3 bg-white">
-                            <h5><a href="{% url 'student-courses-details-url' %}">Learning Process</a></h5>
-                            <p>
-                                The learning process is one of the essential and most important components that is often overlooked. This module does not teach you techniques to lear...
-                            </p>
-                        </div>
-                    </div>
-            </div>
-            <div class="col-12 col-md-4 col-lg-4">
-                    <div class="card shadow-none bg-transparent ">
-                        <div class="card-header p-0 border-0 ">
-                            <img class="card-img-top" src="{% static 'assets/img/course.png' %}" alt="">
-                        </div>
-                        <div class="card-body p-3 bg-white">
-                            <h5><a href="{% url 'student-courses-details-url' %}">Learning Process</a></h5>
-                            <p>
-                                The learning process is one of the essential and most important components that is often overlooked. This module does not teach you techniques to lear...
-                            </p>
-                        </div>
-                    </div>
-            </div>
-            <div class="col-12 col-md-4 col-lg-4">
-                    <div class="card shadow-none bg-transparent ">
-                        <div class="card-header p-0 border-0 ">
-                            <img class="card-img-top" src="{% static 'assets/img/course.png' %}" alt="">
-                        </div>
-                        <div class="card-body p-3 bg-white">
-                            <h5><a href="{% url 'student-courses-details-url' %}">Learning Process</a></h5>
-                            <p>
-                                The learning process is one of the essential and most important components that is often overlooked. This module does not teach you techniques to lear...
-                            </p>
-                        </div>
-                    </div>
-            </div>
+                </div>
+            {% endfor %}
+            
         </div>  
     </div>
     </section>  

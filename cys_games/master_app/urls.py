@@ -80,8 +80,8 @@ urlpatterns = [
     # ? Student Courses
     path("student/courses", views.StudentCourses, name="student-courses-url"),
 
-    # ? Student Courses Detials
-    path("student/courses/details", views.StudentCourseDetails, name="student-courses-details-url"),
+    # ? Student Courses Detials 
+    path("student/courses/details/<int:course_id>", views.StudentCourseDetails, name="student-courses-details-url"),
 
     # ? Student Machines
     path("student/machines", views.StudentMachines, name="student-machines-url"),

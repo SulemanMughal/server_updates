@@ -391,7 +391,11 @@ def StudentDashboard(request):
 @student_required
 def StudentCourses(request):
     template_name = 'master_app/student/courseList.html'
+    courses = AssignedStudents.objects.filter(student__id = request.user.id).filter(course__is_approved="Approved")
+    # print(courses)
+    
     context = {
+        "courses" : courses
     }
     return render(request, template_name, context)
 
@@ -399,9 +403,21 @@ def StudentCourses(request):
 # TODO  :   Student Course Details
 @login_required
 @student_required
-def StudentCourseDetails(request):
+def StudentCourseDetails(request , course_id):
+    try:
+        course = Course.objects.get(id=course_id, is_approved = "Approved")
+        easy_challenges = course.coursechallenge_set.filter(levels = 1)
+        medium_challenges = course.coursechallenge_set.filter(levels = 2)
+        hard_challenges = course.coursechallenge_set.filter(levels = 3)
+    except:
+        messages.error(request, "Requested course does not exist")
+        return redirect(reverse("student-courses-url"))
     template_name = 'master_app/student/courseDetails.html'
     context = {
+        "course" : course,
+        "easy_challenges" : easy_challenges,
+        "medium_challenges" : medium_challenges,
+        "hard_challenges" : hard_challenges
     }
     return render(request, template_name, context)
 
