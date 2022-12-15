@@ -63,6 +63,10 @@ urlpatterns = [
 
     # ? Instructor Challenge Details
     path("instructor/courses/<int:course_id>/challenge/<int:challenge_id>/", views.InstructorChallengeDetails, name="instructor-challenge-details-url"),
+
+
+    # ? Instructor Virutal Network
+    path("instructor/network/create", views.InstructorNetworkCreate, name="instructor-create-network-url"),
     
 
     

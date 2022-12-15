@@ -82,7 +82,7 @@
                     
                     <div class="card-body  px-0">
                       {% if course.get_virtual_network %}
-                        <a class="btn btn-primary py-3 shadow-lg w-100 " href="#!">Start instance for {{ course.get_virtual_network }}</a>
+                        <button class="btn btn-primary py-3 shadow-lg w-100 "  id="start_network">Start instance for {{ course.get_virtual_network }}</button>
                         <ul class="list-group list-group-flush">
                         
                           <li class="list-group-item d-flex justify-content-between align-items-start">
@@ -434,6 +434,34 @@
         })
     });
   }
+
+
+  $("#start_network").on("click", function(event){
+    event.preventDefault();
+    event.stopPropagation();
+    var fd = new FormData();
+    fd.append("name" , "testing");
+              $.ajaxSetup({
+                beforeSend: function(xhr, settings){
+                  xhr.setRequestHeader(
+                    'X-CSRFToken', '{{ csrf_token }}'
+                  )
+                }
+              });
+              $.ajax({
+                url : "{% url 'instructor-create-network-url' %}",
+                type  : "POST",
+                data: fd,
+                processData: false,
+                contentType: false,
+                success : function(response){
+                  console.debug("Login Successfully");
+                },
+                error : function(response){
+                  console.debug(response["responseJSON"]["error"]);
+                }
+              });
+    });
   
 </script>
 {% endblock %}
@@ -448,7 +476,7 @@
     <div class="card bg-transparent p-0 ">
       <div class="card-body p-0 shadow-none">
         {% if course.get_virtual_network %}
-          <a class="btn btn-primary py-3 shadow-lg w-100 " href="#!">Start instance for {{ course.get_virtual_network }}</a>
+          <button class="btn btn-primary py-3 shadow-lg w-100" >Start instance for {{ course.get_virtual_network }}</button>
         {% else %}
           <a class="btn btn-primary py-3 shadow-lg w-100 " href="#virutal_network_modal" data-bs-toggle="modal">Create Virutal Network</a>
         {% endif %}

@@ -311,6 +311,29 @@ def InstructorChallengeDetails(request, course_id, challenge_id):
     return render(request, template_name, context)
 
 
+def InstructorNetworkCreate(request):
+    
+    if request.method == "POST" :
+        return JsonResponse(
+            json.loads(
+                json.dumps({
+                    "text" : "Valid method"
+                })
+            ),
+            status =200
+        )
+        
+    else:
+        return JsonResponse(
+            json.loads(
+                json.dumps({
+                    "error" : "Invalid request method"
+                })
+            ),
+            status =400
+        )
+
+
 
 # TODO  :   Instructor Virutal Networks Create New
 @login_required

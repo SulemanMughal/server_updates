@@ -137,7 +137,7 @@
 
             
             <!-- Reports -->
-            <div class="col-12 ">
+            <div class="col-12 d-none">
               <div class="card">
 
                 <div class="filter">
@@ -218,6 +218,44 @@
               </div>
             </div><!-- End Reports -->
 
+            <div class="col-12 col-md-4">
+              <div class="card  mb-0 pb-0">
+                <div class="card-body pb-0">
+              <!-- Donut Chart -->
+              <div id="donutChart" ></div>
+              
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  new ApexCharts(document.querySelector("#donutChart"), {
+                    series: [44, 55, 13, 43, 22],
+                    chart: {
+                      
+                      type: 'donut',
+                      height: 300,
+                      toolbar: {
+                        show: true
+                      }
+                    },
+                    legend: {
+                          position: 'top',
+                        },
+                        plotOptions: {
+                    pie: {
+                      donut: {
+                        size: '50%'
+                      }
+                    }
+                  },
+                    labels: ['Student A', 'Student B', 'Student C', 'Student D', 'Student E'],
+                  }).render();
+                });
+              </script>
+              <!-- End Donut Chart -->
+                </div>
+              </div>
+            </div>
+
+
             <!-- Recent Sales -->
             <div class="col-12 d-none">
               <div class="card recent-sales overflow-auto">
@@ -278,7 +316,7 @@
                 </div>
 
               </div>
-            </div><!-- End Recent Sales -->
+            </div>
 
             <!-- Top Selling -->
             <div class="col-12">
@@ -363,7 +401,7 @@
             </div>
 
             <div class="card-body pb-0">
-              <h5 class="card-title">Information <span>| Today</span></h5>
+              <h5 class="card-title">Information</h5>
 
               <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
 
@@ -394,7 +432,7 @@
                         }
                       },
                       labelLine: {
-                        show: false
+                        show: true
                       },
                       data: [{
                           value: 1048,
