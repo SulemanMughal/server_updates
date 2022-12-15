@@ -30,3 +30,9 @@ RATING_CHOICES = (
     ("4", 4),
     ("5", 5),
 )
+
+CHALLENGE_LEVELS = (
+    ("1" , "EASY"),
+    ("2" , "MEDIUM"),
+    ("3" , "HARD")
+)

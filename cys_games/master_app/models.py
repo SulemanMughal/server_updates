@@ -10,7 +10,7 @@ from ckeditor.fields import RichTextField
 
 from django.core.exceptions import ValidationError
 
-from .choices import OPERATING_SYSTEM_CHOICES,  SCENARIOS_CATEGORYIES, RATING_CHOICES
+from .choices import OPERATING_SYSTEM_CHOICES,  SCENARIOS_CATEGORYIES, RATING_CHOICES, CHALLENGE_LEVELS
 
 
 # Create your models here.
@@ -68,10 +68,25 @@ class VirtualNetwork(models.Model):
     name = models.CharField(max_length=100)
     description = RichTextField()
     operating_system = models.CharField(max_length=3, default=1 , choices=OPERATING_SYSTEM_CHOICES)
-    scenarios = models.CharField(max_length=50, default=1 , choices=SCENARIOS_CATEGORYIES)
-    rating  = models.CharField(max_length=1 , default=1, choices=RATING_CHOICES)
+    scenarios = models.CharField(max_length=50, default="1" , choices=SCENARIOS_CATEGORYIES)
+    rating  = models.CharField(max_length=1 , default="1", choices=RATING_CHOICES)
     ip_address = models.GenericIPAddressField(blank=True, null=True)
 
 
     def __str__(self):
         return self.name
+
+
+
+class CourseChallenge(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    description = RichTextField()
+    levels = models.CharField(max_length=1, default="1", choices=CHALLENGE_LEVELS)
+    
+
+    def __str__(self):
+        return "{course} : {title}".format(
+            course = self.course,
+            title = self.title
+        )

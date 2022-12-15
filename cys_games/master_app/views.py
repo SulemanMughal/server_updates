@@ -8,7 +8,7 @@ from django.utils.decorators import method_decorator
 from django.contrib import messages
 
 # ? forms
-from .forms import loginForm, CreateCourseForm, AddNewStudent, NewVirtualNetworkForm
+from .forms import loginForm, CreateCourseForm, AddNewStudent, NewVirtualNetworkForm, CourseChallengeForm
 
 
 # ? Models
@@ -215,6 +215,8 @@ def StudentList(request):
     return render(request, template_name, context)
 
 
+
+# TODO  :   Instructor Create New Course
 @login_required
 @teacher_required
 def CreateCourse(request):
@@ -235,6 +237,24 @@ def CreateCourse(request):
     }
     return render(request, template_name, context)
 
+
+
+# TODO  :   Instructor Create New Challenge
+@login_required
+@teacher_required
+def InstructorCreateNewChallenge(request):
+    template_name = 'master_app/instructor/create_new_challenge.html'
+    if request.method  == "POST":
+        form = CourseChallengeForm(request.POST)
+        form.save()
+        messages.success(request, "New Challenge has been added.")
+        return redirect("courses-all-url")
+
+    form = CourseChallengeForm()
+    context = {
+        "form" : form
+    }
+    return render(request, template_name, context)
 
 # TODO  :   Instructor Course Details
 @login_required

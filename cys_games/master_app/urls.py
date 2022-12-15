@@ -48,6 +48,9 @@ urlpatterns = [
     # ? Instructor Create New Course
     path("instructor/course/new", views.CreateCourse, name="course-new-url"),
 
+    # ? Instructor Create New Challenge
+    path("instructor/course/challenge/new", views.InstructorCreateNewChallenge, name="instructor-create-new-challenge-url"),
+
     # ? Instructor Courses Detials
     path("instructor/courses/details", views.InstructorCourseDetails, name="instructor-courses-details-url"),
 
