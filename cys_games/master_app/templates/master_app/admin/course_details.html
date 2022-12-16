@@ -101,7 +101,25 @@
                     
                           
                           <ul class="list-group list-group-flush">
-                          
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                              <div class="ms-2 me-auto">
+                                <div class="fw-bold">Status</div>
+                              </div>
+                              {% if course.get_virtual_network %}
+                        {% if course.is_approved == "1" %}
+                              <span class="badge bg-warning">Send Request for Approval</span>
+                    {% elif course.is_approved == "2" %}
+                      
+                      <span class="badge bg-primary">Sent Admin for Approval</span>
+                    {% elif course.is_approved == "3" %}
+                    <span class="badge bg-success">Approved</span>
+                      
+                    {% elif course.is_approved == "4"  %}
+                    <span class="badge bg-danger">Rejected</span>
+                      
+                    {% endif %}
+                    {% endif %}
+                            </li>
                             <li class="list-group-item d-flex justify-content-between align-items-start">
                               <div class="ms-2 me-auto">
                                 <div class="fw-bold">Name</div>
@@ -125,7 +143,8 @@
                               <li class="list-group-item d-flex justify-content-between align-items-start">
                                 <div class="ms-2 me-auto">
                                   <div class="fw-bold">IP Address</div>
-                                </div><p class="w-50 text-end">{{ course.get_virtual_network.ip_address }}</p></li>
+                                </div><p class="w-50 text-end">{{ course.get_virtual_network.ip_address }}</p>
+                              </li>
                               <li class="list-group-item d-flex justify-content-between align-items-start">
                                 <div class="ms-2 me-auto">
                                   <div class="fw-bold">Network Topology Image</div>
