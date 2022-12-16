@@ -88,12 +88,9 @@
                       <a class="btn btn-warning py-3 shadow-lg w-100 "    href="{% url 'instructor-approve-course-url' course.id   %}">Send Request for Approval</a>
                   {% elif course.is_approved == "2" %}
                     <button class="btn btn-primary py-3 shadow-lg w-100 "    >Sent Admin for Approval</button>
-                  {% elif course.is_approved == "3" %}
+                  {% else %}
                   <h3 class="p-3">Virtual Network</h3>
                     
-                  {% elif course.is_approved == "4"  %}
-                    
-                    <button class="btn btn-danger py-3 shadow-lg w-100 ">Rejected</button>
                   {% endif %}
                   
                         

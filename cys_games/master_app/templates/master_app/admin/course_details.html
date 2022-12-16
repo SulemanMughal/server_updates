@@ -12,431 +12,435 @@
 <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
 <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
 <style>
-    .dashboard .activity .activity-item .activite-label{
-      min-width: 0px;
-    }
-    .w-45 {
-    width: 45%!important;
+.dashboard .activity .activity-item .activite-label{
+  min-width: 0px;
 }
-  </style>
+.w-45 {
+width: 45%!important;
+}
+</style>
 {% endblock %}
 
 {% block content %}
 {% include 'master_app/admin/course_approval_form.html' %}
 <main id="main" class="main">
-    <section class="section dashboard">
-        <div class="container">
-            <div class="pagetitle">
-                <h1>Course Details</h1>
-                <nav>
-                    <ol class="breadcrumb">
-                      <li class="breadcrumb-item"><a href="{% url 'admin-dasboard-url' %}">Dashboard</a></li>
-                      <li class="breadcrumb-item "><a href="{% url 'admin-course-list-url' %}">Courses</a></li>
-                      <li class="breadcrumb-item active">{{ course.name }}</li>
-                    </ol>
-                  </nav>
-            </div>
-            {% if course.is_approved == "2" %}
-                <div class="row">
-                    <div class="col-12">
-                        <div class="alert alert-primary " role="alert">
-                            <strong>Instructor has sent request for approval</strong>
-                        </div>
-                    </div>
-                </div>
-            {% endif %}
+<section class="section dashboard">
+    <div class="container">
+        <div class="pagetitle">
+            <h1>Course Details</h1>
+            <nav>
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="{% url 'admin-dasboard-url' %}">Dashboard</a></li>
+                  <li class="breadcrumb-item "><a href="{% url 'admin-course-list-url' %}">Courses</a></li>
+                  <li class="breadcrumb-item active">{{ course.name }}</li>
+                </ol>
+              </nav>
+        </div>
+        {% if course.is_approved == "2" %}
             <div class="row">
-                <div class="col-12 col-md-8">
-                    <div class="card mb-3">
-                        <div class="row g-0">
-                          <div class="col-md-4">
-                            <img src="{% static 'assets/img/Ad.png' %}" class="img-fluid rounded-start h-100" alt="...">
-                          </div>
-                          <div class="col-md-8">
-                            <div class="card-body">
-                              <h5 class="card-title">{{ course.name }} 
-                                {% if course.is_approved == "1" %}
-                            <span class="badge bg-warning text-white">Pending</span>
-                          {% elif course.is_approved == "2" %}
-                            <span class="badge bg-primary text-white">Sent Admin for Approval</span>
-                          {% elif course.is_approved == "3" %}
-                            <span class="badge bg-success text-white">Approved</span>
-                          {% elif course.is_approved == "4"  %}
-                            <span class="badge bg-danger text-white">Rejected</span>
-                          {% endif %}</h5> 
-                              <p>Start Date&Time : {{ course.start_time }}</p>
-                              <p>End Date&Time : {{ course.end_time }}</p>
-                              <p class="mb-1"><i class="fas fa-star text-warning fs-5" ></i><i class="fas fa-star text-warning fs-5" ></i><i class="fas fa-star text-warning fs-5" ></i><i class="fas fa-star text-warning fs-5" ></i><i class="fas fa-star text-warning fs-5" ></i></p>
-                              <p class="mb-0">Created By <strong class="text-primary fw-bolder">{{ course.instructor.username }}</strong></p>
-                            </div>
-                          </div>
-                        </div>
-                        
+                <div class="col-12">
+                    <div class="alert alert-primary " role="alert">
+                        <strong>Instructor has sent request for approval</strong>
                     </div>
-                    <div class="card">
-                        <div class="card-body p-3">
-                          <h3>Summary</h3>
-                          {{ course.description|safe }}
-                        </div>
-                      </div>
                 </div>
-                <div class="col-12 col-md-4 mb-5">
-                    <div class="card {% if not course.get_virtual_network %} bg-transparent shadow-none {% endif %} p-0 ">
-                      
-                      <div class="card-body  px-0">
-                        {% if course.get_virtual_network %}
-                        {% if course.is_approved == "1" %}
-                        <a class="btn btn-warning py-3 shadow-lg w-100 "    href="#!">Pending Request</a>
-                    {% elif course.is_approved == "2" %}
-                      <div class="container-fluid">
-                        <div class="row justify-content-center">
-                          <a class="btn btn-danger py-3  col-6 rounded-0" type="button" href="#!" >Reject</a>
-                          <a class="btn btn-primary py-3   col-6 rounded-0" type="button" data-bs-toggle="modal" href="#virutal_network_modal">Approve</a>
+            </div>
+        {% endif %}
+        <div class="row">
+            <div class="col-12 col-md-8">
+                <div class="card mb-3">
+                    <div class="row g-0">
+                      <div class="col-md-4">
+                        <img src="{% static 'assets/img/Ad.png' %}" class="img-fluid rounded-start h-100" alt="...">
+                      </div>
+                      <div class="col-md-8">
+                        <div class="card-body">
+                          <h5 class="card-title">{{ course.name }} 
+                            {% if course.is_approved == "1" %}
+                        <span class="badge bg-warning text-white">Pending</span>
+                      {% elif course.is_approved == "2" %}
+                        <span class="badge bg-primary text-white">Sent Admin for Approval</span>
+                      {% elif course.is_approved == "3" %}
+                        <span class="badge bg-success text-white">Approved</span>
+                      {% elif course.is_approved == "4"  %}
+                        <span class="badge bg-danger text-white">Rejected</span>
+                      {% endif %}</h5> 
+                          <p>Start Date&Time : {{ course.start_time }}</p>
+                          <p>End Date&Time : {{ course.end_time }}</p>
+                          <p class="mb-1"><i class="fas fa-star text-warning fs-5" ></i><i class="fas fa-star text-warning fs-5" ></i><i class="fas fa-star text-warning fs-5" ></i><i class="fas fa-star text-warning fs-5" ></i><i class="fas fa-star text-warning fs-5" ></i></p>
+                          <p class="mb-0">Created By <strong class="text-primary fw-bolder">{{ course.instructor.username }}</strong></p>
                         </div>
                       </div>
-                      {% else %}
-                        <h3 class="p-3">Virtual Network</h3>
-                      {% endif %}
-                      
+                    </div>
                     
-                          
-                          <ul class="list-group list-group-flush">
-                            <li class="list-group-item d-flex justify-content-between align-items-start">
-                              <div class="ms-2 me-auto">
-                                <div class="fw-bold">Status</div>
-                              </div>
-                              {% if course.get_virtual_network %}
-                        {% if course.is_approved == "1" %}
-                              <span class="badge bg-warning">Send Request for Approval</span>
-                    {% elif course.is_approved == "2" %}
+                </div>
+                <div class="card">
+                    <div class="card-body p-3">
+                      <h3>Summary</h3>
+                      {{ course.description|safe }}
+                    </div>
+                  </div>
+            </div>
+            <div class="col-12 col-md-4 mb-5">
+                <div class="card {% if not course.get_virtual_network %} bg-transparent shadow-none {% endif %} p-0 ">
+                  
+                  <div class="card-body  px-0">
+                    {% if course.get_virtual_network %}
+                    {% if course.is_approved == "1" %}
+                    <a class="btn btn-warning py-3 shadow-lg w-100 "    href="#!">Pending Request</a>
+                {% elif course.is_approved == "2" %}
+                  <div class="container-fluid">
+                    <div class="row justify-content-center">
+                      <a class="btn btn-danger py-3  col-6 rounded-0" type="button" href="{% url 'admin-course-reject-url' course.id %}" >Reject</a>
+                      <a class="btn btn-primary py-3   col-6 rounded-0" type="button" data-bs-toggle="modal" href="#virutal_network_modal">Approve</a>
+                    </div>
+                  </div>
+                  {% else %}
+                    <h3 class="p-3">Virtual Network</h3>
+                  {% endif %}
+                  
+                
                       
-                      <span class="badge bg-primary">Sent Admin for Approval</span>
-                    {% elif course.is_approved == "3" %}
-                    <span class="badge bg-success">Approved</span>
-                      
-                    {% elif course.is_approved == "4"  %}
-                    <span class="badge bg-danger">Rejected</span>
-                      
-                    {% endif %}
-                    {% endif %}
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-start">
-                              <div class="ms-2 me-auto">
-                                <div class="fw-bold">Name</div>
-                              </div>
-                              <p class="w-50 text-end">{{ course.get_virtual_network.name }}</p>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-start">
-                              <div class="ms-2 me-auto">
-                                <div class="fw-bold">OS</div>
-                              </div>
-                              <p class="w-50 text-end">{{ course.get_virtual_network.get_operating_system }}</p></li>
-                            <li class="list-group-item d-flex justify-content-between align-items-start">
-                              <div class="ms-2 me-auto">
-                                <div class="fw-bold">Scenario</div>
-                              </div><p class="w-50 text-end">{{ course.get_virtual_network.get_scenarios }}</p></li>
-                            <li class="list-group-item d-flex justify-content-between align-items-start">
-                              <div class="ms-2 me-auto">
-                                <div class="fw-bold">Config File</div>
-                              </div><p class="w-50"><a href="{{ course.get_virtual_network.config_file_url }}">{{ course.get_virtual_network.config_file_url }}</a></p></li>
+                      <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                          <div class="ms-2 me-auto">
+                            <div class="fw-bold">Status</div>
+                          </div>
+                          {% if course.get_virtual_network %}
+                    {% if course.is_approved == "1" %}
+                          <span class="badge bg-warning">Send Request for Approval</span>
+                {% elif course.is_approved == "2" %}
+                  
+                  <span class="badge bg-primary">Sent Admin for Approval</span>
+                {% elif course.is_approved == "3" %}
+                <span class="badge bg-success">Approved</span>
+                  
+                {% elif course.is_approved == "4"  %}
+                <span class="badge bg-danger">Rejected</span>
+                  
+                {% endif %}
+                {% endif %}
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                          <div class="ms-2 me-auto">
+                            <div class="fw-bold">Name</div>
+                          </div>
+                          <p class="w-50 text-end">{{ course.get_virtual_network.name }}</p>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                          <div class="ms-2 me-auto">
+                            <div class="fw-bold">OS</div>
+                          </div>
+                          <p class="w-50 text-end">{{ course.get_virtual_network.get_operating_system }}</p></li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                          <div class="ms-2 me-auto">
+                            <div class="fw-bold">Scenario</div>
+                          </div><p class="w-50 text-end">{{ course.get_virtual_network.get_scenarios }}</p></li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                          <div class="ms-2 me-auto">
+                            <div class="fw-bold">Config File</div>
+                          </div><p class="w-50"><a href="{{ course.get_virtual_network.config_file_url }}">{{ course.get_virtual_network.config_file_url }}</a></p></li>
 
-                              <li class="list-group-item d-flex justify-content-between align-items-start">
-                                <div class="ms-2 me-auto">
-                                  <div class="fw-bold">IP Address</div>
-                                </div><p class="w-50 text-end">{{ course.get_virtual_network.ip_address }}</p>
-                              </li>
-                              <li class="list-group-item d-flex justify-content-between align-items-start">
-                                <div class="ms-2 me-auto">
-                                  <div class="fw-bold">Network Topology Image</div>
-                                </div><p class="w-50 text-end"><a href="{{ course.get_virtual_network.topology_image.path }}">Download</a></p></li>
-                                <li class="list-group-item d-flex justify-content-between align-items-start">
-                                  <div class="ms-2 me-auto">
-                                    <div class="fw-bold">SSH Zip </div>
-                                  </div><p class="w-50 text-end"><a href="{{ course.get_virtual_network.ssh_file.path }}">Download</a></p></li>
-                                <li class="list-group-item d-flex justify-content-between align-items-start">
-                                  <div class="ms-2 me-auto">
-                                    <div class="fw-bold">Instructions </div>
-                                  </div><p class="w-50 text-end"><a data-bs-toggle="offcanvas" href="#offcanvasExample2" role="button" aria-controls="offcanvasExample2">Read</a></p></li>
-                                  
+
+                          {% if course.is_approved == "3" %}
+
+                          <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                              <div class="fw-bold">IP Address</div>
+                            </div><p class="w-50 text-end">{{ course.get_virtual_network.ip_address }}</p>
+                          </li>
+                          <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                              <div class="fw-bold">Network Topology Image</div>
+                            </div><p class="w-50 text-end"><a href="{{ course.get_virtual_network.topology_image.path }}">Download</a></p></li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                              <div class="ms-2 me-auto">
+                                <div class="fw-bold">SSH Zip </div>
+                              </div><p class="w-50 text-end"><a href="{{ course.get_virtual_network.ssh_file.path }}">Download</a></p></li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                              <div class="ms-2 me-auto">
+                                <div class="fw-bold">Instructions </div>
+                              </div><p class="w-50 text-end"><a data-bs-toggle="offcanvas" href="#offcanvasExample2" role="button" aria-controls="offcanvasExample2">Read</a></p></li>
                               
-                            <li class="list-group-item text-center" aria-disabled="true"><a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">See Details<i class="fas fa-chevron-right fs-5 ms-3 pt-2"></i></a></li>
-                          </ul>
-                        {% endif %}
-                        
-                        
-                      </div>
-                    </div>
-                    <div class="card">
+                            {% endif %}
+                          
+                        <li class="list-group-item text-center" aria-disabled="true"><a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">See Details<i class="fas fa-chevron-right fs-5 ms-3 pt-2"></i></a></li>
+                      </ul>
+                    {% endif %}
+                    
+                    
+                  </div>
+                </div>
+                <div class="card">
 
-                      <div class="card-body p-3">
-                        <h3>Challenges</h3>
-                        <div class="activity">
-                        
-                          {% if easy_challenges %}
-                              {% for ch in easy_challenges %}
-                              {% include 'master_app/instructor/challenges_modals.html' with ch=ch %}
-                              <div class="activity-item d-flex">
-                                <div class="activite-label"></div>
-                                <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
-                                <div class="activity-content">
-                                  <a href="#verticalycentered_{{ ch.course.id }}_{{ ch.id }}" class="fw-bold " data-bs-toggle="modal" >{{ ch.title }}</a>
-                                </div>
-                              </div><!-- End activity item-->
-                              {% endfor %}
-                            
-                        {% endif %}
-                        {% if medium_challenges %}
-                          
-                              {% for ch in medium_challenges %}
-                              {% include 'master_app/instructor/challenges_modals.html' with ch=ch %}
-                              <div class="activity-item d-flex">
-                                <div class="activite-label"></div>
-                                <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
-                                <div class="activity-content">
-                                  <a href="#verticalycentered_{{ ch.course.id }}_{{ ch.id }}" class="fw-bold " data-bs-toggle="modal" >{{ ch.title }}</a>
-                                </div>
-                              </div><!-- End activity item-->
-                              {% endfor %}
-                          
-                        {% endif %}
-                        {% if hard_challenges %}
-                          
-                              {% for ch in hard_challenges %}
-                              {% include 'master_app/instructor/challenges_modals.html' with ch=ch %}
-                              <div class="activity-item d-flex">
-                                <div class="activite-label"></div>
-                                <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
-                                <div class="activity-content">
-                                  <a href="#verticalycentered_{{ ch.course.id }}_{{ ch.id }}" class="fw-bold " data-bs-toggle="modal" >{{ ch.title }}</a>
-                                </div>
-                              </div><!-- End activity item-->
-                              {% endfor %}
-                          
-                        {% endif %}
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card">
-
-                      <div class="card-body p-3">
-                        <h3>Students</h3>
-                        <ul class="list-group list-group-flush">
-                          {% if students %}
-                            {% for std in students %}
-                              <li class="list-group-item">{{std.student.email }}</li>
-                            {% endfor %}
-                          {% endif %}
-                        </ul><!-- End Clean list group -->
-                      </div>
-                    </div>
-                    <div class="card mb-0 px-0">
-                      <div class="card-body pb-0 px-0">
-                        <h5 class="card-title px-3">Challenges Results</h5>
-          
-  
-                        <div data-flickity='{"pageDots":true,"cellAlign": "left", "wrapAround": true, "imagesLoaded": true, "prevNextButtons": false, "adaptiveHeight" : true}' class="flickity-viewport-visible">
-                          <div class="col-12 "  aria-hidden="true">
-                            <div class="card shadow-none bg-transparent mb-0 pb-0">
-                              <div class="card-body pb-0">
-                          <!-- Bar Chart -->
-                        <div id="barChart"></div>
-          
-                        <script>
-                          document.addEventListener("DOMContentLoaded", () => {
-                            new ApexCharts(document.querySelector("#barChart"), {
-                              series: [
-                              {
-                        name: 'Student A',
-                        data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
-                      }, {
-                        name: 'Student B',
-                        data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
-                      },
-                      {
-                        name: 'Student C',
-                        data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
-                      }
-                              ],
-                              chart: {
-                                type: 'bar',
-                                height: 400
-  
-                              },
-                              plotOptions: {
-                                bar: {
-                                  borderRadius: 2,
-                                  horizontal: true,
-                                  width : 2
-                                }
-                              },
-                              dataLabels: {
-                                enabled: false
-                              },
-                              legend: {
-              position: 'top',
-            },
-                              xaxis: {
-                                categories: ['Challenge A', 'Challenge B', 'Challenge C', 'Challenge D', 'Challenge E'
-                                ],
-                              }
-                            }).render();
-                          });
-                        </script>
-                        <!-- End Bar Chart -->  
-                        </div>
-                        </div>
-                          </div>
-                          <div class="col-12" aria-hidden="true">
-  <div class="card shadow-none bg-transparent mb-0 pb-0">
-    <div class="card-body pb-0">
-  <!-- Donut Chart -->
-  <div id="donutChart" ></div>
-  
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      new ApexCharts(document.querySelector("#donutChart"), {
-        series: [44, 55, 13, 43, 22],
-        chart: {
-          
-          type: 'donut',
-          height: 300,
-          toolbar: {
-            show: true
-          }
-        },
-        legend: {
-              position: 'top',
-            },
-            plotOptions: {
-        pie: {
-          donut: {
-            size: '50%'
-          }
-        }
-      },
-        labels: ['Student A', 'Student B', 'Student C', 'Student D', 'Student E'],
-      }).render();
-    });
-  </script>
-  <!-- End Donut Chart -->
-    </div>
-  </div>
-                          </div>
-                          <div class="col-12" aria-hidden="true">
-                            <div class="card shadow-none bg-transparent mb-0 pb-0 px-0">
-                              <div class="card-body pb-0 px-0">
-                  
-                                <!-- Radar Chart -->
-                                <div id="radarChart"></div>
-                  
-                                <script>
-                                  document.addEventListener("DOMContentLoaded", () => {
-                                    new ApexCharts(document.querySelector("#radarChart"), {
-                                      series: [{
-                                        name: 'Student A',
-                                        data: [80, 50, 30, 40, 100],
-                                      },
-                                      {
-                                        name: 'Student B',
-                                        data: [50, 60, 40, 30, 95],
-                                      },
-                                      {
-                                        name: 'Student C',
-                                        data: [30, 80, 60, 10, 75],
-                                      }],
-                                      chart: {
-                                        height: 350,
-                                        type: 'radar',
-                                        toolbar: {
-            show: true
-          }
-                                      },
-                                      legend: {
-              position: 'top',
-            },
-                                      xaxis: {
-                                        categories: ['Challenge A', 'Challenge B', 'Challenge C', 'Challenge D', 'Challenge E']
-                                      }
-                                    }).render();
-                                  });
-                                </script>
-                                <!-- End Radar Chart -->
-                  
-                              </div>
+                  <div class="card-body p-3">
+                    <h3>Challenges</h3>
+                    <div class="activity">
+                    
+                      {% if easy_challenges %}
+                          {% for ch in easy_challenges %}
+                          {% include 'master_app/instructor/challenges_modals.html' with ch=ch %}
+                          <div class="activity-item d-flex">
+                            <div class="activite-label"></div>
+                            <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
+                            <div class="activity-content">
+                              <a href="#verticalycentered_{{ ch.course.id }}_{{ ch.id }}" class="fw-bold " data-bs-toggle="modal" >{{ ch.title }}</a>
                             </div>
-                          </div>
-                          
-                          
-                          </div>
-  
+                          </div><!-- End activity item-->
+                          {% endfor %}
                         
-          
-                      </div>
+                    {% endif %}
+                    {% if medium_challenges %}
+                      
+                          {% for ch in medium_challenges %}
+                          {% include 'master_app/instructor/challenges_modals.html' with ch=ch %}
+                          <div class="activity-item d-flex">
+                            <div class="activite-label"></div>
+                            <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
+                            <div class="activity-content">
+                              <a href="#verticalycentered_{{ ch.course.id }}_{{ ch.id }}" class="fw-bold " data-bs-toggle="modal" >{{ ch.title }}</a>
+                            </div>
+                          </div><!-- End activity item-->
+                          {% endfor %}
+                      
+                    {% endif %}
+                    {% if hard_challenges %}
+                      
+                          {% for ch in hard_challenges %}
+                          {% include 'master_app/instructor/challenges_modals.html' with ch=ch %}
+                          <div class="activity-item d-flex">
+                            <div class="activite-label"></div>
+                            <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
+                            <div class="activity-content">
+                              <a href="#verticalycentered_{{ ch.course.id }}_{{ ch.id }}" class="fw-bold " data-bs-toggle="modal" >{{ ch.title }}</a>
+                            </div>
+                          </div><!-- End activity item-->
+                          {% endfor %}
+                      
+                    {% endif %}
                     </div>
+                  </div>
+                </div>
+                <div class="card">
+
+                  <div class="card-body p-3">
+                    <h3>Students</h3>
+                    <ul class="list-group list-group-flush">
+                      {% if students %}
+                        {% for std in students %}
+                          <li class="list-group-item">{{std.student.email }}</li>
+                        {% endfor %}
+                      {% endif %}
+                    </ul><!-- End Clean list group -->
+                  </div>
+                </div>
+                <div class="card mb-0 px-0">
+                  <div class="card-body pb-0 px-0">
+                    <h5 class="card-title px-3">Challenges Results</h5>
+      
+
+                    <div data-flickity='{"pageDots":true,"cellAlign": "left", "wrapAround": true, "imagesLoaded": true, "prevNextButtons": false, "adaptiveHeight" : true}' class="flickity-viewport-visible">
+                      <div class="col-12 "  aria-hidden="true">
+                        <div class="card shadow-none bg-transparent mb-0 pb-0">
+                          <div class="card-body pb-0">
+                      <!-- Bar Chart -->
+                    <div id="barChart"></div>
+      
+                    <script>
+                      document.addEventListener("DOMContentLoaded", () => {
+                        new ApexCharts(document.querySelector("#barChart"), {
+                          series: [
+                          {
+                    name: 'Student A',
+                    data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
+                  }, {
+                    name: 'Student B',
+                    data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
+                  },
+                  {
+                    name: 'Student C',
+                    data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
+                  }
+                          ],
+                          chart: {
+                            type: 'bar',
+                            height: 400
+
+                          },
+                          plotOptions: {
+                            bar: {
+                              borderRadius: 2,
+                              horizontal: true,
+                              width : 2
+                            }
+                          },
+                          dataLabels: {
+                            enabled: false
+                          },
+                          legend: {
+          position: 'top',
+        },
+                          xaxis: {
+                            categories: ['Challenge A', 'Challenge B', 'Challenge C', 'Challenge D', 'Challenge E'
+                            ],
+                          }
+                        }).render();
+                      });
+                    </script>
+                    <!-- End Bar Chart -->  
+                    </div>
+                    </div>
+                      </div>
+                      <div class="col-12" aria-hidden="true">
+<div class="card shadow-none bg-transparent mb-0 pb-0">
+<div class="card-body pb-0">
+<!-- Donut Chart -->
+<div id="donutChart" ></div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  new ApexCharts(document.querySelector("#donutChart"), {
+    series: [44, 55, 13, 43, 22],
+    chart: {
+      
+      type: 'donut',
+      height: 300,
+      toolbar: {
+        show: true
+      }
+    },
+    legend: {
+          position: 'top',
+        },
+        plotOptions: {
+    pie: {
+      donut: {
+        size: '50%'
+      }
+    }
+  },
+    labels: ['Student A', 'Student B', 'Student C', 'Student D', 'Student E'],
+  }).render();
+});
+</script>
+<!-- End Donut Chart -->
+</div>
+</div>
+                      </div>
+                      <div class="col-12" aria-hidden="true">
+                        <div class="card shadow-none bg-transparent mb-0 pb-0 px-0">
+                          <div class="card-body pb-0 px-0">
+              
+                            <!-- Radar Chart -->
+                            <div id="radarChart"></div>
+              
+                            <script>
+                              document.addEventListener("DOMContentLoaded", () => {
+                                new ApexCharts(document.querySelector("#radarChart"), {
+                                  series: [{
+                                    name: 'Student A',
+                                    data: [80, 50, 30, 40, 100],
+                                  },
+                                  {
+                                    name: 'Student B',
+                                    data: [50, 60, 40, 30, 95],
+                                  },
+                                  {
+                                    name: 'Student C',
+                                    data: [30, 80, 60, 10, 75],
+                                  }],
+                                  chart: {
+                                    height: 350,
+                                    type: 'radar',
+                                    toolbar: {
+        show: true
+      }
+                                  },
+                                  legend: {
+          position: 'top',
+        },
+                                  xaxis: {
+                                    categories: ['Challenge A', 'Challenge B', 'Challenge C', 'Challenge D', 'Challenge E']
+                                  }
+                                }).render();
+                              });
+                            </script>
+                            <!-- End Radar Chart -->
+              
+                          </div>
+                        </div>
+                      </div>
+                      
+                      
+                      </div>
+
+                    
+      
+                  </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 </main>
 
 <!-- offcanvas -->
 <div class="offcanvas offcanvas-end " tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-    <div class="offcanvas-header " style="background-color: #012970;">
-      <h5 class="offcanvas-title mx-auto text-white fw-bolder" id="offcanvasExampleLabel">Description</h5>
-    </div>
-    <div class="offcanvas-body bg-light">
-        <div class="d-flex align-items-center mt-3 mb-2 ">
-            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-              <img src="{% static 'assets/img/caac8772de14a769c0bfe95756bceebe.png' %}" width="60" alt="">
-            </div>
-            <div class="ps-3">
-              <h4 class="mb-0">{{ course.get_virtual_network }}</h4>
-              <span class=" small pt-1 fw-bold h5">{{ course.get_virtual_network.rating }} Rating</span>
-  
-            </div>
-          </div>
-  
-          
-      <div class="row justify-content-center my-3">
-        <div class="col-12">
-            <h6 class="">{{ course.get_virtual_network.description|safe }}</h6>
+<div class="offcanvas-header " style="background-color: #012970;">
+  <h5 class="offcanvas-title mx-auto text-white fw-bolder" id="offcanvasExampleLabel">Description</h5>
+</div>
+<div class="offcanvas-body bg-light">
+    <div class="d-flex align-items-center mt-3 mb-2 ">
+        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+          <img src="{% static 'assets/img/caac8772de14a769c0bfe95756bceebe.png' %}" width="60" alt="">
+        </div>
+        <div class="ps-3">
+          <h4 class="mb-0">{{ course.get_virtual_network }}</h4>
+          <span class=" small pt-1 fw-bold h5">{{ course.get_virtual_network.rating }} Rating</span>
+
         </div>
       </div>
+
       
-      
-      
-      
+  <div class="row justify-content-center my-3">
+    <div class="col-12">
+        <h6 class="">{{ course.get_virtual_network.description|safe }}</h6>
     </div>
+  </div>
+  
+  
+  
+  
+</div>
 </div>
 
 <!-- offcanvas: instructions -->
 <div class="offcanvas offcanvas-end " tabindex="-1" id="offcanvasExample2" aria-labelledby="offcanvasExampleLabel">
-    <div class="offcanvas-header " style="background-color: #012970;">
-      <h5 class="offcanvas-title mx-auto text-white fw-bolder" id="offcanvasExampleLabel">Instructions</h5>
-    </div>
-    <div class="offcanvas-body bg-light">
-        <div class="d-flex align-items-center mt-3 mb-2 ">
-            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-              <img src="{% static 'assets/img/caac8772de14a769c0bfe95756bceebe.png' %}" width="60" alt="">
-            </div>
-            <div class="ps-3">
-              <h4 class="mb-0">{{ course.get_virtual_network }}</h4>
-              <span class=" small pt-1 fw-bold h5">{{ course.get_virtual_network.rating }} Rating</span>
-  
-            </div>
-          </div>
-  
-          
-      <div class="row justify-content-center my-3">
-        <div class="col-12">
-            <h6 class="">{{ course.get_virtual_network.instructions|safe }}</h6>
+<div class="offcanvas-header " style="background-color: #012970;">
+  <h5 class="offcanvas-title mx-auto text-white fw-bolder" id="offcanvasExampleLabel">Instructions</h5>
+</div>
+<div class="offcanvas-body bg-light">
+    <div class="d-flex align-items-center mt-3 mb-2 ">
+        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+          <img src="{% static 'assets/img/caac8772de14a769c0bfe95756bceebe.png' %}" width="60" alt="">
+        </div>
+        <div class="ps-3">
+          <h4 class="mb-0">{{ course.get_virtual_network }}</h4>
+          <span class=" small pt-1 fw-bold h5">{{ course.get_virtual_network.rating }} Rating</span>
+
         </div>
       </div>
+
       
-      
-      
-      
+  <div class="row justify-content-center my-3">
+    <div class="col-12">
+        <h6 class="">{{ course.get_virtual_network.instructions|safe }}</h6>
     </div>
+  </div>
+  
+  
+  
+  
+</div>
 </div>
 
 {% endblock %}
@@ -446,40 +450,40 @@
 
 
 <script>
-  $(function(){
-    window.dispatchEvent(new Event('resize'));
-  });
-  $(".ql-editor").attr('contenteditable', false);
-  $(".ql-clipboard, .ql-tooltip").hide();
-  
-  if($("#course_approval_instructions").length){
-    
-    $("#course_approval_instructions .ql-editor").attr('contenteditable', true);
-    $("#course_approval_instructions .ql-clipboard, #course_approval_instructions .ql-tooltip").hide();
-    $(function(){
-        $("#identifier").on("submit",function(event) {
-        $("#id_instructions").val($(".quill-editor-full").html());
-        })
-    });
-  }
+$(function(){
+window.dispatchEvent(new Event('resize'));
+});
+$(".ql-editor").attr('contenteditable', false);
+$(".ql-clipboard, .ql-tooltip").hide();
+
+if($("#course_approval_instructions").length){
+
+$("#course_approval_instructions .ql-editor").attr('contenteditable', true);
+$("#course_approval_instructions .ql-clipboard, #course_approval_instructions .ql-tooltip").hide();
+$(function(){
+    $("#identifier").on("submit",function(event) {
+    $("#id_instructions").val($(".quill-editor-full").html());
+    })
+});
+}
 
 
-  if($("#challengeEditor").length){
+if($("#challengeEditor").length){
 
-    
-  var quill = new Quill('#challengeEditor', {
-    theme: 'snow'
-  });
 
-    
-    $("#challengeEditor .ql-editor").attr('contenteditable', true);
-    $("#challengeEditor .ql-clipboard, #challengeEditor .ql-tooltip").hide();
-    $(function(){
-        $("#identifier_challenge").on("submit",function(event) {
-        $("#identifier_challenge #id_description").val($("#challengeEditor").html());
-        })
-    });
-  }
+var quill = new Quill('#challengeEditor', {
+theme: 'snow'
+});
+
+
+$("#challengeEditor .ql-editor").attr('contenteditable', true);
+$("#challengeEditor .ql-clipboard, #challengeEditor .ql-tooltip").hide();
+$(function(){
+    $("#identifier_challenge").on("submit",function(event) {
+    $("#identifier_challenge #id_description").val($("#challengeEditor").html());
+    })
+});
+}
 
 </script>
 {% endblock %}

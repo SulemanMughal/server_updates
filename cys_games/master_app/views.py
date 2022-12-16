@@ -230,6 +230,28 @@ def AdminCourseApproval(request, vn_id):
     # return render(request, template_name, context)
 
 
+# TODO  :   Admin Course Reject
+@login_required
+@admin_required
+def AdminCourseReject(request, course_id):
+    try:
+        course = Course.objects.get(id = course_id)
+        course.is_approved = "4"
+        course.save()
+        messages.success(request, "Course has been rejected")
+        return redirect(reverse("admin-courses-details-url" , args=[course_id]))
+    except Course.DoesNotExist:
+        messages.error(request, "Requested course does not exist.")
+        return redirect(reverse("admin-course-list-url"))
+    except : 
+        messages.error(request, "Requested page does not exist.")
+        return redirect(reverse("admin-course-list-url"))
+    
+    # context = {
+    # }
+    # return render(request, template_name, context)
+
+
 # TODO  :   Instructor Dashboard
 @login_required
 @teacher_required
@@ -541,7 +563,14 @@ def StudentProfile(request):
 @student_required
 def StudentMachines(request):
     template_name = 'master_app/student/machines.html'
+    # TODO  :   Retrieve All courses
+    courses = AssignedStudents.objects.filter(student__id = request.user.id).filter(course__is_approved="3")
+    # print(courses)
+    networks = [i for x in courses for i in x.course.virtualnetwork_set.all() if len(x.course.virtualnetwork_set.all())>0 ]
+
+    # print(networks)
     context = {
+        "networks" : networks
     }
     return render(request, template_name, context)
 

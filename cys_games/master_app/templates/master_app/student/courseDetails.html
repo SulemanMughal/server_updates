@@ -70,7 +70,7 @@
                   <div class="card  p-0 ">
                     
                     <div class="card-body  px-0">
-                      <a class="btn btn-primary py-3 shadow-lg w-100 " href="#!">Start instance for {{ course.get_virtual_network }}</a>
+                      <h3 class="p-3">Virtual Network</h3>
                       <ul class="list-group list-group-flush">
                         
                         <li class="list-group-item d-flex justify-content-between align-items-start">
@@ -87,6 +87,50 @@
                           <div class="ms-2 me-auto">
                             <div class="fw-bold">Scenario</div>
                           </div>{{ course.get_virtual_network.get_scenarios }}</li>
+                          <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                              <div class="fw-bold">Config File</div>
+                            </div><p class="w-50"><a href="{{ course.get_virtual_network.config_file_url }}">{{ course.get_virtual_network.config_file_url }}</a></p>
+                          </li>
+                          {% if course.is_approved == "3" %}
+                            <li class="list-group-item  justify-content-between align-items-start">
+                              <div class="accordion accordion-flush" id="accordionFlushExample">
+                                <div class="accordion-item">
+                                  <h2 class="accordion-header" id="flush-headingOne">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                      Approved Details
+                                    </button>
+                                  </h2>
+                                  <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                    <ul class="list-group list-group-flush">
+                                      <li class="list-group-item d-flex justify-content-between align-items-start px-0">
+                                        <div class=" me-auto">
+                                          <div class="fw-bold">IP Address</div>
+                                        </div><p class="w-50 text-end">{{ course.get_virtual_network.ip_address }}</p>
+                                      </li>
+                                      <li class="list-group-item d-flex justify-content-between align-items-start px-0">
+                                        <div class=" me-auto">
+                                          <div class="fw-bold">Network Topology Image</div>
+                                        </div><p class="w-50 text-end"><a href="{{ course.get_virtual_network.topology_image.path }}">Download</a></p>
+                                      </li>
+                                      <li class="list-group-item d-flex justify-content-between align-items-start px-0">
+                                        <div class=" me-auto">
+                                          <div class="fw-bold">SSH Zip</div>
+                                        </div><p class="w-50 text-end"><a href="{{ course.get_virtual_network.ssh_file.path }}">Download</a></p>
+                                      </li>
+                                      <li class="list-group-item d-flex justify-content-between align-items-start px-0">
+                                        <div class=" me-auto">
+                                          <div class="fw-bold">Instructions</div>
+                                        </div><p class="w-50 text-end"><a data-bs-toggle="offcanvas" href="#offcanvasExample2" role="button" aria-controls="offcanvasExample2">Read</a></p>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </div>
+                                
+                              </div>
+                            </li>
+                            
+                            {% endif %}
                         <li class="list-group-item text-center" aria-disabled="true"><a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">See Details<i class="fas fa-chevron-right fs-5 ms-3 pt-2"></i></a></li>
                       </ul><!-- End Clean list group -->
                     </div>
@@ -214,6 +258,38 @@
     
   </div>
 </div>
+
+<!-- offcanvas: instructions -->
+<div class="offcanvas offcanvas-end " tabindex="-1" id="offcanvasExample2" aria-labelledby="offcanvasExampleLabel">
+  <div class="offcanvas-header " style="background-color: #012970;">
+    <h5 class="offcanvas-title mx-auto text-white fw-bolder" id="offcanvasExampleLabel">Instructions</h5>
+  </div>
+  <div class="offcanvas-body bg-light">
+      <div class="d-flex align-items-center mt-3 mb-2 ">
+          <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+            <img src="{% static 'assets/img/caac8772de14a769c0bfe95756bceebe.png' %}" width="60" alt="">
+          </div>
+          <div class="ps-3">
+            <h4 class="mb-0">{{ course.get_virtual_network }}</h4>
+            <span class=" small pt-1 fw-bold h5">{{ course.get_virtual_network.rating }} Rating</span>
+
+          </div>
+        </div>
+
+        
+    <div class="row justify-content-center my-3">
+      <div class="col-12">
+          <h6 class="">{{ course.get_virtual_network.instructions|safe }}</h6>
+      </div>
+    </div>
+    
+    
+    
+    
+  </div>
+</div>
+
+
 {% endblock %}
 
 
