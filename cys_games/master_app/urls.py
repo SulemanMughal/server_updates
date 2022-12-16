@@ -100,10 +100,10 @@ urlpatterns = [
     path("student/courses/details/<int:course_id>", views.StudentCourseDetails, name="student-courses-details-url"),
 
     # ? Student Machines
-    path("student/machines", views.StudentMachines, name="student-machines-url"),
+    path("student/networks", views.StudentMachines, name="student-machines-url"),
     
     # ? Student Machine Details
-    path("student/machine/detail", views.StudentMachineDetail, name="student-machine-detail-url"),
+    path("student/networks/<int:vn_id>/detail", views.StudentMachineDetail, name="student-machine-detail-url"),
 
 
     # ? Student Challenge Details

@@ -576,12 +576,22 @@ def StudentMachines(request):
 
 
 
-# TODO  :   Students Machine Detail
+# TODO  :   Students Network Detail
 @login_required
 @student_required
-def StudentMachineDetail(request):
+def StudentMachineDetail(request, vn_id):
     template_name = 'master_app/student/machine_detail.html'
+    try:
+        virtual_network = VirtualNetwork.objects.get(id = vn_id)
+
+    except VirtualNetwork.DoesNotExist:
+        messages.error(request, "Requested Virtual Network does not exist.")
+        return redirect(reverse("student-machines-url"))
+    except :
+        messages.error(request, "Requested page does not exist.")
+        return redirect(reverse("student-dasboard-url"))
     context = {
+        "virtual_network" : virtual_network
     }
     return render(request, template_name, context)
 
