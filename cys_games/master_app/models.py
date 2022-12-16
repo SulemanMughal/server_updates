@@ -1,24 +1,14 @@
 # Built-in
 from django.db import models
 from django.contrib.auth import get_user_model
-
 from django.utils import timezone
-User = get_user_model()
-
 from ckeditor.fields import RichTextField
-
-
 from django.core.exceptions import ValidationError
 
 from .choices import OPERATING_SYSTEM_CHOICES,  SCENARIOS_CATEGORYIES, RATING_CHOICES, CHALLENGE_LEVELS, CHALLENGE_LEVELS_TEXT, OPERATING_SYSTEM_CHOICES_TEXT, SCENARIOS_CATEGORYIES_TEXT, APPROVED_CHOICES
 
 
-# Create your models here.
-
-# # Customized User
-# class User(AbstractUser):
-#     is_student = models.BooleanField(default=False)
-#     is_teacher = models.BooleanField(default=False)
+User = get_user_model()
 
 
 
@@ -56,6 +46,7 @@ class AssignedStudents(models.Model):
         )
 
     def clean(self):
+        
         if not self.student.is_student :
             raise ValidationError("Only Students are allowed to added.")
 
@@ -72,12 +63,18 @@ class VirtualNetwork(models.Model):
     scenarios = models.CharField(max_length=50, default="1" , choices=SCENARIOS_CATEGORYIES)
     rating  = models.CharField(max_length=1 , default="1", choices=RATING_CHOICES)
     config_file_url = models.URLField(max_length=300 , default="" , blank=True, null=True)
+    
+    # Set fields by admin at the time of approval
     ip_address = models.GenericIPAddressField(blank=True, null=True)
+    topology_image = models.ImageField(upload_to="topologies/", blank=True, null=True)
+    ssh_file = models.FileField(upload_to="sshFiles/" , blank=True, null=True)
+    instructions = RichTextField(blank = True, null=True, default="")
 
 
     def clean(self):
-        if self.course.get_virtual_network() :
-            raise ValidationError("Virtual Network already exists for this course.")
+        if self.pk is None:
+            if self.course.get_virtual_network() :
+                raise ValidationError("Virtual Network already exists for this course.")
 
 
     def __str__(self):

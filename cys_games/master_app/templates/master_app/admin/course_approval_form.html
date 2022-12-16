@@ -1,0 +1,69 @@
+<style>
+    #course_approval_instructions  .ql-editor {
+ overflow-y: scroll;
+ min-height: 150px;
+ }
+ </style>
+ 
+ <div class="modal fade" id="virutal_network_modal" tabindex="-1">
+     <div class="modal-dialog modal-dialog-scrollable modal-lg">
+       <div class="modal-content">
+         <div class="modal-header">
+           <h5 class="modal-title">Course Approval</h5>
+           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+             <form class="row g-3 needs-validation" novalidate  
+                         action="{% url 'admin-course-approval-url' course.get_virtual_network.id %}"  id="identifier"   method="POST" enctype="multipart/form-data">
+                             {% csrf_token %}
+ 
+
+
+                              <!-- IP Addresses -->
+ <div class="col-12  mb-3">
+    <div class="form-floating">
+      <input type="text" name="ip_address" class="form-control" id="id_ip_address" placeholder="IP Address"  autocapitalize="none" autocomplete="off" maxlength="100" required >
+      <label for="id_ip_address">IP Address</label>
+      <div class="invalid-feedback">
+        Please choose a valid IP Address.
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Topology Image -->
+  <div class="input-group mb-3">
+    <input type="file" accept="image/*" class="form-control" id="id_topology_image" name="topology_image">
+    <label class="input-group-text" for="id_topology_image">Topology Image</label>
+  </div>
+
+
+  <!-- SSh File -->
+  <div class="input-group mb-3">
+    <input type="file"  class="form-control" id="id_ssh_file" name="ssh_file">
+    <label class="input-group-text" for="inputGroupFile02">SSH Zip File</label>
+  </div>
+ 
+
+  <!-- Instruction -->
+  <div class="quill-editor-full mb-3" id="course_approval_instructions">
+                      
+  </div>
+
+  <textarea  style="display:none" id="id_instructions" name="instructions"></textarea>
+ 
+                    
+ 
+ 
+                             
+ <input type="hidden" name="next" value="{{ request.path }}">
+                             <div class="d-grid gap-2 mt-3">
+                                 <button type="submit" class="btn btn-primary"  tabindex="4">Approve</button>
+                             </div>
+
+                        </form>
+         </div>
+       </div>
+     </div>
+   </div>
+ 

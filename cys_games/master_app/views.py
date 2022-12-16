@@ -8,11 +8,11 @@ from django.utils.decorators import method_decorator
 from django.contrib import messages
 
 # ? forms
-from .forms import loginForm, CreateCourseForm, AddNewStudent, NewVirtualNetworkForm, CourseChallengeForm
+from .forms import loginForm, CreateCourseForm, AddNewStudent, NewVirtualNetworkForm, CourseChallengeForm, CourseApprovalForm
 
 
 # ? Models
-from .models import Course, AssignedStudents, CourseChallenge
+from .models import Course, AssignedStudents, CourseChallenge, VirtualNetwork
 
 # ? Decorators
 from .decorators import (
@@ -200,9 +200,34 @@ def AdminCourseDetails(request, course_id):
         "easy_challenges" : easy_challenges,
         "medium_challenges" :medium_challenges,
         "hard_challenges" :hard_challenges,
-        "students":students
+        "students":students,
     }
     return render(request, template_name, context)
+
+# TODO  :   Admin Course Approval
+@login_required
+@admin_required
+def AdminCourseApproval(request, vn_id):
+    updated_obj = VirtualNetwork.objects.get(id = vn_id)
+    if request.method == "POST":
+        form = CourseApprovalForm(  request.POST, request.FILES, instance=updated_obj)
+        if form.is_valid():
+            updated_obj = form.save()
+            updated_obj.course.is_approved = "3"
+            updated_obj.course.save()
+            # updated_obj.save()
+            messages.success(request, "Request has been approved.")
+            return redirect(reverse("admin-courses-details-url", args = [updated_obj.course.id]))
+    else:
+        form = CourseApprovalForm()
+    messages.success(request, "Request can't be proceed at this time.")
+    return redirect(reverse("admin-courses-details-url", args = [updated_obj.course.id]))
+    
+    # template_name = ''
+    # context = {
+    #     "form" : form
+    # }
+    # return render(request, template_name, context)
 
 
 # TODO  :   Instructor Dashboard

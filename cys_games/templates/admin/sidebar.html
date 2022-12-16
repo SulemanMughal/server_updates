@@ -7,7 +7,7 @@
 
       {% if request.user.is_authenticated %}
 
-      <li class="nav-heading fs-6">Welcome, <strong>{% firstof user.get_short_name user.get_username %}</strong></li>
+      
   
   
       <li class="nav-item">
@@ -16,12 +16,83 @@
           <span>Developer</span>
         </a>
       </li><!-- End Dashboard Nav -->
+      
   
       {% endif %}
 
       <li class="nav-heading">Pages</li> 
   
 
+      {% if request.user.is_authenticated %}
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#user-nav" data-bs-toggle="collapse" href="#">
+          <i class="fas fa-user me-2"></i><span>User Management</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="user-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{% url 'admin:accounts_user_add' %}">
+              <i class="bi bi-circle"></i><span>Create User Challenge</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'admin:accounts_user_changelist' %}">
+              <i class="bi bi-circle"></i><span>All User</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End User Nav -->  
+      <li class="nav-item">
+          <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+            <i class="bi bi-menu-button-wide"></i><span>Course Management</span><i class="bi bi-chevron-down ms-auto"></i>
+          </a>
+          <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <li>
+              <a href="{% url 'admin:master_app_course_add' %}">
+                <i class="bi bi-circle"></i><span>Create New Course</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'admin:master_app_course_changelist' %}">
+                <i class="bi bi-circle"></i><span>All Courses</span>
+              </a>
+            </li>
+          </ul>
+        </li><!-- End Courses Nav -->
+        <li class="nav-item">
+          <a class="nav-link collapsed" data-bs-target="#challenges-nav" data-bs-toggle="collapse" href="#">
+            <i class="fas fa-tasks me-2"></i><span>Challenge Management</span><i class="bi bi-chevron-down ms-auto"></i>
+          </a>
+          <ul id="challenges-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <li>
+              <a href="{% url 'admin:master_app_course_add' %}">
+                <i class="bi bi-circle"></i><span>Create New Challenge</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'admin:master_app_course_changelist' %}">
+                <i class="bi bi-circle"></i><span>All Challenges</span>
+              </a>
+            </li>
+          </ul>
+        </li><!-- End Challenges Nav -->
+        <li class="nav-item">
+          <a class="nav-link collapsed" data-bs-target="#network-nav" data-bs-toggle="collapse" href="#">
+            <i class="fas fa-server me-2"></i><span>Virtual Network Management</span><i class="bi bi-chevron-down ms-auto"></i>
+          </a>
+          <ul id="network-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <li>
+              <a href="{% url 'admin:master_app_virtualnetwork_add' %}">
+                <i class="bi bi-circle"></i><span>Create New Virtual Network</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'admin:master_app_virtualnetwork_changelist' %}">
+                <i class="bi bi-circle"></i><span>All Virtual Network</span>
+              </a>
+            </li>
+          </ul>
+        </li><!-- End Virtual Network Nav -->
+      {% endif %}
       
 
 
@@ -46,7 +117,7 @@
       {% endcomment %}
 
 
-      {% if user.has_usable_password %}
+      {% if request.user.has_usable_password %}
       
       <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'admin:password_change' %}">

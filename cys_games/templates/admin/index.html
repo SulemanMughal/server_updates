@@ -9,7 +9,6 @@
 
 
 
-
 {% endblock extra_style %}
 
 
@@ -30,6 +29,7 @@ box-shadow: 0px 0 25px 0 rgba(0, 0, 0, 0.1);
 padding: 50px 30px;
 transition: all ease-in-out 0.4s;
 background: #fff;
+border-radius: 0.625rem;
 }
 .services .icon-box .icon {
 margin-bottom: 10px;
@@ -37,23 +37,24 @@ margin-bottom: 10px;
 .services .icon-box:hover {
 transform: translateY(-10px);
 }
-.services .icon-box .icon i {
-color: #47b2e4;
-font-size: 36px;
-transition: 0.3s;
+.card-icon {
+  color: #4154f1;
+  background: #f6f6fe;
 }
-.services .icon-box h4 {
-font-weight: 500;
-margin-bottom: 15px;
-font-size: 24px;
+.color-green{
+  color: #2eca6a;
+background: #e0f8e9;
 }
-.services .icon-box h4 a {
-color: #37517e;
-transition: ease-in-out 0.3s;
+
+.color-indian-saffrons{
+  color: #ff771d;
+background: #ffecdf;
 }
-.services .icon-box:hover h4 a {
-color: #47b2e4;
+.color-mocha{
+  color: #492b7c;
+  background: #dfcefd;
 }
+
 </style>
 
 <!-- <div class="container-fluid py-4"> -->
@@ -63,32 +64,45 @@ color: #47b2e4;
 <!-- ======= Services Section ======= -->
 <section id="services" class="services ">
   <div class="container" >
-
-    
-
     <div class="row justify-content-center">
-      <div class="col-xl-3 col-md-4 d-flex align-items-stretch"  >
-        <div class="icon-box">
-          <h4 class="text-center"><a href="{% url 'admin:accounts_user_changelist' %}">Users Management</a></h4>
+      <div class="col-xl-3 col-md-4 d-flex  align-items-stretch"  >
+        <div class="icon-box d-flex flex-column ">
+          <div class="card-icon rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3">
+            <i class="fas fa-user "></i>
+          </div>
+          <h4 class="text-center "><a href="{% url 'admin:accounts_user_changelist' %}">User &nbsp; Management</a></h4>
         </div>
       </div>
 
       <div class="col-xl-3 col-md-4 d-flex align-items-stretch mt-4 mt-md-0"  >
-        <div class="icon-box">
-          <h4 class="text-center"><a href="{% url 'admin:master_app_course_changelist' %}">Course Management</a></h4>
+        <div class="icon-box d-flex flex-column ">
+          <div class="card-icon rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3 color-green">
+            <i class="bi bi-menu-button-wide "></i>
+          </div>
+          <h4 class="text-center "><a href="{% url 'admin:master_app_course_changelist' %}">Course Management</a></h4>
         </div>
+        
       </div>
+
+
       <div class="col-xl-3 col-md-4 d-flex align-items-stretch mt-4 mt-md-0"  >
-        <div class="icon-box">
-          <h4 class="text-center"><a href="{% url 'admin:master_app_virtualnetwork_changelist' %}">Virtual Networks Management</a></h4>
-        </div>
+        <div class="icon-box d-flex flex-column ">
+          <div class="card-icon rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3 color-indian-saffrons">
+            <i class="fas fa-server "></i>
+          </div>
+          <h4 class="text-center "><a href="{% url 'admin:master_app_virtualnetwork_changelist' %}">Virtual Network Management</a></h4>
+        </div>        
       </div>
-      
+
       <div class="col-xl-3 col-md-4 d-flex align-items-stretch mt-4 mt-md-0"  >
-        <div class="icon-box">
-          <h4 class="text-center"><a href="{% url 'admin:master_app_coursechallenge_changelist' %}">Challenge Management</a></h4>
-        </div>
+        <div class="icon-box d-flex flex-column ">
+          <div class="card-icon rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3 color-mocha">
+            <i class="fas fa-tasks "></i>
+          </div>
+          <h4 class="text-center "><a href="{% url 'admin:master_app_coursechallenge_changelist' %}">Challenge Management</a></h4>
+        </div>        
       </div>
+
 
 
 

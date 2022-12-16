@@ -39,6 +39,18 @@ class NewVirtualNetworkForm(forms.ModelForm):
         fields = "__all__"
 
 
+class CourseApprovalForm(forms.ModelForm):
+    class Meta:
+        model = VirtualNetwork
+        # fields = "__all__"
+        fields = [
+            "ip_address",
+            "topology_image",
+            "ssh_file",
+            "instructions"
+        ]
+
+
 class CourseChallengeForm(forms.ModelForm):
     class Meta:
         model = CourseChallenge

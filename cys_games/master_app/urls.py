@@ -30,6 +30,9 @@ urlpatterns = [
     # ? Admin Course Details
     path("admininstrator/course/<int:course_id>/details", views.AdminCourseDetails, name="admin-courses-details-url"),
 
+    # ? Admin Course Approval Form Submission
+    path("admininstrator/course/<int:vn_id>/approval", views.AdminCourseApproval, name="admin-course-approval-url"),
+
 
     # ==========================================================
     # ? Instructor Dashbaord
