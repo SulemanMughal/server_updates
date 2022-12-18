@@ -78,3 +78,9 @@ APPROVED_CHOICES = (
     ("3", "Approved"),
     ("4", "Rejected"),
 )
+
+
+CHALLENGE_SUBMISSION_CHOICES=(
+    ("PENDING", "PENDING"),
+    ("SUBMITTED", "SUBMITTED"),
+)

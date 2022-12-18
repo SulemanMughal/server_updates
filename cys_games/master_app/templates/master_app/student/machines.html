@@ -46,46 +46,7 @@
             <div class="col-12">
                 <div class="card ">
                     <div class="card-body px-0">
-                      <table class="table">
-                        <thead class="table-primary ">
-                          <tr>
-                            <th scope="col" class="p-3">Network</th>
-                            <th scope="col" class="p-3">Rating</th>
-                            <th scope="col" class="p-3">Course</th>
-                            <th scope="col" class="p-3">Scenario</th>
-                            <th scope="col"></th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {% for network in networks %}
-                            <tr>
-                              <td>
-                                  <div class="d-flex align-items-center">
-                                      <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                        <a href="{% url 'student-machine-detail-url' network.id %}">
-                                          <img src="{% static 'assets/img/caac8772de14a769c0bfe95756bceebe.png' %}" width="50" alt="">
-                                        </a>
-                                      </div>
-                                      <div class="ps-3">
-                                        <h6 class="mb-0">{{ network.name }}</h6>
-                                        <span class=" small pt-1 fw-bold">{{ network.get_operating_system }}</span>
-                                      </div>
-                                    </div>
-                              </td>
-                              <td class="align-middle"> 
-                                  <i class="fas fa-star circle-icon fs-5 me-2"></i> {{ network.rating }}
-                                  </td>
-                              <td class="align-middle"><a href="{% url 'student-courses-details-url' network.course.id %}">{{ network.course.name }}</a></td>
-                              <td class="align-middle">{{ network.get_scenarios }}</td>
-                              
-                              <td class="align-middle"><a data-bs-toggle="offcanvas" href="#offcanvasExample{{ network.name|slugify  }}" role="button" aria-controls="offcanvasExample{{ network.name|slugify  }}"><i class="fas fa-chevron-right fs-5"></i></a></td>
-                            </tr>
-                          {% endfor %}
-                          
-                        </tbody>
-                      </table>
-                      
-        
+                      {% include 'master_app/virtual_networks.html' with networks=networks %}
                     </div>
                   </div>
             </div>
@@ -97,8 +58,8 @@
 
 
   {% for network in networks %}
-  {% include 'master_app/student/offcanvas_network.html' with network=network %}
-{% endfor %}
+    {% include 'master_app/offcanvas_network.html' with network=network %}
+  {% endfor %}
 
 {% endblock %}
 

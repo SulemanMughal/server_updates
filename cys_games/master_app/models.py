@@ -4,8 +4,9 @@ from django.contrib.auth import get_user_model
 from django.utils import timezone
 from ckeditor.fields import RichTextField
 from django.core.exceptions import ValidationError
+from django.urls import reverse
 
-from .choices import OPERATING_SYSTEM_CHOICES,  SCENARIOS_CATEGORYIES, RATING_CHOICES, CHALLENGE_LEVELS, CHALLENGE_LEVELS_TEXT, OPERATING_SYSTEM_CHOICES_TEXT, SCENARIOS_CATEGORYIES_TEXT, APPROVED_CHOICES
+from .choices import OPERATING_SYSTEM_CHOICES,  SCENARIOS_CATEGORYIES, RATING_CHOICES, CHALLENGE_LEVELS, CHALLENGE_LEVELS_TEXT, OPERATING_SYSTEM_CHOICES_TEXT, SCENARIOS_CATEGORYIES_TEXT, APPROVED_CHOICES, CHALLENGE_SUBMISSION_CHOICES
 
 
 User = get_user_model()
@@ -31,6 +32,50 @@ class Course(models.Model):
             return VirtualNetwork.objects.get(course__id = self.id)
         except:
             return None
+
+
+    def get_admin_url(self):
+        try:
+            return reverse("admin-courses-details-url", args=[self.id])
+        except:
+            return "#"
+
+    def get_instructor_url(self):
+        try:
+            return reverse("instructor-courses-details-url", args=[self.id])
+        except:
+            return "#"
+
+    def get_student_url(self):
+        try:
+            return reverse("student-courses-details-url", args =[self.id])
+        except:
+            return "#"
+
+    # def get_detail_url(self):
+    #     try:
+    #         if self.instructor.is_student is True:
+    #             return self.get_student_url()
+    #         elif self.instructor.is_instructor is True:
+    #             return self.get_instructor_url()
+    #         elif self.instructor.is_admin is True:
+    #             return self.get_admin_url()
+    #         else:
+    #             return "#"
+    #     except :
+    #         return "#"
+
+    def total_challenges(self):
+        try:
+            return self.coursechallenge_set.all().count()
+        except:
+            return 0
+
+    def total_duration(self):
+        try:
+            return ("%s" % str(self.end_time - self.start_time)[:-3])
+        except:
+            return ("%s" % str(self.end_time - self.start_time))
 
 
 class AssignedStudents(models.Model):
@@ -94,7 +139,52 @@ class VirtualNetwork(models.Model):
             return None
 
 
+    def instructor_network_url(self):
+        try:
+            return reverse("instructor-machine-detail-url", args=[self.id])
+        except:
+            return "#"
     
+    
+    def student_network_url(self):
+        try:
+            return reverse("student-machine-detail-url", args=[self.id])
+        except :
+            return "#"
+
+
+    def admin_network_url(self):
+        try:
+            return reverse("admin-machine-detail-url", args=[self.id])
+        except :
+            return "#"
+
+    # def network_url(self):
+    #     try:
+    #         if self.course.instructor.is_instructor is True:
+    #             return self.instructor_network_url()
+    #         elif self.course.instructor.is_student is True:
+    #             return self.student_network_url()
+    #         else:
+    #             return "#"
+    #     except:
+    #         return "#"
+
+    # def get_course_url(self):
+    #     try:
+    #         if self.instructor.is_student is True:
+    #             return self.get_student_url()
+    #         elif self.instructor.is_instructor is True:
+    #             return self.get_instructor_url()
+    #         elif self.instructor.is_admin is True:
+    #             return self.get_admin_url()
+    #         else:
+    #             return "#"
+    #     except :
+    #         return "#"
+        
+
+
         
 
 
@@ -104,6 +194,7 @@ class CourseChallenge(models.Model):
     title = models.CharField(max_length=200)
     description = RichTextField()
     levels = models.CharField(max_length=1, default="1", choices=CHALLENGE_LEVELS)
+    points = models.IntegerField(blank=True, default=50)
     
 
     def __str__(self):
@@ -117,3 +208,12 @@ class CourseChallenge(models.Model):
             return CHALLENGE_LEVELS_TEXT[self.levels]
         except:
             return None
+
+
+class ChallengeSubmission(models.Model):
+    assinged_student = models.ForeignKey(AssignedStudents, on_delete=models.CASCADE)
+    challenge = models.ForeignKey(CourseChallenge , on_delete=models.CASCADE)
+    status= models.CharField(max_length=100, choices=CHALLENGE_SUBMISSION_CHOICES, default="PENDING", blank=True, null=True )
+    submitted_answer = models.TextField( max_length=200, blank=True, null=True)
+    obtained_points = models.IntegerField( blank=True, null=True, default=0)
+    timestamp=models.DateTimeField(auto_now_add=True)

@@ -49,11 +49,34 @@
                   </div>
                   <div class="col-md-8">
                     <div class="card-body">
-                      <h5 class="card-title">{{ course.name }}</h5>
-                      <p>Start Date&Time : {{ course.start_time }}</p>
-                      <p>End Date&Time : {{ course.end_time }}</p>
-                      <p class="mb-1"><i class="fas fa-star text-warning fs-5" ></i><i class="fas fa-star text-warning fs-5" ></i><i class="fas fa-star text-warning fs-5" ></i><i class="fas fa-star text-warning fs-5" ></i><i class="fas fa-star text-warning fs-5" ></i></p>
-                      <p class="mb-0">Created By <strong class="text-primary fw-bolder">{{ course.instructor.username }}</strong></p>
+                      <h5 class="card-title  mb-0">{{ course.name }}</h5>
+                      <ul class="list-group  list-group-flush px-0 mx-0 ">
+                        <li class="list-group-item d-flex justify-content-between align-items-start px-0 border-0">
+                          <div >
+                            <div ><i class="bi bi-alarm me-1"></i> Start Date & Time</div>
+                          </div>
+                          {{ course.start_time }}
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start px-0 border-0">
+                          <div >
+                            <div ><i class="bi bi-alarm me-1"></i> End Date & Time</div>
+                          </div>
+                          {{ course.end_time }}
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start px-0 border-0">
+                          <div >
+                            <div ><i class="bi bi-alarm me-1"></i> Duration</div>
+                          </div>
+                          {{ course.total_duration }}
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start px-0 border-0" >
+                          <div >
+                            <div ><i class="bi bi-list-check me-1"></i> Challenges</div>
+                          </div>
+                          {{ course.total_challenges }}
+                        </li>
+                      </ul>
+                      <p class="my-2">Created By <strong class="text-primary fw-bolder">{{ course.instructor.username }}</strong></p>
                       
                     </div>
                   </div>
@@ -115,7 +138,7 @@
                                       </li>
                                       <li class="list-group-item d-flex justify-content-between align-items-start px-0">
                                         <div class=" me-auto">
-                                          <div class="fw-bold">SSH Zip</div>
+                                          <div class="fw-bold">Connection File</div>
                                         </div><p class="w-50 text-end"><a href="{{ course.get_virtual_network.ssh_file.path }}">Download</a></p>
                                       </li>
                                       <li class="list-group-item d-flex justify-content-between align-items-start px-0">

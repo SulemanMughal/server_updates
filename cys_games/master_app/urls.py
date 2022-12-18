@@ -26,6 +26,9 @@ urlpatterns = [
 
     # ? Admin Course List
     path("admininstrator/course/all", views.AdminCourseList, name="admin-course-list-url"),
+
+    # ? Admin Create New Course
+    path("admininstrator/course/new", views.AdminCreateCourse, name="admin-course-new-url"),
     
     # ? Admin Course Details
     path("admininstrator/course/<int:course_id>/details", views.AdminCourseDetails, name="admin-courses-details-url"),
@@ -36,6 +39,12 @@ urlpatterns = [
     # ? Admin Course Reject
     path("admininstrator/course/<int:course_id>/reject", views.AdminCourseReject, name="admin-course-reject-url"),
 
+    # ? Admin Virutal Networks
+    path("admin/virtaul-networks", views.AdminVirtualNetworkList, name="admin-virtual-network-url"),
+
+    # ? Admin Virutal Networks Details
+    path("admin/virtaul-networks/<int:vn_id>/detail", views.AdminVirtualNetworkDetails, name="admin-machine-detail-url"),
+
 
     # ==========================================================
     # ? Instructor Dashbaord
@@ -44,11 +53,6 @@ urlpatterns = [
     # ? Instructor Profile
     path("instructor/profile", views.InsturctorProfile, name="instructor-profile-url"),
     
-
-    
-
-    
-
     # ? Instructor Create New Course
     path("instructor/course/new", views.CreateCourse, name="course-new-url"),
 
@@ -69,6 +73,9 @@ urlpatterns = [
 
     # ? Instructor Virutal Networks
     path("instructor/virtaul-networks", views.InstructorVirtualNetworkList, name="instructor-virtual-network-url"),
+
+    # ? Instructor Networks Details
+    path("instructor/networks/<int:vn_id>/detail", views.InstructorMachineDetail, name="instructor-machine-detail-url"),
 
     # ? Instructor Courses Detials
     path("instructor/courses/<int:course_id>/details", views.InstructorCourseDetails, name="instructor-courses-details-url"),
@@ -99,10 +106,10 @@ urlpatterns = [
     # ? Student Courses Detials 
     path("student/courses/details/<int:course_id>", views.StudentCourseDetails, name="student-courses-details-url"),
 
-    # ? Student Machines
+    # ? Student Networks
     path("student/networks", views.StudentMachines, name="student-machines-url"),
     
-    # ? Student Machine Details
+    # ? Student Networks Details
     path("student/networks/<int:vn_id>/detail", views.StudentMachineDetail, name="student-machine-detail-url"),
 
 

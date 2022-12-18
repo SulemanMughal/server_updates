@@ -176,6 +176,26 @@ def AdminCourseList(request):
     }
     return render(request, template_name, context)
 
+@login_required
+@admin_required
+def AdminCreateCourse(request):
+    template_name = 'master_app/admin/create_course.html'
+    if request.method == "POST" : 
+        # print(request.POST)
+        form = CreateCourseForm(request.POST)
+        if form.is_valid():
+            new_course = form.save(commit = False)
+            new_course.instructor = request.user
+            new_course.save()
+            # messages.success(request, "New course has been created")
+            return redirect(reverse("admin-course-list-url"))
+    else:
+        form = CreateCourseForm()
+    context = {
+        "form" : form
+    }
+    return render(request, template_name, context)
+
 
 # TODO  :   Admin Course Details
 @login_required
@@ -246,10 +266,37 @@ def AdminCourseReject(request, course_id):
     except : 
         messages.error(request, "Requested page does not exist.")
         return redirect(reverse("admin-course-list-url"))
-    
-    # context = {
-    # }
-    # return render(request, template_name, context)
+
+
+# TODO  :   Admin Virtual Network List
+@login_required
+@admin_required
+def AdminVirtualNetworkList(request ):
+    template_name = 'master_app/admin/virutal_netwroks.html'
+    context = {
+        "networks" : VirtualNetwork.objects.all()
+    }
+    return render(request, template_name, context)
+
+
+# TODO  :   Admin Virtual Network Details
+@login_required
+@admin_required
+def AdminVirtualNetworkDetails(request, vn_id):
+    template_name = 'master_app/admin/virutal_netwroks_detail.html'
+    try:
+        virtual_network = VirtualNetwork.objects.get(id = vn_id)
+
+    except VirtualNetwork.DoesNotExist:
+        messages.error(request, "Requested Virtual Network does not exist.")
+        return redirect(reverse("student-machines-url"))
+    except :
+        messages.error(request, "Requested page does not exist.")
+        return redirect(reverse("student-dasboard-url"))
+    context = {
+        "virtual_network" : virtual_network
+    }
+    return render(request, template_name, context)
 
 
 # TODO  :   Instructor Dashboard
@@ -469,6 +516,24 @@ def InstructorVirtualNetworkList(request):
     return render(request, template_name, context)
 
 
+# TODO  :   Instructor Virutal Networks Details
+@login_required
+@teacher_required
+def InstructorMachineDetail(request, vn_id):
+    template_name = 'master_app/instructor/network_detail.html'
+    try:
+        virtual_network = VirtualNetwork.objects.get(id = vn_id)
+
+    except VirtualNetwork.DoesNotExist:
+        messages.error(request, "Requested Virtual Network does not exist.")
+        return redirect(reverse("student-machines-url"))
+    except :
+        messages.error(request, "Requested page does not exist.")
+        return redirect(reverse("student-dasboard-url"))
+    context = {
+        "virtual_network" : virtual_network
+    }
+    return render(request, template_name, context)
 
 
 

@@ -2,14 +2,28 @@
 
 <div class="offcanvas offcanvas-end " tabindex="-1" id="offcanvasExample{{ network.name|slugify  }}" aria-labelledby="offcanvasExampleLabel">
     <div class="offcanvas-header " style="background-color: #012970;">
-      <h5 class="offcanvas-title mx-auto text-white fw-bolder" id="offcanvasExampleLabel">Virtual Network Description</h5>
+      <h5 class="offcanvas-title mx-auto text-white fw-bolder" id="offcanvasExampleLabel">Description</h5>
     </div>
     <div class="offcanvas-body bg-light">
         <div class="d-flex align-items-center">
             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-              <a href="{% url 'student-machine-detail-url' network.id %}">
-                <img src="{% static 'assets/img/caac8772de14a769c0bfe95756bceebe.png' %}" width="50" alt="">
-              </a>
+              {% if request.user.is_student %}
+                        <a href="{{ network.student_network_url }}">
+                            <img src="{% static 'assets/img/caac8772de14a769c0bfe95756bceebe.png' %}" width="50" alt="">
+                        </a>
+                    {% elif request.user.is_instructor %}
+                        <a href="{{ network.instructor_network_url }}">
+                            <img src="{% static 'assets/img/caac8772de14a769c0bfe95756bceebe.png' %}" width="50" alt="">
+                        </a>
+                    {% elif request.user.is_admin %}
+                        <a href="{{ network.admin_network_url }}">
+                            <img src="{% static 'assets/img/caac8772de14a769c0bfe95756bceebe.png' %}" width="50" alt="">
+                        </a>
+                    {% else %}
+                        <a href="#!">
+                            <img src="{% static 'assets/img/caac8772de14a769c0bfe95756bceebe.png' %}" width="50" alt="">
+                        </a>
+                    {%  endif %}
             </div>
             <div class="ps-3">
               <h6 class="mb-0">{{ network.name }}</h6>

@@ -16,7 +16,7 @@
             </a>
             <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
               <li>
-                <a href="#!">
+                <a href="{% url 'admin-course-new-url' %}">
                   <i class="bi bi-circle"></i><span>Create New Course</span>
                 </a>
               </li>
@@ -41,13 +41,13 @@
           </a>
           <ul id="student-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
             <li>
-              <a href="{% url 'course-students-new-url' %}">
-                <i class="bi bi-circle"></i><span>Add New Student</span>
+              <a href="#!">
+                <i class="bi bi-circle"></i><span>Create New Student</span>
               </a>
             </li>
             
             <li>
-              <a href="{% url 'students-all-url' %}">
+              <a href="#!">
                 <i class="bi bi-circle"></i><span>All Students</span>
               </a>
             </li>
@@ -64,12 +64,12 @@
           </a>
           <ul id="networks-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
             <li>
-              <a href="{% url 'instructor-virutal-network-create-url' %}">
+              <a href="#!">
                 <i class="bi bi-circle"></i><span>Create New Network</span>
               </a>
             </li>
             <li>
-              <a href="{% url 'instructor-virtual-network-url' %}">
+              <a href="{% url 'admin-virtual-network-url' %}">
                 <i class="bi bi-circle"></i><span>All Virtual Networks</span>
               </a>
             </li>

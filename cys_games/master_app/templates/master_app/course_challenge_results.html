@@ -1,0 +1,147 @@
+
+
+
+<div class="card mb-0 px-0">
+    <div class="card-body pb-0 px-0">
+      <h5 class="card-title px-3">Challenges Results</h5>
+
+
+      <div data-flickity='{"pageDots":true,"cellAlign": "left", "wrapAround": true, "imagesLoaded": true, "prevNextButtons": false, "adaptiveHeight" : true}' class="flickity-viewport-visible">
+        <div class="col-12 "  aria-hidden="true">
+          <div class="card shadow-none bg-transparent mb-0 pb-0">
+            <div class="card-body pb-0">
+        <!-- Bar Chart -->
+      <div id="barChart"></div>
+
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          new ApexCharts(document.querySelector("#barChart"), {
+            series: [
+            {
+      name: 'Student A',
+      data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
+    }, {
+      name: 'Student B',
+      data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
+    },
+    {
+      name: 'Student C',
+      data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
+    }
+            ],
+            chart: {
+              type: 'bar',
+              height: 400
+
+            },
+            plotOptions: {
+              bar: {
+                borderRadius: 2,
+                horizontal: true,
+                width : 2
+              }
+            },
+            dataLabels: {
+              enabled: false
+            },
+            legend: {
+position: 'top',
+},
+            xaxis: {
+              categories: ['Challenge A', 'Challenge B', 'Challenge C', 'Challenge D', 'Challenge E'
+              ],
+            }
+          }).render();
+        });
+      </script>
+      <!-- End Bar Chart -->  
+      </div>
+      </div>
+        </div>
+        <div class="col-12" aria-hidden="true">
+<div class="card shadow-none bg-transparent mb-0 pb-0">
+<div class="card-body pb-0">
+<!-- Donut Chart -->
+<div id="donutChart" ></div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+new ApexCharts(document.querySelector("#donutChart"), {
+series: [44, 55, 13, 43, 22],
+chart: {
+
+type: 'donut',
+height: 300,
+toolbar: {
+show: true
+}
+},
+legend: {
+position: 'top',
+},
+plotOptions: {
+pie: {
+donut: {
+size: '50%'
+}
+}
+},
+labels: ['Student A', 'Student B', 'Student C', 'Student D', 'Student E'],
+}).render();
+});
+</script>
+<!-- End Donut Chart -->
+</div>
+</div>
+        </div>
+        <div class="col-12" aria-hidden="true">
+          <div class="card shadow-none bg-transparent mb-0 pb-0 px-0">
+            <div class="card-body pb-0 px-0">
+
+              <!-- Radar Chart -->
+              <div id="radarChart"></div>
+
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  new ApexCharts(document.querySelector("#radarChart"), {
+                    series: [{
+                      name: 'Student A',
+                      data: [80, 50, 30, 40, 100],
+                    },
+                    {
+                      name: 'Student B',
+                      data: [50, 60, 40, 30, 95],
+                    },
+                    {
+                      name: 'Student C',
+                      data: [30, 80, 60, 10, 75],
+                    }],
+                    chart: {
+                      height: 350,
+                      type: 'radar',
+                      toolbar: {
+show: true
+}
+                    },
+                    legend: {
+position: 'top',
+},
+                    xaxis: {
+                      categories: ['Challenge A', 'Challenge B', 'Challenge C', 'Challenge D', 'Challenge E']
+                    }
+                  }).render();
+                });
+              </script>
+              <!-- End Radar Chart -->
+
+            </div>
+          </div>
+        </div>
+        
+        
+        </div>
+
+      
+
+    </div>
+  </div>

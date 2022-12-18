@@ -1,0 +1,64 @@
+{% load static %}
+
+<table class="table">
+    <thead class="table-primary ">
+      <tr>
+        <th scope="col" class="p-3">Network</th>
+        <th scope="col" class="p-3">Rating</th>
+        <th scope="col" class="p-3">Course</th>
+        <th scope="col" class="p-3">Scenario</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for network in networks %}
+        <tr>
+          <td>
+              <div class="d-flex align-items-center">
+                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    {% if request.user.is_student %}
+                        <a href="{{ network.student_network_url }}">
+                            <img src="{% static 'assets/img/caac8772de14a769c0bfe95756bceebe.png' %}" width="50" alt="">
+                        </a>
+                    {% elif request.user.is_instructor %}
+                        <a href="{{ network.instructor_network_url }}">
+                            <img src="{% static 'assets/img/caac8772de14a769c0bfe95756bceebe.png' %}" width="50" alt="">
+                        </a>
+                    {% elif request.user.is_admin %}
+                        <a href="{{ network.admin_network_url }}">
+                            <img src="{% static 'assets/img/caac8772de14a769c0bfe95756bceebe.png' %}" width="50" alt="">
+                        </a>
+                    {% else %}
+                        <a href="#!">
+                            <img src="{% static 'assets/img/caac8772de14a769c0bfe95756bceebe.png' %}" width="50" alt="">
+                        </a>
+                    {%  endif %}
+                  </div>
+                  <div class="ps-3">
+                    <h6 class="mb-0">{{ network.name }}</h6>
+                    <span class=" small pt-1 fw-bold">{{ network.get_operating_system }}</span>
+                  </div>
+                </div>
+          </td>
+          <td class="align-middle"> 
+              <i class="fas fa-star circle-icon fs-5 me-2"></i> {{ network.rating }}
+              </td>
+        <td class="align-middle">
+            {% if request.user.is_student %}
+                <a href="{{ network.course.get_student_url }}">{{ network.course.name }}</a>
+            {% elif request.user.is_instructor %}
+                <a href="{{ network.course.get_instructor_url }}">{{ network.course.name }}</a>
+            {% elif request.user.is_admin %}
+                <a href="{{ network.course.get_admin_url }}">{{ network.course.name }}</a>
+            {% else %}
+                <a href="#!">{{ network.course.name }}</a>
+            {% endif %}
+        </td>
+          <td class="align-middle">{{ network.get_scenarios }}</td>
+          
+          <td class="align-middle"><a data-bs-toggle="offcanvas" href="#offcanvasExample{{ network.name|slugify  }}" role="button" aria-controls="offcanvasExample{{ network.name|slugify  }}"><i class="fas fa-chevron-right fs-5"></i></a></td>
+        </tr>
+      {% endfor %}
+      
+    </tbody>
+  </table>

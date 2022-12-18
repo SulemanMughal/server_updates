@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Course, AssignedStudents, VirtualNetwork, CourseChallenge
+from .models import Course, AssignedStudents, VirtualNetwork, CourseChallenge, ChallengeSubmission
 
 # Register your models here.
 
@@ -27,3 +27,4 @@ admin.site.register(Course, CourseAdmin)
 
 admin.site.register(VirtualNetwork)
 admin.site.register(CourseChallenge)
+admin.site.register(ChallengeSubmission)
