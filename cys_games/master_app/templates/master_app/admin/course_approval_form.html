@@ -4,6 +4,7 @@
  min-height: 150px;
  }
  </style>
+
  
  <div class="modal fade" id="virutal_network_modal" tabindex="-1">
      <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -13,7 +14,7 @@
            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
          </div>
          <div class="modal-body">
-             <form class="row g-3 needs-validation" novalidate  
+             <form class="row g-3 needs-validation " novalidate  
                          action="{% url 'admin-course-approval-url' course.get_virtual_network.id %}"  id="identifier"   method="POST" enctype="multipart/form-data">
                              {% csrf_token %}
  
@@ -32,9 +33,10 @@
 
 
   <!-- Topology Image -->
-  <div class="input-group mb-3">
-    <input type="file" accept="image/*" class="form-control" id="id_topology_image" name="topology_image">
+  <div class="input-group mb-3 ">
+    <input type="file" accept="image/*" class="form-control dropzone" id="id_topology_image" name="topology_image">
     <label class="input-group-text" for="id_topology_image">Topology Image</label>
+    
   </div>
 
 
