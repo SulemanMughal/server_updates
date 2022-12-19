@@ -21,8 +21,59 @@
             </ol>
           </nav>
         </div><!-- End Page Title ---->
-
-        <div class="row">
+        <div class="row justify-content-center ">
+          <div class="col-12 col-md-10 col-lg-7 text-center">
+            <!-- Badges -->
+            <nav class="nav justify-content-center ">
+              <a
+                class="badge bg-primary text-white rounded-pill mr-1 mb-1"
+                href="#"
+                data-toggle="pill"
+                data-filter="*"
+                data-target="#portfolio"
+              >
+                <span class="h6 text-uppercase  px-2">All</span>
+              </a>
+              <a
+                class="badge border border-primary text-primary rounded-pill mr-1 mb-1 mx-2"
+                href="#"
+                data-toggle="pill"
+                data-filter=".3card"
+                data-target="#portfolio"
+              >
+                <span class="h6 text-uppercase  px-2">Approved</span>
+              </a>
+              <a
+                class="badge  border border-primary text-primary rounded-pill mr-1 mb-1 "
+                href="#"
+                data-toggle="pill"
+                data-filter=".1card"
+                data-target="#portfolio"
+              >
+                <span class="h6 text-uppercase  px-2">Pending</span>
+              </a>
+              <a
+                class="badge border border-primary text-primary rounded-pill mr-1 mb-1 mx-2"
+                href="#"
+                data-toggle="pill"
+                data-filter=".2card"
+                data-target="#portfolio"
+              >
+                <span class="h6 text-uppercase  px-2">Need Admin Approval</span>
+              </a>
+              <a
+                class="badge border border-primary text-primary rounded-pill mr-1 mb-1 "
+                href="#"
+                data-toggle="pill"
+                data-filter=".4card"
+                data-target="#portfolio"
+              >
+                <span class="h6 text-uppercase  px-2">Rejected</span>
+              </a>
+            </nav>
+          </div>
+        </div>
+        <div class="row my-5 py-3" id="portfolio" data-isotope='{"layoutMode": "fitRows"}'>
           {% for course in all_courses %}
             {% include 'master_app/course_card.html' with cURL=course.get_instructor_url %}
           {% endfor %}
@@ -31,9 +82,26 @@
 {% endblock %}
 
 {% block extra_js %}
-
+<script src="{% static 'assets/vendor/isotope/isotope.pkgd.min.js' %}"></script>
 <script>
   $(".ql-editor").attr('contenteditable', false);
   $(".ql-clipboard, .ql-tooltip").hide();
+
+
+  
+  var $row =  $('#portfolio').isotope({
+  itemSelector: '.col-12',
+  layoutMode: 'fitRows'
+});
+$("a[data-filter]").on("click", function(){
+  $("a[data-filter]").removeClass("bg-primary").removeClass("text-white");
+  $("a[data-filter]").addClass("border").addClass("border-primary").addClass("text-primary");
+  $(this).addClass("bg-primary").addClass("text-white");
+  if($(this).attr("data-filter") == "*"){
+    $row.isotope({ filter: '*' });
+  }else{
+    $row.isotope({ filter: '' + $(this).attr("data-filter") });
+  }  
+});
 </script>
 {% endblock %}

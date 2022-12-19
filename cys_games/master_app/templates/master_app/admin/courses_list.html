@@ -83,37 +83,25 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+<script src="{% static 'assets/vendor/isotope/isotope.pkgd.min.js' %}"></script>
 <script>
   $(".ql-editor").attr('contenteditable', false);
   $(".ql-clipboard, .ql-tooltip").hide();
 
-
   var $row =  $('#portfolio').isotope({
-  // options
   itemSelector: '.col-12',
   layoutMode: 'fitRows'
 });
-
 $("a[data-filter]").on("click", function(){
-
   $("a[data-filter]").removeClass("bg-primary").removeClass("text-white");
   $("a[data-filter]").addClass("border").addClass("border-primary").addClass("text-primary");
   $(this).addClass("bg-primary").addClass("text-white");
-  
-
   if($(this).attr("data-filter") == "*"){
     $row.isotope({ filter: '*' });
   }else{
-    // console.debug($(this).attr("data-filter"));
     $row.isotope({ filter: '' + $(this).attr("data-filter") });
-    // $row.isotope({ filter: ".1" });
-  }
-  
+  }  
 });
-
-// filter .metal AND .transition items
-// $grid.isotope({ filter: '.ux' });
 
 </script>
 {% endblock %}
