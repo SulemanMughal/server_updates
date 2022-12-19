@@ -3,11 +3,11 @@
 {% block title %} {{ course.name }} {% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
-<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+<link rel="stylesheet" href="{% static 'assets/vendor/flickity/flickity.min.css' %}">
+<script src="{% static 'assets/vendor/flickity/flickity.pkgd.min.js' %}"></script>
 <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css"
+      href="{% static 'assets/vendor/fancybox/fancybox.css' %}"
     />
 <style>
   .dashboard .activity .activity-item .activite-label{
@@ -327,7 +327,7 @@
 
 
 {% block extra_js %}
-<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+<script src="{% static 'assets/vendor/fancybox/fancybox.umd.js' %}"></script>
 
 <script>
   $(".ql-editor").attr('contenteditable', false);
