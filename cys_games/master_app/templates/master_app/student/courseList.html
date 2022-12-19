@@ -97,9 +97,55 @@
             </nav>
           </div><!-- End Page Title -->
     
-        <div class="row">
+
+          <div class="row justify-content-center ">
+            <div class="col-12 col-md-10 col-lg-7 text-center">
+              <!-- Badges -->
+              <nav class="nav justify-content-center ">
+                <a
+                  class="badge bg-primary text-white rounded-pill mr-1 mb-1"
+                  href="#"
+                  data-toggle="pill"
+                  data-filter="*"
+                  data-target="#portfolio"
+                >
+                  <span class="h6 text-uppercase  px-2">All</span>
+                </a>
+                <a
+                  class="badge border border-primary text-primary rounded-pill mr-1 mb-1 mx-2"
+                  href="#"
+                  data-toggle="pill"
+                  data-filter=".3card"
+                  data-target="#portfolio"
+                >
+                  <span class="h6 text-uppercase  px-2">Ended</span>
+                </a>
+                <a
+                  class="badge  border border-primary text-primary rounded-pill mr-1 mb-1 "
+                  href="#"
+                  data-toggle="pill"
+                  data-filter=".2card"
+                  data-target="#portfolio"
+                >
+                  <span class="h6 text-uppercase  px-2">In-Progress</span>
+                </a>
+                <a
+                  class="badge border border-primary text-primary rounded-pill mr-1 mb-1 mx-2"
+                  href="#"
+                  data-toggle="pill"
+                  data-filter=".1card"
+                  data-target="#portfolio"
+                >
+                  <span class="h6 text-uppercase  px-2">Upcoming</span>
+                </a>
+
+              </nav>
+            </div>
+          </div>
+
+        <div class="row my-4 " id="portfolio" data-isotope='{"layoutMode": "fitRows"}'>
             {% for course in courses %}
-                <div class="col-12 col-md-4 col-lg-4 d-flex align-items-stretch">
+                <div class="col-12 col-md-4 col-lg-4  align-items-stretch {{ course.course.course_status }}card">
                         <div class="card  ">
                             <div class="card-header p-0 border-0 ">
                                 <img class="card-img-top" src="{% static 'assets/img/Ad.webp' %}" alt="">
@@ -144,4 +190,24 @@
     </main>
 
 
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'assets/vendor/isotope/isotope.pkgd.min.js' %}"></script>
+<script>
+  
+  var $row =  $('#portfolio').isotope({
+  itemSelector: '.col-12',
+  layoutMode: 'fitRows'
+});
+$("a[data-filter]").on("click", function(){
+  $("a[data-filter]").removeClass("bg-primary").removeClass("text-white");
+  $("a[data-filter]").addClass("border").addClass("border-primary").addClass("text-primary");
+  $(this).addClass("bg-primary").addClass("text-white");
+  if($(this).attr("data-filter") == "*"){
+    $row.isotope({ filter: '*' });
+  }else{
+    $row.isotope({ filter: '' + $(this).attr("data-filter") });
+  }  
+});
+</script>
 {% endblock %}

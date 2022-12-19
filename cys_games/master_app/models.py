@@ -78,6 +78,27 @@ class Course(models.Model):
         except:
             return ("%s" % str(self.end_time - self.start_time))
 
+    # TODO  : Check Status for an exam
+    def course_status(self):
+        current_time = timezone.now()
+        start_time = self.start_time
+        end_time = self.end_time
+
+        # ? New Course (About to Start)
+        if current_time < start_time:
+            return 1
+        
+        # ? In-Progress Course (Already Course has started)
+        elif start_time < current_time < end_time:
+            return 2
+
+        # ? End Course (Course has been finished)
+        elif end_time < current_time:
+            return 3
+
+        else:
+            return 0
+
 
 class AssignedStudents(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)

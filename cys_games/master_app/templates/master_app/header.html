@@ -1,8 +1,12 @@
 {% load static %}
 
 <!-- ======= Header ======= -->
-<header   class="header fixed-top d-flex align-items-center sticky-top">
-  <div class="d-flex align-items-center justify-content-between">
+
+<header   class="header fixed-top d-flex align-items-center  sticky-top ">
+  
+
+  
+  <div class="d-flex align-items-center justify-content-center">
     
     <i class="bi bi-list toggle-sidebar-btn"></i>
     
@@ -18,7 +22,7 @@
   </div><!-- End Search Bar -->
 
 
-  <nav class="header-nav ms-auto">
+  <nav class="header-nav  ms-auto">
     <ul class="d-flex align-items-center">
       <li class="nav-item d-block d-lg-none">
         <a class="nav-link nav-icon search-bar-toggle " href="#">
@@ -27,6 +31,10 @@
       </li><!-- End Search Icon-->
 
       {% if request.user.is_authenticated %}
+
+      <li class="nav-item">
+        <a href="#!" class="nav-link nav-profile d-flex align-items-center me-3"> VPN Config <i class="fas fa-download me-3 ms-2"></i></a>
+      </li>
 
       <li class="nav-item dropdown pe-3">
 
@@ -89,6 +97,7 @@
 
         </ul><!-- End Profile Dropdown Items -->
       </li><!-- End Profile Nav -->
+      
 
       {% endif %}
 

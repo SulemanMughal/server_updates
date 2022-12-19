@@ -30,7 +30,9 @@ width: 45%!important;
 
 {% block content %}
 {% if not course.instructor.is_admin %}
-{% include 'master_app/admin/course_approval_form.html' %}
+  {% if course.is_approved != "1" %}
+    {% include 'master_app/admin/course_approval_form.html' %}
+  {% endif %}
 {% endif %}
 <main id="main" class="main">
 <section class="section dashboard">

@@ -445,6 +445,10 @@ def InstructorChallengeDetails(request, course_id, challenge_id):
     return render(request, template_name, context)
 
 
+# ! Depreciated
+# TODO  :   Instructor 
+@login_required
+@teacher_required
 def InstructorApproveCourse(request, course_id):
 
     try:
@@ -668,6 +672,9 @@ def StudentChallengeDetails(request, course_id, challenge_id):
     template_name = 'master_app/student/challenge_details.html'
     try:
         course = Course.objects.get(id = course_id)
+        if course.course_status() == 1:
+            messages.error(request, "Challenges can't be accessed before course")
+            return redirect(reverse("student-courses-details-url", args=[course_id]))
         challenge = CourseChallenge.objects.get(id = challenge_id)
         assigned_student = AssignedStudents.objects.get(
             course = course,
@@ -772,3 +779,27 @@ def StudentChallengeFlagSubmission(request, course_id, challenge_id, submission_
     # context = {
     # }
     # return render(request, template_name, context)
+
+
+# TODO  :   Student Create Virtual Network Instance
+
+def StudentCreateNetworkInstance(request):
+    if request.method == "POST" :
+        return JsonResponse(
+            json.loads(
+                json.dumps({
+                    "message" : "Valid method"
+                })
+            ),
+            status =200
+        )
+        
+    else:
+        return JsonResponse(
+            json.loads(
+                json.dumps({
+                    "error" : "Invalid request method"
+                })
+            ),
+            status =400
+        )

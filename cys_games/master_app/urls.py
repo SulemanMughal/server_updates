@@ -111,5 +111,8 @@ urlpatterns = [
     # ? Student Challenge Flag Submission
     path("student/courses/<int:course_id>/challenge/<int:challenge_id>/<int:submission_id>/flag/submission", views.StudentChallengeFlagSubmission, name="student-challenge-flag-submission-url"),
 
+    # ? Student Create virtual network instance
+    path("student/virtual-network/crate/instance", views.StudentCreateNetworkInstance, name="student-create-network-instance"),
+
 ]
 
