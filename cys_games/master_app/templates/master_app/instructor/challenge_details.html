@@ -17,30 +17,110 @@
                 <h1>Course Details</h1>
                 <nav>
                   <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#!">Home</a></li>
-                    <li class="breadcrumb-item "><a href="#!">Courses</a></li>
-                    <li class="breadcrumb-item "><a href="#!">{{ course.name }}</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'instructor-dasboard-url' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item "><a href="{% url 'courses-all-url' %}">Courses</a></li>
+                    <li class="breadcrumb-item "><a href="{% url 'instructor-courses-details-url' course.id %}">{{ course.name }}</a></li>
                     <li class="breadcrumb-item active">{{ challenge.title }}</li>
                   </ol>
                 </nav>
               </div><!-- End Page Title -->
 
               <div class="row justify-content-center">
-                <div class="col-12 col-md-6">
+                <div class="col-12 col-md-5">
                     <div class="card">
-                        <div class="card-body py-3">
-                            <h5 class="card-title fs-5">
+                        <div class="card-body p-3">
+                            <h5 class="card-title fs-4 d-flex justify-content-between align-items-center mb-0">
                                 {{ challenge.title }}
+                                {% if challenge.levels == "1" %}
+                                    <span class="badge bg-success text-white">{{ challenge.get_difficulty_level }}</span>
+                                {% elif challenge.levels == "2" %}
+                                    <span class="badge bg-warning text-white">{{ challenge.get_difficulty_level }}</span>
+                                {% elif challenge.levels == "3" %}
+                                    <span class="badge bg-danger text-white">{{ challenge.get_difficulty_level }}</span>
+                                {% endif %}
                             </h5>
-                            <p>
-                                Course Name : {{ course.name }}
-                            </p>
-                            <p>
-                                Difficulty Level  : {{ challenge.get_difficulty_level }}
-                            </p>
-                            <p>
-                                Decription : {{ course.name }}
-                            </p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body p-3">
+                            <h3 class="card-title fs-4">Description</h3>
+                            {{ challenge.description|safe }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-7">
+                    <div class="card ">
+                        <div class="card-body p-3">
+                            <div id="barChart"></div>
+                            <script>
+                                document.addEventListener("DOMContentLoaded", () => {
+                                  new ApexCharts(document.querySelector("#barChart"), {
+                                    series: [
+                                    {
+                              name: 'Student A',
+                              data: [50, 50,0, 50]
+                            },
+                                    ],
+                                    chart: {
+                                      type: 'bar',
+                                      height: 250
+                        
+                                    },
+                                    plotOptions: {
+                                      bar: {
+                                        borderRadius: 2,
+                                        horizontal: true,
+                                        width : 2
+                                      }
+                                    },
+                                    dataLabels: {
+                                      enabled: false
+                                    },
+                                    legend: {
+                        position: 'top',
+                        },
+                                    xaxis: {
+                                      categories: ['Student A', 'Student B', 'Student C',  'Student D'],
+                                    }
+                                  }).render();
+                                });
+                              </script>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body p-3">
+<!-- Table with stripped rows -->
+<table class="table table-striped">
+    <thead>
+      <tr>
+        
+        <th scope="col">Name</th>
+        <th scope="col">Submitted Flag</th>
+        
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        
+        <td>Brandon Jacob</td>
+        <td>9f617cb296331a6cdfba18389c9d9f60</td>
+
+      </tr>
+      <tr>
+        <td>Bridie Kessler</td>
+        <td>4ae5a557fe35d9f2167ef6a1bc3e37cd</td>
+      </tr>
+      <tr>
+        <td>Ashleigh Langosh</td>
+        <td>197d34b2c2d84ba9b973a9eb39f4e4ef</td>
+      </tr>
+      <tr>
+        <td>Angus Grady</td>
+        <td>1d0d2deee55f33363b54adcab444737b</td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- End Table with stripped rows -->
                         </div>
                     </div>
                 </div>
