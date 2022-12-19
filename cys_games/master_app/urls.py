@@ -83,16 +83,9 @@ urlpatterns = [
     # ? Instructor Challenge Details
     path("instructor/courses/<int:course_id>/challenge/<int:challenge_id>/", views.InstructorChallengeDetails, name="instructor-challenge-details-url"),
 
-
     # ? Instructor Virutal Network
     path("instructor/course/approval/<int:course_id>/", views.InstructorApproveCourse, name="instructor-approve-course-url"),
     
-
-    
-
-    
-
-
     # ==========================================================
     # ? Student Dashbaord
     path("student/", views.StudentDashboard, name="student-dasboard-url"),
@@ -117,7 +110,6 @@ urlpatterns = [
     
     # ? Student Challenge Flag Submission
     path("student/courses/<int:course_id>/challenge/<int:challenge_id>/<int:submission_id>/flag/submission", views.StudentChallengeFlagSubmission, name="student-challenge-flag-submission-url"),
-
 
 ]
 
