@@ -22,6 +22,7 @@ class Course(models.Model):
     created_timestamp = models.DateTimeField( auto_now_add=True )
     description = RichTextField()
     is_approved = models.CharField(max_length=2, choices=APPROVED_CHOICES, default="1")
+    points = models.IntegerField(blank=True, null=True, default=60)
     
     def __str__(self):
         return self.name
@@ -97,6 +98,39 @@ class AssignedStudents(models.Model):
 
     class Meta:
         unique_together = ('course', 'student')
+
+
+    def get_easy_challenges(self):
+        return self.course.coursechallenge_set.filter(levels = "1")
+
+    def get_medium_challenges(self):
+        return self.course.coursechallenge_set.filter(levels = "2")
+
+    def is_all_easy_challenges_submitted(self):
+        for q in self.get_easy_challenges():
+            try:
+                if ChallengeSubmission.objects.filter(
+                        challenge__id = q.id,
+                        assinged_student__id = self.id,
+                        status= "SUBMITTED"
+                    ).count() == 0:
+                    return False
+            except:
+                return False
+        return True
+    
+    def is_all_medium_challenges_submitted(self):
+        for q in self.get_medium_challenges():
+            try:
+                if ChallengeSubmission.objects.filter(
+                        challenge__id = q.id,
+                        assinged_student__id = self.id,
+                        status= "SUBMITTED"
+                    ).count() == 0:
+                    return False
+            except:
+                return False
+        return True
 
 
 

@@ -12,7 +12,7 @@ from .forms import loginForm, CreateCourseForm, AddNewStudent, NewVirtualNetwork
 
 
 # ? Models
-from .models import Course, AssignedStudents, CourseChallenge, VirtualNetwork
+from .models import Course, AssignedStudents, CourseChallenge, VirtualNetwork, ChallengeSubmission
 
 # ? Decorators
 from .decorators import (
@@ -669,14 +669,98 @@ def StudentChallengeDetails(request, course_id, challenge_id):
     try:
         course = Course.objects.get(id = course_id)
         challenge = CourseChallenge.objects.get(id = challenge_id)
-    except (Course.DoesNotExist, CourseChallenge.DoesNotExist):
+        assigned_student = AssignedStudents.objects.get(
+            course = course,
+            student = request.user
+        )
+        if challenge.levels == "3":
+            if not assigned_student.is_all_easy_challenges_submitted():
+                messages.error(request, "Please submit all EASY level challenges first.")
+                return redirect(reverse("student-courses-details-url", args=[course_id]))
+            elif not assigned_student.is_all_medium_challenges_submitted():
+                messages.error(request, "Please submit all MEDIUM level challenges first.")
+                return redirect(reverse("student-courses-details-url", args=[course_id]))
+        elif challenge.levels == "2":
+            if not assigned_student.is_all_easy_challenges_submitted():
+                messages.error(request, "Please submit all EASY level challenges first.")
+                return redirect(reverse("student-courses-details-url", args=[course_id]))
+                
+        try:
+            submission_obj = ChallengeSubmission.objects.get(
+                assinged_student = assigned_student,
+                challenge = challenge
+            )
+        except ChallengeSubmission.DoesNotExist:
+            submission_obj = ChallengeSubmission.objects.create(
+                assinged_student = assigned_student,
+                challenge = challenge,
+                status = "PENDING"
+            )
+        # try:
+        #     # TODO  :   Get TaskSubmission instance
+        #     submission_obj = ChallengeSubmission.objects.get(
+        #         assinged_student = course,
+        #         challenge_id = obj.task_id,
+        #         content_type = ContentType.objects.get_for_model(
+        #             obj
+        #         )
+        #     )
+        # except TaskSubmission.DoesNotExist:
+        #     task_submission_obj = TaskSubmission.objects.create(
+        #         assinged_event = ctf_obj,
+        #         challenge_id = obj.task_id,
+        #         content_object = obj
+        #     )
+        # except Exception as e:
+        #     logger.error(e, exc_info=sys.exc_info())
+        #     messages.error(request, settings.GENERAL_EXCEPTION_ERROR)
+        #     return redirect(reverse("master-home"))
+    except (Course.DoesNotExist, CourseChallenge.DoesNotExist, AssignedStudents.DoesNotExist):
         messages.error(request, "Invalid URL")
-        return redirect(reverse("courses-all-url"))
+        return redirect(reverse("student-courses-url"))
     except Exception as e:
         messages.error(request, "Plase try again after some time or contact admin.")
         return redirect(reverse("master_index"))
     context = {
         "course" : course,
-        "challenge" : challenge
+        "challenge" : challenge, 
+        "submission_obj" : submission_obj
     }
     return render(request, template_name, context)
+
+
+# TODO  :   Student Challenge Flag Submission
+@login_required
+@student_required
+def StudentChallengeFlagSubmission(request, course_id, challenge_id, submission_id):
+    try:
+        if request.method == "POST":
+            # print(request.POST)
+            course = Course.objects.get(id = course_id)
+            challenge = CourseChallenge.objects.get(course__id = course.id, id=challenge_id)
+            assigned_student = AssignedStudents.objects.get(
+                course = course,
+                student = request.user
+            )
+            submission_obj = ChallengeSubmission.objects.get(
+                assinged_student = assigned_student,
+                challenge = challenge,
+                id = submission_id  
+            )
+            submission_obj.submitted_answer = request.POST['flag']
+            submission_obj.status = "SUBMITTED"
+            submission_obj.save()
+            # print(challenge)
+            messages.success(request, "Submit successfully.")
+            return redirect(reverse("student-challenge-details-url" , args=[course_id, challenge_id]))
+        else:
+            messages.error(request, "Requested page does not exist")
+            return redirect(reverse("student-dasboard-url" ))
+    except :
+        messages.error(request, "Requested page does not exist")
+        return redirect(reverse("student-dasboard-url" ))
+    
+    # template_name = ''
+    # context = {
+    # }
+    # return render(request, template_name, context)

@@ -112,9 +112,12 @@ urlpatterns = [
     # ? Student Networks Details
     path("student/networks/<int:vn_id>/detail", views.StudentMachineDetail, name="student-machine-detail-url"),
 
-
     # ? Student Challenge Details
     path("student/courses/<int:course_id>/challenge/<int:challenge_id>/", views.StudentChallengeDetails, name="student-challenge-details-url"),
+    
+    # ? Student Challenge Flag Submission
+    path("student/courses/<int:course_id>/challenge/<int:challenge_id>/<int:submission_id>/flag/submission", views.StudentChallengeFlagSubmission, name="student-challenge-flag-submission-url"),
+
 
 ]
 
