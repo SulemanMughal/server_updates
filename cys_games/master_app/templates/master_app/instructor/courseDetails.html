@@ -10,6 +10,10 @@
 <script src="{% static 'assets/vendor/quill/quill.min.js' %}"></script>
 <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
 <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+<link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css"
+    />
 
 <style>
   .dashboard .activity .activity-item .activite-label{
@@ -108,43 +112,49 @@
                               </div><p class="w-50"><a href="{{ course.get_virtual_network.config_file_url }}">{{ course.get_virtual_network.config_file_url }}</a></p>
                             </li>
                             {% if course.is_approved == "3" %}
-                            <li class="list-group-item  justify-content-between align-items-start">
-                              <div class="accordion accordion-flush" id="accordionFlushExample">
-                                <div class="accordion-item">
-                                  <h2 class="accordion-header" id="flush-headingOne">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                                      Approved Details
-                                    </button>
-                                  </h2>
-                                  <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                                    <ul class="list-group list-group-flush">
-                                      <li class="list-group-item d-flex justify-content-between align-items-start px-0">
-                                        <div class=" me-auto">
-                                          <div class="fw-bold">IP Address</div>
-                                        </div><p class="w-50 text-end">{{ course.get_virtual_network.ip_address }}</p>
-                                      </li>
-                                      <li class="list-group-item d-flex justify-content-between align-items-start px-0">
-                                        <div class=" me-auto">
-                                          <div class="fw-bold">Network Topology Image</div>
-                                        </div><p class="w-50 text-end"><a href="{{ course.get_virtual_network.topology_image.path }}">Download</a></p>
-                                      </li>
-                                      <li class="list-group-item d-flex justify-content-between align-items-start px-0">
-                                        <div class=" me-auto">
-                                          <div class="fw-bold">Connection File</div>
-                                        </div><p class="w-50 text-end"><a href="{{ course.get_virtual_network.ssh_file.path }}">Download</a></p>
-                                      </li>
-                                      <li class="list-group-item d-flex justify-content-between align-items-start px-0">
-                                        <div class=" me-auto">
-                                          <div class="fw-bold">Instructions</div>
-                                        </div><p class="w-50 text-end"><a data-bs-toggle="offcanvas" href="#offcanvasExample2" role="button" aria-controls="offcanvasExample2">Read</a></p>
-                                      </li>
-                                    </ul>
+                              <li class="list-group-item  justify-content-between align-items-start">
+                                <div class="accordion accordion-flush" id="accordionFlushExample">
+                                  <div class="accordion-item">
+                                    <h2 class="accordion-header" id="flush-headingOne">
+                                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        Approved Details
+                                      </button>
+                                    </h2>
+                                    <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                      <ul class="list-group list-group-flush">
+                                        <li class="list-group-item d-flex justify-content-between align-items-start px-0">
+                                          <div class=" me-auto">
+                                            <div class="fw-bold">IP Address</div>
+                                          </div><p class="w-50 text-end">{{ course.get_virtual_network.ip_address }}</p>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-start px-0">
+                                          <div class=" me-auto">
+                                            <div class="fw-bold">Network Topology Image</div>
+                                          </div><p class="w-50 text-end">
+                                            <a
+    data-fancybox
+    data-type="image"
+    href="/media/{{ course.get_virtual_network.topology_image }}"
+    >View <i class="fa-regular fa-eye ms-1"></i></a
+  >
+                                            </p>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-start px-0">
+                                          <div class=" me-auto">
+                                            <div class="fw-bold">Connection File</div>
+                                          </div><p class="w-50 text-end"><a href="{{ course.get_virtual_network.ssh_file.path }}">Download <i class="fa-solid fa-download ms-1"></i></a></p>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-start px-0">
+                                          <div class=" me-auto">
+                                            <div class="fw-bold">Instructions</div>
+                                          </div><p class="w-50 text-end"><a data-bs-toggle="offcanvas" href="#offcanvasExample2" role="button" aria-controls="offcanvasExample2">Read <i class="fa-solid fa-book ms-1"></i></a></p>
+                                        </li>
+                                      </ul>
+                                    </div>
                                   </div>
+                                  
                                 </div>
-                                
-                              </div>
-                            </li>
-                            
+                              </li>
                             {% endif %}
                           <li class="list-group-item text-center" aria-disabled="true"><a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">See Details<i class="fas fa-chevron-right fs-5 ms-3 pt-2"></i></a></li>
                         </ul>
@@ -335,6 +345,7 @@
 
 {% block extra_js %}
 
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
 
 
 <script>

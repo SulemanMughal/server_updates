@@ -229,6 +229,7 @@ class CourseChallenge(models.Model):
     description = RichTextField()
     levels = models.CharField(max_length=1, default="1", choices=CHALLENGE_LEVELS)
     points = models.IntegerField(blank=True, default=50)
+    original_flag = models.CharField(max_length=200, blank=True, null=True, default="")
     
 
     def __str__(self):
@@ -251,3 +252,4 @@ class ChallengeSubmission(models.Model):
     submitted_answer = models.TextField( max_length=200, blank=True, null=True)
     obtained_points = models.IntegerField( blank=True, null=True, default=0)
     timestamp=models.DateTimeField(auto_now_add=True)
+    attempts = models.IntegerField(blank=True, null=True, default=0)

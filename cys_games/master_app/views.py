@@ -747,11 +747,19 @@ def StudentChallengeFlagSubmission(request, course_id, challenge_id, submission_
                 challenge = challenge,
                 id = submission_id  
             )
-            submission_obj.submitted_answer = request.POST['flag']
-            submission_obj.status = "SUBMITTED"
+            
+            if request.POST.get("flag", None):
+                if request.POST.get("flag", None) == challenge.original_flag:
+                    submission_obj.submitted_answer = request.POST['flag']
+                    submission_obj.status = "SUBMITTED"
+                    submission_obj.obtained_points = (challenge.points) - (submission_obj.attempts*5)
+                    submission_obj.attempts = (submission_obj.attempts) + 1
+                    submission_obj.save()
+                    messages.success(request, "Correct Flag")
+                    return redirect(reverse("student-challenge-details-url" , args=[course_id, challenge_id]))
+            submission_obj.attempts = int(submission_obj.attempts)+1
             submission_obj.save()
-            # print(challenge)
-            messages.success(request, "Submit successfully.")
+            messages.error(request, "Wrong Flag Submission")
             return redirect(reverse("student-challenge-details-url" , args=[course_id, challenge_id]))
         else:
             messages.error(request, "Requested page does not exist")
