@@ -1,0 +1,109 @@
+<style>
+    #modalEditor  .ql-editor {
+ overflow-y: scroll;
+ min-height: 150px;
+ }
+ </style>
+ 
+ <div class="modal fade" id="course_approve_details" tabindex="-1">
+     <div class="modal-dialog modal-dialog-scrollable modal-md">
+       <div class="modal-content">
+         <div class="modal-header">
+           <h5 class="modal-title">Confirm Course Details</h5>
+           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+            <div class="card shadow-none bg-transparent py-1 my-1">
+                <div class="card-body">
+                  <h5 class="card-title pt-0">Virtual Network </h5>
+    
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-start px-0">
+                      <div class="ms-2 me-auto">
+                        <div class="fw-bold">Status</div>
+                      </div>
+                      {% if course.get_virtual_network %}
+                {% if course.is_approved == "1" %}
+                      <span class="badge bg-warning">Pending</span>
+            {% elif course.is_approved == "2" %}
+              
+              <span class="badge bg-primary">Sent Admin for Approval</span>
+            {% elif course.is_approved == "3" %}
+            <span class="badge bg-success">Approved</span>
+              
+            {% elif course.is_approved == "4"  %}
+            <span class="badge bg-danger">Rejected</span>
+              
+            {% endif %}
+            {% endif %}
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start px-0">
+                      <div class="ms-2 me-auto">
+                        <div class="fw-bold">Name</div>
+                      </div>
+                      {{ course.get_virtual_network.name }}
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start px-0">
+                      <div class="ms-2 me-auto">
+                        <div class="fw-bold">OS</div>
+                      </div>{{ course.get_virtual_network.get_operating_system }}</li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start px-0">
+                      <div class="ms-2 me-auto">
+                        <div class="fw-bold">Scenario</div>
+                      </div>{{ course.get_virtual_network.get_scenarios }}</li>
+                      
+                      
+                    
+                  </ul>
+    
+                </div>
+            </div>
+            <div class="card shadow-none bg-transparent py-1 my-1">
+                <div class="card-body">
+                  <h5 class="card-title pt-0">Added Challenges </h5>
+    
+                  <ul class="list-group list-group-flush">
+                    {% for ch in easy_challenges %}
+                        <li class="list-group-item d-flex justify-content-between align-items-start px-0">
+                            {{ ch.title }}
+                        </li>
+                    {% endfor %}
+                    {% for ch in medium_challenges %}
+                        <li class="list-group-item d-flex justify-content-between align-items-start px-0">
+                            {{ ch.title }}
+                        </li>
+                    {% endfor %}
+                    {% for ch in hard_challenges %}
+                        <li class="list-group-item d-flex justify-content-between align-items-start px-0">
+                            {{ ch.title }}
+                        </li>
+                    {% endfor %}
+                  </ul>
+    
+                </div>
+            </div>    
+            <div class="card shadow-none bg-transparent py-1 my-1">
+                <div class="card-body">
+                  <h5 class="card-title pt-0">Added Students</h5>
+    
+                  <ul class="list-group list-group-flush">
+                    {% for std in students %}
+                        <li class="list-group-item d-flex justify-content-between align-items-start px-0">
+                            {{ std.student.email }}
+                        </li>
+                    {% endfor %}
+                  </ul>
+    
+                </div>
+            </div>   
+            <div class="text-end">
+                <button type="button" class="btn btn-danger " data-bs-dismiss="modal" aria-label="Close" ><i class="fa-solid fa-chevron-left me-2"></i> Cancel</button>
+              <a type="submit" class="btn btn-primary "  href="{% url 'instructor-approve-course-url' course.id   %}">Send Request for Approval <i class="fa-solid fa-chevron-right ms-2"></i></a>
+              </div> 
+         </div>
+         
+       </div>
+     </div>
+   </div>
+ 
+ 

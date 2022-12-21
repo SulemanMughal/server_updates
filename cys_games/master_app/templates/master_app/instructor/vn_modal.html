@@ -6,7 +6,7 @@ min-height: 150px;
 </style>
 
 <div class="modal fade" id="virutal_network_modal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+    <div class="modal-dialog modal-dialog-scrollable ">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Virtual Network Details</h5>
@@ -20,7 +20,7 @@ min-height: 150px;
 
 
  <!-- Virtual Network Name -->
- <div class="col-12  mb-3">
+ <div class="col-12   ">
     <div class="form-floating">
       <input type="text" name="name" class="form-control" id="id_name" placeholder="Virutal Network Name"  autocapitalize="none" autocomplete="off" maxlength="100" required >
       <label for="id_name">Virutal Network Name</label>
@@ -30,19 +30,20 @@ min-height: 150px;
     </div>
   </div>
 
-   <!-- Github Config File URL -->
-<div class="col-md-12 mb-3">
-  <div class="form-floating">
-    <input type="url" name="config_file_url" class="form-control" id="id_config_file_url" placeholder="Github Config File URL"  autocapitalize="none" autocomplete="off" maxlength="300" required >
-    <label for="id_config_file_url">Github Config File URL</label>
-    <div class="invalid-feedback">
-      Please enter a valid url.
-    </div>
-  </div>
+  <!-- Scenarios -->
+<div class="col-12  mb-3">
+  <label for="id_scenarios" class="form-label">Scenarios </label>
+  <select class="form-select" id="id_scenarios" required="" name="scenarios">
+      {% for scenario in form.scenarios  %}
+          {{ scenario }}
+      {% endfor %}
+  </select>
 </div>
 
+   
+
 <!-- Course Name -->
-<div class="col-12 col-md-6 mb-3">
+<div class="col-12 col-md-6 mb-3 d-none">
     <label for="id_course" class="form-label">Course </label>
     <select class="form-select" id="id_course" required="" name="course">
       <option value="{{ course.id }}" selected="">{{ course.name }}</option>
@@ -50,15 +51,30 @@ min-height: 150px;
   </div>
 
 <!-- Operating System -->
-<div class="col-12 col-md-6 mb-3">
+<div class="col-12 col-md-6 mb-3 d-none">
     <label for="id_operating_system" class="form-label">Operating System </label>
     <select class="form-select" id="id_operating_system" required="" name="operating_system">
-        {% for os in form.operating_system  %}
-            {{ os }}
-        {% endfor %}
+      <option value="1" selected="">Windows</option>
     </select>
   </div>
  
+
+
+
+
+
+
+
+<!-- Rating -->
+<div class="col-12 col-md-6 mb-3 d-none">
+  <label for="id_rating" class="form-label">Rating </label>
+  <select class="form-select" id="id_rating" required="" name="rating">
+      {% for rate in form.rating  %}
+          {{ rate }}
+      {% endfor %}
+  </select>
+</div>
+
 
 
   <!-- Description -->
@@ -72,35 +88,19 @@ min-height: 150px;
   
 
 
-<!-- Scenarios -->
-<div class="col-md-12 mb-3">
-    <label for="id_scenarios" class="form-label">Scenarios </label>
-    <select class="form-select" id="id_scenarios" required="" name="scenarios">
-        {% for scenario in form.scenarios  %}
-            {{ scenario }}
-        {% endfor %}
-    </select>
-</div>
 
-
-
-<!-- Rating -->
-<div class="col-md-12 mb-3">
-    <label for="id_rating" class="form-label">Rating </label>
-    <select class="form-select" id="id_rating" required="" name="rating">
-        {% for rate in form.rating  %}
-            {{ rate }}
-        {% endfor %}
-    </select>
-</div>
 
 
 
                             
 <input type="hidden" name="next" value="{{ request.path }}">
-                            <div class="d-grid gap-2 mt-3">
-                                <button type="submit" class="btn btn-primary"  tabindex="4">Create</button>
-                            </div>
+
+<div class="text-end">
+  <button type="button" class="btn btn-danger " data-bs-dismiss="modal" aria-label="Close"  ><i class="fa-solid fa-chevron-left me-2"></i> Cancel</button>
+<button type="submit" class="btn btn-primary "  >Create <i class="fa-solid fa-chevron-right ms-2"></i></button>
+</div>
+
+                            
                         </form>
         </div>
       </div>

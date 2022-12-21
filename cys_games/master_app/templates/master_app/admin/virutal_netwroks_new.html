@@ -20,11 +20,7 @@
 
 {% endblock extra_css %}
 
-
-
-
 {% block content %}
-
 <main id="main" class="main ">
     <section class="section dashboard">
       <div class="container">
@@ -43,7 +39,7 @@
                           {% endfor %}
                         {% endif %}
                         <form class="row g-3 needs-validation" novalidate  
-                        action="{% url 'instructor-virutal-network-create-url' %}"  id="identifier"   method="POST">
+                        action="{% url 'admin-virtual-network-create-url' %}"  id="identifier"   method="POST">
                             {% csrf_token %}
 
 <!-- Course Name -->
@@ -104,7 +100,7 @@
                             
 
                             <div class="text-end">
-                              <a href="{% url 'instructor-virtual-network-url' %}" type="button" class="btn btn-danger "  ><i class="fa-solid fa-chevron-left me-2"></i> Back to Virtual Networks</a>
+                              <a href="{% url 'admin-virtual-network-url' %}" type="button" class="btn btn-danger "  ><i class="fa-solid fa-chevron-left me-2"></i> Back to Virtual Networks</a>
                             <button type="submit" class="btn btn-primary "  >Create <i class="fa-solid fa-chevron-right ms-2"></i></button>
                             </div>
                         </form>

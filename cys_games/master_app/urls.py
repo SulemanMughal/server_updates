@@ -42,6 +42,9 @@ urlpatterns = [
     # ? Admin Virutal Networks
     path("admin/virtaul-networks", views.AdminVirtualNetworkList, name="admin-virtual-network-url"),
 
+    # ? Admin Craete New Virutal Networks
+    path("admin/virtaul-networks/create", views.AdminVirtualNetworkCreate, name="admin-virtual-network-create-url"),
+
     # ? Admin Virutal Networks Details
     path("admin/virtaul-networks/<int:vn_id>/detail", views.AdminVirtualNetworkDetails, name="admin-machine-detail-url"),
 
@@ -67,6 +70,9 @@ urlpatterns = [
 
     # ? Instructor Courses List
     path("instructor/courses", views.CoursesList, name="courses-all-url"),
+    
+    # ? Instructor Courses Detials
+    path("instructor/courses/<int:course_id>/details", views.InstructorCourseDetails, name="instructor-courses-details-url"),
 
     # ? Instructor Students List
     path("instructor/students", views.StudentList, name="students-all-url"),
@@ -77,8 +83,7 @@ urlpatterns = [
     # ? Instructor Networks Details
     path("instructor/networks/<int:vn_id>/detail", views.InstructorMachineDetail, name="instructor-machine-detail-url"),
 
-    # ? Instructor Courses Detials
-    path("instructor/courses/<int:course_id>/details", views.InstructorCourseDetails, name="instructor-courses-details-url"),
+
 
     # ? Instructor Challenge Details
     path("instructor/courses/<int:course_id>/challenge/<int:challenge_id>/", views.InstructorChallengeDetails, name="instructor-challenge-details-url"),

@@ -22,7 +22,17 @@
               </li>
               <li>
                 <a href="#!">
-                  <i class="bi bi-circle"></i><span>Create New Challenge</span>
+                  <i class="bi bi-circle"></i><span>Add New Challenge</span>
+                </a>
+              </li>
+              <li>
+                <a href="#!">
+                  <i class="bi bi-circle"></i><span>Add New Student</span>
+                </a>
+              </li>
+              <li>
+                <a href="#!">
+                  <i class="bi bi-circle"></i><span>Add New Network</span>
                 </a>
               </li>
               <li>
@@ -30,6 +40,7 @@
                   <i class="bi bi-circle"></i><span>All Courses</span>
                 </a>
               </li>
+              
               
             </ul>
           </li><!-- End Courses Management Nav -->
@@ -64,7 +75,7 @@
           </a>
           <ul id="networks-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
             <li>
-              <a href="#!">
+              <a href="{% url 'admin-virtual-network-create-url' %}">
                 <i class="bi bi-circle"></i><span>Create New Network</span>
               </a>
             </li>

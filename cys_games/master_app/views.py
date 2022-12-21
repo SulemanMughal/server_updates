@@ -279,6 +279,28 @@ def AdminVirtualNetworkList(request ):
     return render(request, template_name, context)
 
 
+# TODO  :   Admin Virtual Network Create
+@login_required
+@admin_required
+def AdminVirtualNetworkCreate(request):
+    template_name = 'master_app/admin/virutal_netwroks_new.html'
+    if request.method == "POST":
+        form = NewVirtualNetworkForm(request.POST)
+        # print(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "New Virtual Network has been added")
+            if request.POST.get("next" , None):
+                return redirect(request.POST.get("next" , None))
+            return redirect(reverse("admin-virtual-network-url"))
+    else:
+        form = NewVirtualNetworkForm()
+    context = {
+        "form" : form
+    }
+    return render(request, template_name, context)
+
+
 # TODO  :   Admin Virtual Network Details
 @login_required
 @admin_required

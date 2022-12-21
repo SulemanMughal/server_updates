@@ -30,6 +30,7 @@
 {% if course.is_approved == "1" %}
   {% include 'master_app/instructor/create_challenge_modal.html' %}
   {% include 'master_app/instructor/create_student_modal.html' %}
+  {% include 'master_app/instructor/course_approve_details.html' %}
 {% endif %}
 
 
@@ -62,7 +63,7 @@
                     <div class="card-body  px-0">
                       {% if course.get_virtual_network %}
                       {% if course.is_approved == "1" %}
-                      <a class="btn btn-warning py-3 shadow-lg w-100 "    href="{% url 'instructor-approve-course-url' course.id   %}">Send Request for Approval</a>
+                      <a class="btn btn-warning py-3 shadow-lg w-100 "    data-href="{% url 'instructor-approve-course-url' course.id   %}" href="#course_approve_details" data-bs-toggle="modal">Send Request for Approval</a>
                   {% elif course.is_approved == "2" %}
                     <button class="btn btn-primary py-3 shadow-lg w-100 "    >Sent Admin for Approval</button>
                   {% else %}
@@ -78,7 +79,7 @@
                             </div>
                             {% if course.get_virtual_network %}
                       {% if course.is_approved == "1" %}
-                            <span class="badge bg-warning">Send Request for Approval</span>
+                            <span class="badge bg-warning">Pending</span>
                   {% elif course.is_approved == "2" %}
                     
                     <span class="badge bg-primary">Sent Admin for Approval</span>
@@ -105,56 +106,8 @@
                             <div class="ms-2 me-auto">
                               <div class="fw-bold">Scenario</div>
                             </div>{{ course.get_virtual_network.get_scenarios }}</li>
-                            <li class="list-group-item d-flex justify-content-between align-items-start">
-                              <div class="ms-2 me-auto">
-                                <div class="fw-bold">Config File</div>
-                              </div><p class="w-50"><a href="{{ course.get_virtual_network.config_file_url }}">{{ course.get_virtual_network.config_file_url }}</a></p>
-                            </li>
-                            {% if course.is_approved == "3" %}
-                              <li class="list-group-item  justify-content-between align-items-start">
-                                <div class="accordion accordion-flush" id="accordionFlushExample">
-                                  <div class="accordion-item">
-                                    <h2 class="accordion-header" id="flush-headingOne">
-                                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                                        Approved Details
-                                      </button>
-                                    </h2>
-                                    <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                                      <ul class="list-group list-group-flush">
-                                        <li class="list-group-item d-flex justify-content-between align-items-start px-0">
-                                          <div class=" me-auto">
-                                            <div class="fw-bold">IP Address</div>
-                                          </div><p class="w-50 text-end">{{ course.get_virtual_network.ip_address }}</p>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between align-items-start px-0">
-                                          <div class=" me-auto">
-                                            <div class="fw-bold">Network Topology Image</div>
-                                          </div><p class="w-50 text-end">
-                                            <a
-    data-fancybox
-    data-type="image"
-    href="/media/{{ course.get_virtual_network.topology_image }}"
-    >View <i class="fa-regular fa-eye ms-1"></i></a
-  >
-                                            </p>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between align-items-start px-0">
-                                          <div class=" me-auto">
-                                            <div class="fw-bold">Connection File</div>
-                                          </div><p class="w-50 text-end"><a href="{{ course.get_virtual_network.ssh_file.path }}">Download <i class="fa-solid fa-download ms-1"></i></a></p>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between align-items-start px-0">
-                                          <div class=" me-auto">
-                                            <div class="fw-bold">Instructions</div>
-                                          </div><p class="w-50 text-end"><a data-bs-toggle="offcanvas" href="#offcanvasExample2" role="button" aria-controls="offcanvasExample2">Read <i class="fa-solid fa-book ms-1"></i></a></p>
-                                        </li>
-                                      </ul>
-                                    </div>
-                                  </div>
-                                  
-                                </div>
-                              </li>
-                            {% endif %}
+                            
+                            
                           <li class="list-group-item text-center" aria-disabled="true"><a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">See Details<i class="fas fa-chevron-right fs-5 ms-3 pt-2"></i></a></li>
                         </ul>
                       {% else %}
@@ -228,7 +181,7 @@
                       <ul class="list-group list-group-flush">
                         {% if students %}
                           {% for std in students %}
-                            <li class="list-group-item">{{std.student.email }}</li>
+                            <li class="list-group-item">{{ std.student.email }}</li>
                           {% endfor %}
                         {% endif %}
                       </ul><!-- End Clean list group -->
@@ -695,4 +648,57 @@
     });
   
 </script>
+
+
+{% if course.is_approved == "3" %}
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                              <div class="ms-2 me-auto">
+                                <div class="fw-bold">Config File</div>
+                              </div><p class="w-50"><a href="{{ course.get_virtual_network.config_file_url }}">{{ course.get_virtual_network.config_file_url }}</a></p>
+                            </li>
+                              <li class="list-group-item  justify-content-between align-items-start">
+                                <div class="accordion accordion-flush" id="accordionFlushExample">
+                                  <div class="accordion-item">
+                                    <h2 class="accordion-header" id="flush-headingOne">
+                                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        Approved Details
+                                      </button>
+                                    </h2>
+                                    <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                      <ul class="list-group list-group-flush">
+                                        <li class="list-group-item d-flex justify-content-between align-items-start px-0">
+                                          <div class=" me-auto">
+                                            <div class="fw-bold">IP Address</div>
+                                          </div><p class="w-50 text-end">{{ course.get_virtual_network.ip_address }}</p>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-start px-0">
+                                          <div class=" me-auto">
+                                            <div class="fw-bold">Network Topology Image</div>
+                                          </div><p class="w-50 text-end">
+                                            <a
+    data-fancybox
+    data-type="image"
+    href="/media/{{ course.get_virtual_network.topology_image }}"
+    >View <i class="fa-regular fa-eye ms-1"></i></a
+  >
+                                            </p>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-start px-0">
+                                          <div class=" me-auto">
+                                            <div class="fw-bold">Connection File</div>
+                                          </div><p class="w-50 text-end"><a href="{{ course.get_virtual_network.ssh_file.path }}">Download <i class="fa-solid fa-download ms-1"></i></a></p>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-start px-0">
+                                          <div class=" me-auto">
+                                            <div class="fw-bold">Instructions</div>
+                                          </div><p class="w-50 text-end"><a data-bs-toggle="offcanvas" href="#offcanvasExample2" role="button" aria-controls="offcanvasExample2">Read <i class="fa-solid fa-book ms-1"></i></a></p>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                  
+                                </div>
+                              </li>
+                            {% endif %}
+
 {% endcomment %}

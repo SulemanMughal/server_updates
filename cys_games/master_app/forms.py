@@ -32,11 +32,22 @@ class AddNewStudent(forms.ModelForm):
         model = AssignedStudents
         fields =  "__all__"
 
+    def __init__(self, *args, **kwargs):
+        super(AddNewStudent, self).__init__(*args, **kwargs)
+        self.fields['student'].queryset = User.objects.filter(is_student = True)
+
 
 class NewVirtualNetworkForm(forms.ModelForm):
     class Meta:
         model = VirtualNetwork
         fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super(NewVirtualNetworkForm, self).__init__(*args, **kwargs)
+        excludes = [network.course.id for network in VirtualNetwork.objects.all()]
+        # self.fields['course'].queryset = Course.objects.filter(is_student = True)
+        self.fields['course'].queryset = Course.objects.all().exclude(id__in=excludes)
+
 
 
 class CourseApprovalForm(forms.ModelForm):

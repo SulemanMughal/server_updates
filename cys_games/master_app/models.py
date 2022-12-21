@@ -164,7 +164,7 @@ class VirtualNetwork(models.Model):
     description = RichTextField()
     operating_system = models.CharField(max_length=3, default=1 , choices=OPERATING_SYSTEM_CHOICES)
     scenarios = models.CharField(max_length=50, default="1" , choices=SCENARIOS_CATEGORYIES)
-    rating  = models.CharField(max_length=1 , default="1", choices=RATING_CHOICES)
+    rating  = models.CharField(max_length=1 , default="1", choices=RATING_CHOICES, blank=True, null=True)
     config_file_url = models.URLField(max_length=300 , default="" , blank=True, null=True)
     
     # Set fields by admin at the time of approval
