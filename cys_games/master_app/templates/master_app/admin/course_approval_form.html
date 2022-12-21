@@ -15,7 +15,7 @@
          </div>
          <div class="modal-body">
              <form class="row g-3 needs-validation " novalidate  
-                         action="{% url 'admin-course-approval-url' course.get_virtual_network.id %}"  id="identifier"   method="POST" enctype="multipart/form-data">
+                         action="{% url 'admin-course-approval-url' course.get_virtual_network.id %}"  id="course_approval_form"   method="POST" enctype="multipart/form-data">
                              {% csrf_token %}
  
 
@@ -61,7 +61,7 @@
  <input type="hidden" name="next" value="{{ request.path }}">
  <div class="text-end">
   <button type="button" class="btn btn-danger "  data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-chevron-left me-2"></i> Cancel</button>
-<button type="submit" class="btn btn-primary "  >Create <i class="fa-solid fa-chevron-right ms-2"></i></button>
+<button type="submit" class="btn btn-primary "  id="course_approval_btn">Create <i class="fa-solid fa-chevron-right ms-2"></i></button>
 </div>
 
                         </form>

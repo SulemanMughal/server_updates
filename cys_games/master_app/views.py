@@ -239,8 +239,6 @@ def AdminCourseDetails(request, course_id):
     return render(request, template_name, context)
 
 # TODO  :   Admin Course Approval
-
-
 @login_required
 @admin_required
 def AdminCourseApproval(request, vn_id):
@@ -253,15 +251,46 @@ def AdminCourseApproval(request, vn_id):
             updated_obj = form.save()
             updated_obj.course.is_approved = "3"
             updated_obj.course.save()
-            # updated_obj.save()
-            messages.success(request, "Request has been approved.")
-            return redirect(reverse("admin-courses-details-url", args=[updated_obj.course.id]))
+            updated_obj.save()
+            # messages.success(request, "Request has been approved.")
+            # return redirect(reverse("admin-courses-details-url", args=[updated_obj.course.id]))
+            return JsonResponse(
+            json.loads(
+                json.dumps({
+                    "text" : "Course has been approved."
+                })
+            ),
+            status =200
+        )
         else:
-            print(form.errors)
+            return JsonResponse(
+            json.loads(
+                json.dumps({
+                    "error" : json.dumps(form.errors)
+                })
+            ),
+            status =400
+        )
     else:
-        form = CourseApprovalForm()
-    messages.success(request, "Request can't be proceed at this time.")
-    return redirect(reverse("admin-courses-details-url", args=[updated_obj.course.id]))
+        # form = CourseApprovalForm()
+        return JsonResponse(
+            json.loads(
+                json.dumps({
+                    "error" : "Invalid request method"
+                })
+            ),
+            status =400
+        )
+    # messages.success(request, "Request can't be proceed at this time.")
+    # return redirect(reverse("admin-courses-details-url", args=[updated_obj.course.id]))
+    # return JsonResponse(
+    #         json.loads(
+    #             json.dumps({
+    #                 "error" : "Request can't be proceed at this time."
+    #             })
+    #         ),
+    #         status =400
+    #     )
 
     # template_name = ''
     # context = {
