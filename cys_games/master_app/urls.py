@@ -48,14 +48,18 @@ urlpatterns = [
     # ? Admin Virutal Networks Details
     path("admin/virtaul-networks/<int:vn_id>/detail", views.AdminVirtualNetworkDetails, name="admin-machine-detail-url"),
 
+    
+    # ? Admin Create New Student
+    path("admin/students/create", views.AdminStudentCreate, name="admin-student-new-url"),
+
     # ? Admin Students List
     path("admin/students/", views.AdminStudentList, name="admin-student-list-url"),
 
-    # ? Admin Create New Instructor
-    path("admin/instructor/create", views.AdminInstructorCreate, name="admin-instructor-new-url"),
-
     # ? Admin Instructor List
     path("admin/instructors/", views.AdminInstructorsList, name="admin-instructors-list-url"),
+
+    # ? Admin Create New Instructor
+    path("admin/instructor/create", views.AdminInstructorCreate, name="admin-instructor-new-url"),
 
 
     # ==========================================================
