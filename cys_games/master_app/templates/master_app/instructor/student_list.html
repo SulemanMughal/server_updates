@@ -4,10 +4,7 @@
 
 
 {% block extra_css %}
-<!-- Table CSS API-->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gridjs/5.0.2/theme/mermaid.min.css" integrity="sha512-QT3siPsD/eTF0b7f9Vq2eHf456XGoqXaiwmqpuIoYwRKnLgpnyntOlebCf/6WtXoXRZV7LupbEdvbgV2Lh0zmA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-
+<link rel="stylesheet" href="{% static 'assets/vendor/grid/mermaid.min.css' %}"  />
 {% endblock extra_css %}
 
 
@@ -16,43 +13,42 @@
 
 {% block content %}
 <main id="main" class="main">
-    <div class="pagetitle">
-        <h1>Students</h1>
-        <nav>
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#!">Home</a></li>
-            <li class="breadcrumb-item active">Students</li>
-          </ol>
-          
-        </nav>
-        
-      </div><!-- End Page Title -->
+    
       <section class="section dashboard">
-        <div class="col-12">
-            <div class="card-body w-100 p-0 ">
-                <div class="row  justify-content-center mb-5">
-                    <div class="col-12">
-                        <div id="wrapper" class="w-100 "></div>
-                    </div>
-                </div>
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <div class="pagetitle">
+                <h1>Students</h1>
+                <nav>
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'instructor-dasboard-url' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Students</li>
+                  </ol>
+                  
+                </nav>
+                
+              </div><!-- End Page Title -->
             </div>
+            <div class="col-12">
+              <div class="card-body w-100 p-0 ">
+                  <div class="row  justify-content-center mb-5">
+                      <div class="col-12">
+                          <div id="wrapper" class="w-100 "></div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          </div>
         </div>
+        
       </section>
 </main>
 {% endblock %}
 
 {% block extra_js %}
 
-
-
-
-
-
-
-
-<!-- Table JS API-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gridjs/5.0.2/gridjs.umd.js" integrity="sha512-Tv3f/y9wnNx+aH5FkA/kqiHSTIz6F8VZA/thVKMzzrCHzzpsBhxmXcHdrgzDkGv9AV4yKh7F6m8PJV/wUjRkyQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<!-- Event Details Table Script -->
+<script src="{% static 'assets/vendor/grid/gridjs.umd.js' %}" ></script>
 
 <script>
     var students_data = [];

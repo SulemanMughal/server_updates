@@ -48,6 +48,9 @@ urlpatterns = [
     # ? Admin Virutal Networks Details
     path("admin/virtaul-networks/<int:vn_id>/detail", views.AdminVirtualNetworkDetails, name="admin-machine-detail-url"),
 
+    # ? Admin Students List
+    path("admin/students/", views.AdminStudentList, name="admin-student-list-url"),
+
 
     # ==========================================================
     # ? Instructor Dashbaord

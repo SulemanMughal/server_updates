@@ -20,6 +20,11 @@ from .decorators import (
     teacher_required,
     admin_required
 )
+
+# import user
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
 # Create your views here.
 
 
@@ -317,6 +322,18 @@ def AdminVirtualNetworkDetails(request, vn_id):
         return redirect(reverse("student-dasboard-url"))
     context = {
         "virtual_network" : virtual_network
+    }
+    return render(request, template_name, context)
+
+
+# TODO : Admin Student List
+@login_required
+@admin_required
+def AdminStudentList(request):
+    template_name = 'master_app/admin/student_list.html'
+    all_students = User.objects.filter(is_student = True)
+    context = {
+        "all_students" : all_students
     }
     return render(request, template_name, context)
 
