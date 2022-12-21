@@ -77,13 +77,18 @@
                   <i class="bi bi-circle"></i><span>All Courses</span>
                 </a>
               </li>
+              <li>
+                <a href="{% url 'admin-virtual-network-url' %}">
+                  <i class="bi bi-circle"></i><span>All Virtual Networks</span>
+                </a>
+              </li>
               
               
             </ul>
         </li><!-- End Courses Management Nav -->
 
         
-        <li class="nav-item">
+        <li class="nav-item d-none">
           <a class="nav-link collapsed" data-bs-target="#student-nav" data-bs-toggle="collapse" href="#">
             <i class="fa-solid fa-graduation-cap me-2"></i><span>Student Management</span><i class="bi bi-chevron-down ms-auto"></i>
           </a>
@@ -106,7 +111,7 @@
           </ul>
         </li><!-- End Components Nav -->
       
-        <li class="nav-item">
+        <li class="nav-item d-none">
           <a class="nav-link collapsed" data-bs-target="#networks-nav" data-bs-toggle="collapse" href="#">
             <i class="fas fa-server me-2"></i><span>Virtual Networks</span><i class="bi bi-chevron-down ms-auto"></i>
           </a>

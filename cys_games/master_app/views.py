@@ -246,6 +246,7 @@ def AdminCourseDetails(request, course_id):
 def AdminCourseApproval(request, vn_id):
     updated_obj = VirtualNetwork.objects.get(id=vn_id)
     if request.method == "POST":
+        # print(request.POST)
         form = CourseApprovalForm(
             request.POST, request.FILES, instance=updated_obj)
         if form.is_valid():
@@ -255,6 +256,8 @@ def AdminCourseApproval(request, vn_id):
             # updated_obj.save()
             messages.success(request, "Request has been approved.")
             return redirect(reverse("admin-courses-details-url", args=[updated_obj.course.id]))
+        else:
+            print(form.errors)
     else:
         form = CourseApprovalForm()
     messages.success(request, "Request can't be proceed at this time.")

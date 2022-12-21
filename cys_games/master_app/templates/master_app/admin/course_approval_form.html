@@ -7,7 +7,7 @@
 
  
  <div class="modal fade" id="virutal_network_modal" tabindex="-1">
-     <div class="modal-dialog modal-dialog-scrollable modal-lg">
+     <div class="modal-dialog modal-dialog-scrollable ">
        <div class="modal-content">
          <div class="modal-header">
            <h5 class="modal-title">Course Approval</h5>
@@ -33,7 +33,7 @@
 
 
   <!-- Topology Image -->
-  <div class="input-group mb-3 ">
+  <div class="input-group mb-3 d-none">
     <input type="file" accept="image/*" class="form-control dropzone" id="id_topology_image" name="topology_image">
     <label class="input-group-text" for="id_topology_image">Topology Image</label>
     
@@ -41,7 +41,7 @@
 
 
   <!-- SSh File -->
-  <div class="input-group mb-3">
+  <div class="input-group mb-3 d-none">
     <input type="file"  class="form-control" id="id_ssh_file" name="ssh_file">
     <label class="input-group-text" for="inputGroupFile02">Connection File</label>
   </div>
@@ -59,9 +59,10 @@
  
                              
  <input type="hidden" name="next" value="{{ request.path }}">
-                             <div class="d-grid gap-2 mt-3">
-                                 <button type="submit" class="btn btn-primary"  tabindex="4">Approve</button>
-                             </div>
+ <div class="text-end">
+  <button type="button" class="btn btn-danger "  data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-chevron-left me-2"></i> Cancel</button>
+<button type="submit" class="btn btn-primary "  >Create <i class="fa-solid fa-chevron-right ms-2"></i></button>
+</div>
 
                         </form>
          </div>
