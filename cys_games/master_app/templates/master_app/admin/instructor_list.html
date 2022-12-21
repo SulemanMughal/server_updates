@@ -1,0 +1,80 @@
+{%  extends 'base.html' %}
+{% load static %}
+{% block title %} Instructors {% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'assets/vendor/grid/mermaid.min.css' %}"  />
+{% endblock %}
+{% block content %}
+<main id="main" class="main">
+    <section class="section dashboard">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                  <div class="pagetitle">
+                    <h1>Instructors</h1>
+                    <nav>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'admin-dasboard-url' %}">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Instructors</li>
+                        </ol>
+                    </nav>
+                  </div>
+                </div>
+                <div class="col-12">
+                    <div class="card-body w-100 p-0 ">
+                        <div class="row  justify-content-center mb-5">
+                            <div class="col-12">
+                                <div id="wrapper" class="w-100 "></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </div>
+        </div>
+    </section>
+</main>
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'assets/vendor/grid/gridjs.umd.js' %}" ></script>
+<script>
+    var teaher_data = [];
+</script>
+{% for teacher in all_teachers %}
+    
+        <script>
+            teaher_data.push(
+                [
+                    "{{ teacher.email }}"   
+                ]
+            )
+        </script>
+    
+{% endfor %}
+<script type="text/javascript">
+    $(function(){
+        new gridjs.Grid({
+  columns: [ "Teacher Email" ],
+  data: 
+    teaher_data,
+  style: { 
+    table: { 
+      'white-space': 'nowrap'
+    }
+  },
+  fixedHeader: true,
+  sort: false,
+  resizable: false,
+  pagination: {
+    enabled: false,
+  },
+  search: {
+    enabled: false
+  },
+  className: {
+    table: 'shadow-lg'
+  }
+}).render(document.getElementById("wrapper"));
+    
+    })
+</script>
+{% endblock %}

@@ -10,6 +10,43 @@
             </a>
         </li><!-- End Dashboard Nav -->
 
+        
+        <li class="nav-item">
+          <a class="nav-link collapsed" data-bs-target="#student-nav" data-bs-toggle="collapse" href="#">
+            <i class="fa-solid fa-user me-2"></i><span>User Management</span><i class="bi bi-chevron-down ms-auto"></i>
+          </a>
+          <ul id="student-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <li>
+              <a href="{% url 'admin-instructor-new-url' %}">
+                <i class="bi bi-circle"></i><span>Create New Instrutor</span>
+              </a>
+            </li>
+            <li>
+              <a href="#!">
+                <i class="bi bi-circle"></i><span>Create New Student</span>
+              </a>
+            </li>
+            
+            <li>
+              <a href="{% url 'admin-instructors-list-url' %}">
+                <i class="bi bi-circle"></i><span>All Instructor</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="{% url 'admin-student-list-url' %}">
+                <i class="bi bi-circle"></i><span>All Students</span>
+              </a>
+            </li>
+
+            
+            
+            
+          </ul>
+        </li><!-- End Components Nav -->
+
+
+
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
               <i class="bi bi-menu-button-wide"></i><span>Course Management</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -43,7 +80,7 @@
               
               
             </ul>
-          </li><!-- End Courses Management Nav -->
+        </li><!-- End Courses Management Nav -->
 
         
         <li class="nav-item">

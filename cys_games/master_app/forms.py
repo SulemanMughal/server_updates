@@ -4,6 +4,8 @@ from django.contrib.auth import get_user_model
 User  = get_user_model()
 
 from .models import Course, AssignedStudents, VirtualNetwork, CourseChallenge
+from django.contrib.auth import (
+    authenticate, get_user_model, password_validation,)
 
 
 # ? User Login Form
@@ -66,3 +68,38 @@ class CourseChallengeForm(forms.ModelForm):
     class Meta:
         model = CourseChallenge
         fields = "__all__"
+
+
+
+
+class registerForm(forms.ModelForm):
+    # username = forms.CharField(label='Username', widget = forms.TextInput())
+    password = forms.CharField(label='Password', widget=forms.PasswordInput(
+    ), strip=False, help_text=password_validation.password_validators_help_text_html(),)
+    password2 = forms.CharField(label='Repeat Password', widget=forms.PasswordInput(
+    ), strip=False, help_text="Both Passwords should be same.",)
+
+    class Meta:
+        model = User
+        fields = [
+            "email",
+            "username",
+        ]
+
+    def clean_password2(self):
+        cd = self.cleaned_data
+        if self.cleaned_data.get('password') != cd['password2']:
+            raise forms.ValidationError("Passwords don't match.")
+        return cd['password2']
+
+
+    def _post_clean(self):
+        super()._post_clean()
+        # Validate the password after self.instance is updated with form data
+        # by super().
+        password = self.cleaned_data.get('password2')
+        if password:
+            try:
+                password_validation.validate_password(password, self.instance)
+            except forms.ValidationError as error:
+                self.add_error('password2', error)

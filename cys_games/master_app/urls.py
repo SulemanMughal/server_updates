@@ -51,6 +51,12 @@ urlpatterns = [
     # ? Admin Students List
     path("admin/students/", views.AdminStudentList, name="admin-student-list-url"),
 
+    # ? Admin Create New Instructor
+    path("admin/instructor/create", views.AdminInstructorCreate, name="admin-instructor-new-url"),
+
+    # ? Admin Instructor List
+    path("admin/instructors/", views.AdminInstructorsList, name="admin-instructors-list-url"),
+
 
     # ==========================================================
     # ? Instructor Dashbaord
