@@ -48,7 +48,6 @@ urlpatterns = [
     # ? Admin Virutal Networks Details
     path("admin/virtaul-networks/<int:vn_id>/detail", views.AdminVirtualNetworkDetails, name="admin-machine-detail-url"),
 
-    
     # ? Admin Create New Student
     path("admin/students/create", views.AdminStudentCreate, name="admin-student-new-url"),
 
@@ -63,6 +62,10 @@ urlpatterns = [
 
     # ? Admin Add a new challenge to an existing course
     path("admin/course/challenge/new", views.AdminChallengeCreate, name="admin-challenge-new-url"),
+
+    # ? Admin : Add a new student to an existing course
+    path("admin/course/student/new", views.AdminCourseStudentCreate, name="admin-course-student-add-url"),
+    
     
 
 

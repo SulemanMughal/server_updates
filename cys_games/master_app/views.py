@@ -444,6 +444,32 @@ def AdminChallengeCreate(request):
     return render(request, template_name, context)
 
 
+# TODO  :   Admin   -   Add a new student to an existing course
+@login_required
+@admin_required
+def AdminCourseStudentCreate(request):
+    template_name = 'master_app/admin/add_new_student.html'
+    if request.method == "POST":
+        form = AddNewStudent(request.POST)
+        # print(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "New Student has been added")
+            if request.POST.get("next", None):
+                return redirect(request.POST.get("next", None))
+            return redirect(reverse("students-all-url"))
+        # else:
+        #     print(form.errors)
+        #     messages.error(request, str())
+
+    else:
+        form = AddNewStudent()
+    context = {
+        "form": form
+    }
+    return render(request, template_name, context)
+
+
 # TODO  :   Admin Instructors List
 @login_required
 @admin_required
