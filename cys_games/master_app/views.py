@@ -8,6 +8,10 @@ from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 
+
+# requests module
+import requests
+
 # ? forms
 from .forms import (
     loginForm,
@@ -357,7 +361,7 @@ def AdminStudentCreate(request):
         form = registerForm(request.POST)
         if form.is_valid() :
             user = form.save(commit=False)
-            user.active = True
+            user.is_active = True
             user.is_student = True
             user.set_password(form.cleaned_data['password2'])
             user.email = form.cleaned_data['email']
@@ -393,7 +397,7 @@ def AdminInstructorCreate(request):
         form = registerForm(request.POST)
         if form.is_valid() :
             user = form.save(commit=False)
-            user.active = True
+            user.is_active = True
             user.is_instructor = True
             user.set_password(form.cleaned_data['password2'])
             user.email = form.cleaned_data['email']
@@ -467,6 +471,8 @@ def CoursesList(request):
     return render(request, template_name, context)
 
 
+
+# TODO  :   Instructor Students Lists
 @login_required
 @teacher_required
 def StudentList(request):
@@ -480,6 +486,43 @@ def StudentList(request):
         all_students.append(i.assignedstudents_set.all())
     context = {
         "all_students": all_students
+    }
+    return render(request, template_name, context)
+
+
+# TODO  :   Instructor Create Student
+@login_required
+@teacher_required
+def InstructorCreateStudent(request):
+    template_name="master_app/instructor/student_create.html"
+    if request.method!='POST':
+            form = registerForm()
+    else:
+        form = registerForm(request.POST)
+        if form.is_valid() :
+            user = form.save(commit=False)
+            user.is_active = True
+            user.is_student = True
+            user.set_password(form.cleaned_data['password2'])
+            user.email = form.cleaned_data['email']
+            user.username = form.cleaned_data['username']
+            user.save()
+            messages.success(request, "New Student has been created")
+            return redirect(reverse("students-all-url"))
+            # current_site = get_current_site(request)
+            # message = render_to_string('user_management/acc_active_email.html', {
+            #     'user':user, 
+            #     'domain':current_site.domain,
+            #     'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+            #     'token': account_activation_token.make_token(user),
+            # })
+            # mail_subject = 'Activate your account.'
+            # to_email = form.cleaned_data.get('email')
+            # email = EmailMessage(mail_subject, message, to=[to_email])
+            # email.send()
+            # return render(request, 'user_management/acc_active_email_confirm.html')
+    context={
+        'form' : form
     }
     return render(request, template_name, context)
 

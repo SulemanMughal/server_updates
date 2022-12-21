@@ -31,7 +31,12 @@
               </li>
               <li>
                 <a href="{% url 'instructor-create-new-challenge-url' %}">
-                  <i class="bi bi-circle"></i><span>Create New Challenge</span>
+                  <i class="bi bi-circle"></i><span>Add Challenge</span>
+                </a>
+              </li>
+              <li>
+                <a href="{% url 'course-students-new-url' %}">
+                  <i class="bi bi-circle"></i><span>Add Student</span>
                 </a>
               </li>
               <li>
@@ -50,8 +55,8 @@
           </a>
           <ul id="student-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
             <li>
-              <a href="{% url 'course-students-new-url' %}">
-                <i class="bi bi-circle"></i><span>Add New Student</span>
+              <a href="{% url 'instructor-student-create-url' %}">
+                <i class="bi bi-circle"></i><span>Create New Student</span>
               </a>
             </li>
             
