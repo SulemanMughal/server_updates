@@ -54,11 +54,11 @@
             <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
               <li>
                 <a href="{% url 'admin-course-new-url' %}">
-                  <i class="bi bi-circle"></i><span>Create New Course</span>
+                  <i class="bi bi-circle"></i><span>Create Course</span>
                 </a>
               </li>
               <li>
-                <a href="#!">
+                <a href="{% url 'admin-challenge-new-url' %}">
                   <i class="bi bi-circle"></i><span>Add Challenge</span>
                 </a>
               </li>
@@ -68,7 +68,7 @@
                 </a>
               </li>
               <li>
-                <a href="#!">
+                <a href="{% url 'admin-virtual-network-create-url' %}">
                   <i class="bi bi-circle"></i><span>Add Network</span>
                 </a>
               </li>

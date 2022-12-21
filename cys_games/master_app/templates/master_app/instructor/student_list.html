@@ -55,24 +55,22 @@
 </script>
 
 
-{% for student in all_students %}
-    {% for j in student %}
+
+    {% for j in all_students %}
         <script>
             students_data.push(
                 [
-                    "{{ j.course.name }}",
-                    "{{ j.student.email }}",
-                    "{{ j.created_timestamp }}",
+                    "{{ j.email }}",
                 ]
             )
         </script>
     {% endfor %}
-{% endfor %}
+
 
 <script type="text/javascript">
     $(function(){
         new gridjs.Grid({
-  columns: ["Course Name" ,  "Student Email" , "Student Registered Timestamp"],
+  columns: [ "Student Email" ],
   data: 
     students_data,
   style: { 

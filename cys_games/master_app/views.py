@@ -422,7 +422,27 @@ def AdminInstructorCreate(request):
     }
     return render(request, template_name, context)
     # return redirect(reverse("admin-dasboard-url"))
-        
+
+
+# TODO  :   Admin - Add a new challenge to an existing course
+@login_required  
+@admin_required
+def AdminChallengeCreate(request):
+    template_name = 'master_app/admin/create_new_challenge.html'
+    if request.method == "POST":
+        form = CourseChallengeForm(request.POST)
+        form.save()
+        messages.success(request, "New Challenge has been added.")
+        if request.POST.get("next", None):
+            return redirect(request.POST.get("next", None))
+        return redirect("admin-course-list-url")
+
+    form = CourseChallengeForm()
+    context = {
+        "form": form
+    }
+    return render(request, template_name, context)
+
 
 # TODO  :   Admin Instructors List
 @login_required
@@ -478,12 +498,13 @@ def CoursesList(request):
 def StudentList(request):
     template_name = 'master_app/instructor/student_list.html'
     # TODO  :   Retrieve All Instructor Courses
-    all_courses = Course.objects.filter(instructor=request.user)
+    all_students = User.objects.filter(is_student = True)
+    # all_courses = Course.objects.filter(instructor=request.user)
 
     # TODO  :   Retrieve All Students
-    all_students = []
-    for i in all_courses:
-        all_students.append(i.assignedstudents_set.all())
+    # all_students = []
+    # for i in all_courses:
+    #     all_students.append(i.assignedstudents_set.all())
     context = {
         "all_students": all_students
     }
@@ -571,8 +592,6 @@ def InstructorCreateNewChallenge(request):
     return render(request, template_name, context)
 
 # TODO  :   Instructor Course Details
-
-
 @login_required
 @teacher_required
 def InstructorCourseDetails(request, course_id):

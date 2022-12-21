@@ -61,6 +61,10 @@ urlpatterns = [
     # ? Admin Create New Instructor
     path("admin/instructor/create", views.AdminInstructorCreate, name="admin-instructor-new-url"),
 
+    # ? Admin Add a new challenge to an existing course
+    path("admin/course/challenge/new", views.AdminChallengeCreate, name="admin-challenge-new-url"),
+    
+
 
     # ==========================================================
     # ? Instructor Dashbaord
