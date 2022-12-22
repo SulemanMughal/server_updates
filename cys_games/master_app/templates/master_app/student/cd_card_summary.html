@@ -1,0 +1,47 @@
+{% load static %}
+<div class="card mb-3">
+    <div class="row g-0">
+      <div class="col-md-5">
+        <img src="{% static 'assets/img/Ad.webp' %}" class="img-fluid rounded-start h-100" alt="...">
+      </div>
+      <div class="col-md-7">
+        <div class="card-body">
+          <h5 class="card-title  mb-0">{{ course.name }}</h5>
+          <ul class="list-group  list-group-flush px-0 mx-0 ">
+            <li class="list-group-item d-flex justify-content-between align-items-start px-0 border-0">
+              <div >
+                <div ><i class="bi bi-alarm me-1"></i> Start Date & Time</div>
+              </div>
+              {{ course.start_time }}
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start px-0 border-0">
+              <div >
+                <div ><i class="bi bi-alarm me-1"></i> End Date & Time</div>
+              </div>
+              {{ course.end_time }}
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start px-0 border-0">
+              <div >
+                <div ><i class="bi bi-alarm me-1"></i> Duration</div>
+              </div>
+              {{ course.total_duration }}
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start px-0 border-0" >
+              <div >
+                <div ><i class="bi bi-list-check me-1"></i> Flags</div>
+              </div>
+              2
+            </li>
+          </ul>
+          <p class="my-2">Created By <strong class="text-primary fw-bolder">{{ course.instructor.username }}</strong></p>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body p-3">
+      <h3>Summary</h3>
+      {{ course.description|safe }}
+    </div>
+  </div>

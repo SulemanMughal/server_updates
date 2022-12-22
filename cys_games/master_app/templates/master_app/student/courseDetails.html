@@ -3,13 +3,8 @@
 {% block title %} {{ course.name }} {% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'assets/vendor/flickity/flickity.min.css' %}">
-<script src="{% static 'assets/vendor/flickity/flickity.pkgd.min.js' %}"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/css-loader/3.3.3/loader-double.css"  />
-<link
-      rel="stylesheet"
-      href="{% static 'assets/vendor/fancybox/fancybox.css' %}"
-    />
+
+
 <style>
   .dashboard .activity .activity-item .activite-label{
     min-width: 0px;
@@ -26,9 +21,6 @@
   transition: box-shadow .25s ease,transform .25s ease,-webkit-transform .25s ease;
 }
 </style>
-
-
-
 <style>
   .carousel-cell .card {
 
@@ -74,6 +66,7 @@ color: #47b2e4;
 
 </style>
 
+<link rel="stylesheet" href="{% static 'assets/vendor/flickity/flickity.min.css' %}" />
 
 {% endblock %}
 
@@ -81,7 +74,6 @@ color: #47b2e4;
 {% block content %}
 
 
-<div class="loader loader-double "></div>
 <main id="main" class="main">
     <section class="section dashboard">
         <div class="container">
@@ -98,175 +90,33 @@ color: #47b2e4;
         
             <div class="row">
                 <div class="col-12 col-md-8">
-                    <!-- Card with an image on left -->
-              <div class="card mb-3">
-                <div class="row g-0">
-                  <div class="col-md-5">
-                    <img src="{% static 'assets/img/Ad.webp' %}" class="img-fluid rounded-start h-100" alt="...">
-                  </div>
-                  <div class="col-md-7">
-                    <div class="card-body">
-                      <h5 class="card-title  mb-0">{{ course.name }}</h5>
-                      <ul class="list-group  list-group-flush px-0 mx-0 ">
-                        <li class="list-group-item d-flex justify-content-between align-items-start px-0 border-0">
-                          <div >
-                            <div ><i class="bi bi-alarm me-1"></i> Start Date & Time</div>
-                          </div>
-                          {{ course.start_time }}
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-start px-0 border-0">
-                          <div >
-                            <div ><i class="bi bi-alarm me-1"></i> End Date & Time</div>
-                          </div>
-                          {{ course.end_time }}
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-start px-0 border-0">
-                          <div >
-                            <div ><i class="bi bi-alarm me-1"></i> Duration</div>
-                          </div>
-                          {{ course.total_duration }}
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-start px-0 border-0" >
-                          <div >
-                            <div ><i class="bi bi-list-check me-1"></i> Flags</div>
-                          </div>
-                          2
-                        </li>
-                      </ul>
-                      <p class="my-2">Created By <strong class="text-primary fw-bolder">{{ course.instructor.username }}</strong></p>
-                      
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="card">
-                <div class="card-body p-3">
-                  <h3>Summary</h3>
-                  {{ course.description|safe }}
-                </div>
-              </div>
-              {% include 'master_app/student/flag_submission.html' %}
+                  
+                  
+                  <!-- card header summary -->
+                    {% include 'master_app/student/cd_card_summary.html' %}
+                  <!-- end : card header summary -->
+                  
+                  <!-- Flag Submission -->
+                  {% include 'master_app/student/flag_submission.html' %}
+                  <!-- End : Flag Submission -->
+
+
                 </div>
                 <div class="col-12 col-md-4">
-                  <div class="card  p-0 ">
-                    
-                    <div class="card-body  px-0">
-                      <h3 class="p-3">Virtual Network</h3>
-                      <ul class="list-group list-group-flush">
-                        
-                        <li class="list-group-item d-flex justify-content-between align-items-start">
-                          <div class="ms-2 me-auto">
-                            <div class="fw-bold">Name</div>
-                          </div>
-                          <p class="w-50 text-end">{{ course.get_virtual_network.name }}</p>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-start">
-                          <div class="ms-2 me-auto">
-                            <div class="fw-bold">OS</div>
-                          </div><p  class="w-50 text-end">{{ course.get_virtual_network.get_operating_system }}</p></li>
-                        <li class="list-group-item d-flex justify-content-between align-items-start">
-                          <div class="ms-2 me-auto">
-                            <div class="fw-bold">Scenario</div>
-                          </div> <p class="w-50 text-end">{{ course.get_virtual_network.get_scenarios }}</p></li>
-                          
-                          {% if course.get_virtual_network.is_instance_created %}
-                          <li class="list-group-item d-flex justify-content-between align-items-start">
-                            <div class="ms-2 me-auto">
-                              <div class="fw-bold">IP Address</div>
-                            </div>
-                            <p class="w-50 text-end">{{ course.get_virtual_network.ip_address }}</p></li>
-                          {% endif %}
-                        <li class="list-group-item text-center" aria-disabled="true"><a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">See Details<i class="fas fa-chevron-right fs-5 ms-3 pt-2"></i></a></li>
-                      </ul><!-- End Clean list group -->
-                    </div>
-                  </div>
-                  <div class="card d-none">
-                    <div class="card-body py-3 px-3">
-                      <h3 class="">Challenges</h3>
-                      
-                      <div class="activity">
-                        {% if easy_challenges %}
-                        {% for ch in easy_challenges %}
-                        <div class="activity-item d-flex">
-                          <div class="activite-label"></div>
-                          <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
-                          <div class="activity-content">
-                            <a href="{% url 'student-challenge-details-url' course.id ch.id  %}" class="fw-bold "  >{{ ch.title }}</a>
-                            
-                          </div>
-                        </div><!-- End activity item-->
-                        {% endfor %}
-                        {% endif %}
-                        {% if medium_challenges %}
-                        {% for ch in medium_challenges %}
-                            
-                            <div class="activity-item d-flex">
-                              <div class="activite-label"></div>
-                              <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
-                              <div class="activity-content">
-                                <a href="{% url 'student-challenge-details-url' course.id ch.id  %}" class="fw-bold " >{{ ch.title }}</a>
-                              </div>
-                            </div><!-- End activity item-->
-                            {% endfor %}
-                        {% endif %}
-                        {% if hard_challenges %}
-                        
-                            {% for ch in hard_challenges %}
-                            
-                            <div class="activity-item d-flex">
-                              <div class="activite-label"></div>
-                              <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
-                              <div class="activity-content">
-                                <a href="{% url 'student-challenge-details-url' course.id ch.id  %}" class="fw-bold " >{{ ch.title }}</a>
-                              </div>
-                            </div><!-- End activity item-->
-                            {% endfor %}
-                        
-                      {% endif %}
-                      </div>
-                    </div>
-                  </div>
 
+                  <!-- Virtual Network Details -->
+                  {% include 'master_app/student/cd_network.html' %}
+                  <!-- End : Virtual Network Details -->
+
+
+                  <!-- Challenges Details -->
+                  <!-- End : Challenges Details -->
+
+                  <!-- Results -->
+                  {% include 'master_app/student/cd_results.html' %}
+                  <!-- End : Results -->
                   
                   
-                  <div class="card">
-                    <div class="card-body">
-                      <h5 class="card-title">Results</h5>
-        
-                      <!-- Bar Chart -->
-                      <div id="barChart"></div>
-        
-                      <script>
-                        document.addEventListener("DOMContentLoaded", () => {
-                          new ApexCharts(document.querySelector("#barChart"), {
-                            series: [{
-                              data: [400, 430, 448, 470, 540]
-                            }],
-                            chart: {
-                              type: 'bar',
-                              height: 200
-                            },
-                            plotOptions: {
-                              bar: {
-                                borderRadius: 2,
-                                horizontal: true,
-                                width : 2
-                              }
-                            },
-                            dataLabels: {
-                              enabled: false
-                            },
-                            xaxis: {
-                              categories: ['A', 'B', 'C', 'D', 'E'
-                              ],
-                            }
-                          }).render();
-                        });
-                      </script>
-                      <!-- End Bar Chart -->
-        
-                    </div>
-                  </div>
                   
                   
                 </div>
@@ -306,6 +156,9 @@ color: #47b2e4;
   </div>
 </div>
 
+
+
+{% comment %}
 <!-- offcanvas: instructions -->
 <div class="offcanvas offcanvas-end " tabindex="-1" id="offcanvasExample2" aria-labelledby="offcanvasExampleLabel">
   <div class="offcanvas-header " style="background-color: #012970;">
@@ -335,45 +188,18 @@ color: #47b2e4;
     
   </div>
 </div>
+{% endcomment %}
 
 
 {% endblock %}
 
 
 {% block extra_js %}
-<script src="{% static 'assets/vendor/fancybox/fancybox.umd.js' %}"></script>
-<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
-
+<script src="{% static 'assets/vendor/flickity/flickity.pkgd.min.js' %}"></script>
 <script>
   $(".ql-editor").attr('contenteditable', false);
   $(".ql-clipboard, .ql-tooltip").hide();
 
-
-//create an instance
-$("button#create-instance").on("click", function(event){
-    event.preventDefault();
-    event.stopPropagation();
-    var request_url = $("button#create-instance").attr("data-href");
-    $.ajaxSetup({
-                beforeSend: function(xhr, settings){
-                  xhr.setRequestHeader(
-                    'X-CSRFToken', '{{ csrf_token }}'
-                  )
-                }
-              });
-              $.ajax({
-                url : request_url,
-                type  : "POST",
-                processData: false,
-                contentType: false,
-                success : function(response){
-                  console.debug(response["message"]);
-                },
-                error : function(response){
-                  console.debug(response["responseJSON"]["error"]);
-                }
-              });
-});
 
 
   </script>

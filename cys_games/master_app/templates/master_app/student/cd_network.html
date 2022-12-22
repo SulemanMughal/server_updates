@@ -1,0 +1,31 @@
+<div class="card  p-0 ">
+<div class="card-body  px-0">
+    <h3 class="p-3">Virtual Network</h3>
+    <ul class="list-group list-group-flush">
+      
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+          <div class="fw-bold">Name</div>
+        </div>
+        <p class="w-50 text-end">{{ course.get_virtual_network.name }}</p>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+          <div class="fw-bold">OS</div>
+        </div><p  class="w-50 text-end">{{ course.get_virtual_network.get_operating_system }}</p></li>
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+          <div class="fw-bold">Scenario</div>
+        </div> <p class="w-50 text-end">{{ course.get_virtual_network.get_scenarios }}</p></li>
+        
+        {% if course.get_virtual_network.is_instance_created %}
+        <li class="list-group-item d-flex justify-content-between align-items-start">
+          <div class="ms-2 me-auto">
+            <div class="fw-bold">IP Address</div>
+          </div>
+          <p class="w-50 text-end">{{ course.get_virtual_network.ip_address }}</p></li>
+        {% endif %}
+      <li class="list-group-item text-center" aria-disabled="true"><a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">See Details<i class="fas fa-chevron-right fs-5 ms-3 pt-2"></i></a></li>
+    </ul><!-- End Clean list group -->
+</div>
+</div>

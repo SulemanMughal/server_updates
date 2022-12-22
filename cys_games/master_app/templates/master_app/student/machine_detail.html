@@ -31,3 +31,10 @@
 </main>
 
 {% endblock %}
+
+{% block extra_js %}
+<script>
+  $(".ql-editor").attr('contenteditable', false);
+  $(".ql-clipboard, .ql-tooltip").hide();
+</script>
+{% endblock %}
