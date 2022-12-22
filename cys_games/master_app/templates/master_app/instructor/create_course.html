@@ -52,7 +52,7 @@
                     <!-- Course Name -->
                     <div class="col-md-12 mb-3">
                       <div class="form-floating">
-                        <input type="text" name="name" class="form-control" id="id_name" placeholder="Course Name" autofocus autocapitalize="none" autocomplete="off" maxlength="255" required autofocus="on" tabindex="1">
+                        <input type="text" name="name" class="form-control" id="id_name" placeholder="Course Name" autofocus autocapitalize="none" autocomplete="off" maxlength="255" required autofocus="on" tabindex="1" {% if form.name.value %} value="{{ form.name.value }}" {% endif %}>
                         <label for="id_name">Course Name</label>
                         <div class="invalid-feedback">
                           Please choose a valid course name.
@@ -64,7 +64,7 @@
                     <!-- Course Starting Date -->
                     <div class="col-md-12 mb-3">
                       <div class="form-floating">
-                        <input type="text" name="start_time" class="form-control datepicker" id="id_start_time" placeholder="Course Start Date" data-provide="datepicker" autofocus autocapitalize="none" autocomplete="off" maxlength="255" required autofocus="on" tabindex="2">
+                        <input type="text" name="start_time" class="form-control datepicker" id="id_start_time" placeholder="Course Start Date" data-provide="datepicker" autofocus autocapitalize="none" autocomplete="off" maxlength="255" required autofocus="on" tabindex="2"  {% if form.start_time.value %} value="{{ form.start_time.value }}" {% endif %}>
                         <label for="id_start_time">Course Start Date</label>
                         <div class="invalid-feedback">
                           Please choose a valid start date.
@@ -76,7 +76,7 @@
                     <!-- Course Ending Date -->
                     <div class="col-md-12 mb-3">
                       <div class="form-floating">
-                        <input type="text" name="end_time" class="form-control datepicker" id="id_end_time" placeholder="Course End Date" data-provide="datepicker" autofocus autocapitalize="none" autocomplete="off" maxlength="255" required autofocus="on" tabindex="3">
+                        <input type="text" name="end_time" class="form-control datepicker" id="id_end_time" placeholder="Course End Date" data-provide="datepicker" autofocus autocapitalize="none" autocomplete="off" maxlength="255" required autofocus="on" tabindex="3" {% if form.end_time.value %} value="{{ form.end_time.value }}" {% endif %}>
                         <label for="id_end_time">Course End Date</label>
                         <div class="invalid-feedback">
                           Please choose a valid end date.
@@ -84,8 +84,8 @@
                       </div>
                     </div>
 
-                    <div class="quill-editor-full mb-3">
-                      
+                    <div class="quill-editor-full mb-3" >
+                      {% if form.description.value %} {{ form.description.value|safe }} {% endif %}
                     </div>
 
                     <textarea  style="display:none" id="id_description" name="description"></textarea>

@@ -3,19 +3,13 @@
 {% block title %} {{ course.name }} {% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'assets/vendor/flatpickr/flatpickr.min.css' %}">
 <link href="{% static 'assets/vendor/quill/quill.snow.css' %}" rel="stylesheet">
 <link href="{% static 'assets/vendor/quill/quill.bubble.css' %}" rel="stylesheet">
 <script src="{% static 'assets/vendor/quill/quill.min.js' %}"></script>
-<link rel="stylesheet" href="{% static 'assets/vendor/flickity/flickity.min.css' %}">
-<script src="{% static 'assets/vendor/flickity/flickity.pkgd.min.js' %}"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/css-loader/3.3.3/loader-double.css"  />
-<link
-      rel="stylesheet"
-      href="{% static 'assets/vendor/fancybox/fancybox.css' %}"
-    />
+<link rel="stylesheet" href="{% static 'assets/vendor/loader/loader-double.css' %}"  />
+<script src="{% static 'assets/vendor/filesize/filesize.min.js' %}"></script>
 
-  <script src="{% static 'assets/vendor/filesize/filesize.min.js' %}"></script>
+
 
 <style>
   .dashboard .activity .activity-item .activite-label{
@@ -27,21 +21,26 @@
 
 {% block content %}
 
+
+<!-- Request Virtual Network Modal -->
 {% if not course.get_virtual_network %}
-{% include 'master_app/instructor/vn_modal.html' %}
+  {% include 'master_app/instructor/vn_modal.html' %}
 {%  endif %}
-{% if course.is_approved == "1" %}
-  {% include 'master_app/instructor/create_challenge_modal.html' %}
-  {% include 'master_app/instructor/create_student_modal.html' %}
-  {% include 'master_app/instructor/course_approve_details.html' %}
-{% endif %}
+<!-- End : Request Virtual Network Modal -->
+
+
+<!-- Student Modal -->
+{% include 'master_app/instructor/create_student_modal.html' %}
+<!-- End : Student Modal -->
+
 
 <div class="loader loader-double "></div>
 
 <main id="main" class="main">
     <section class="section dashboard">
         <div class="container">
-            <div class="pagetitle">
+            
+          <div class="pagetitle">
                 <h1>Course Details</h1>
                 <nav>
                   <ol class="breadcrumb">
@@ -54,153 +53,33 @@
         
             <div class="row">
                 <div class="col-12 col-md-8">
-                    
+
+                  <!-- Course Details  -->
                   {% include 'master_app/course_card_header.html' %}
+                  <!-- End : Course Details  -->
 
-
-              
                 </div>
                 <div class="col-12 col-md-4 mb-5">
-                  <div class="card {% if not course.get_virtual_network %} bg-transparent shadow-none {% endif %} p-0 ">
-                    
-                    <div class="card-body  px-0">
-                      {% if course.get_virtual_network %}
-                      {% if course.is_approved == "1" %}
-                      <a class="btn btn-warning py-3 shadow-lg w-100 "    href="{% url 'instructor-approve-course-url' course.id   %}" >Send Request for Approval</a>
-                  {% elif course.is_approved == "2" %}
-                    <button class="btn btn-primary py-3 shadow-lg w-100 "    >Sent Admin for Approval</button>
-                  {% else %}
-                  <h3 class="p-3">Virtual Network</h3>
-                    
-                  {% endif %}
-                  
-                        
-                        <ul class="list-group list-group-flush">
-                          <li class="list-group-item d-flex justify-content-between align-items-start">
-                            <div class="ms-2 me-auto">
-                              <div class="fw-bold">Status</div>
-                            </div>
-                            {% if course.get_virtual_network %}
-                      {% if course.is_approved == "1" %}
-                            <span class="badge bg-warning">Pending</span>
-                  {% elif course.is_approved == "2" %}
-                    
-                    <span class="badge bg-primary">Sent Admin for Approval</span>
-                  {% elif course.is_approved == "3" %}
-                  <span class="badge bg-success">Approved</span>
-                    
-                  {% elif course.is_approved == "4"  %}
-                  <span class="badge bg-danger">Rejected</span>
-                    
-                  {% endif %}
-                  {% endif %}
-                          </li>
-                          <li class="list-group-item d-flex justify-content-between align-items-start">
-                            <div class="ms-2 me-auto">
-                              <div class="fw-bold">Name</div>
-                            </div>
-                            <p class="w-50 text-end">{{ course.get_virtual_network.name }}</p>
-                          </li>
-                          <li class="list-group-item d-flex justify-content-between align-items-start">
-                            <div class="ms-2 me-auto">
-                              <div class="fw-bold">OS</div>
-                            </div>
-                            <p class="w-50 text-end">{{ course.get_virtual_network.get_operating_system }}</p></li>
-                          <li class="list-group-item d-flex justify-content-between align-items-start">
-                            <div class="ms-2 me-auto">
-                              <div class="fw-bold">Scenario</div>
-                            </div><p class="w-50 text-end">{{ course.get_virtual_network.get_scenarios }}</p>
-                          </li>
-                          {% if course.is_approved == "3" %}
-                            <li class="list-group-item d-flex justify-content-between align-items-start">
-                              <div class="ms-2 me-auto">
-                                <div class="fw-bold">IP Address</div>
-                              </div>
-                              <p class="w-50 text-end">{{ course.get_virtual_network.ip_address }}</p></li>
-                          {% endif %}
-                          <li class="list-group-item text-center" aria-disabled="true"><a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">See Details<i class="fas fa-chevron-right fs-5 ms-3 pt-2"></i></a></li>
-                        </ul>
-                      {% else %}
-                        <a class="btn btn-primary py-3 shadow-lg w-100 " href="#virutal_network_modal" data-bs-toggle="modal">Create Virutal Network</a>
-                      {% endif %}
-                      
-                      
-                    </div>
-                  </div>
-                  <div class="card d-none">
-                    <h5 class="card-header d-flex justify-content-between align-items-center">
-                      <span class="h3" style="color:#444444;">Challenges</span>
-                      {% if course.is_approved == "1" %}
-                      <button type="button" class="btn btn-sm btn-primary rounded-circle " style="margin-top: -60px;margin-right: -30px;" data-bs-target="#create_challenge_modal" data-bs-toggle="modal"><i class="bi bi-plus fs-5 "></i></button>
-                      {% endif %}
-                    
-                      <!-- Wrap with <div>...buttons...</div> if you have multiple buttons -->
-                    </h5>
-                    <div class="card-body p-3">
-                      <div class="activity">
-                      
-                        {% if easy_challenges %}
-                            {% for ch in easy_challenges %}
-                            <div class="activity-item d-flex">
-                              <div class="activite-label"></div>
-                              <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
-                              <div class="activity-content">
-                                <a href="{% url 'instructor-challenge-details-url' course.id ch.id %}" class="fw-bold " >{{ ch.title }}</a>
-                              </div>
-                            </div>
-                            {% endfor %}
-                        {% endif %}
-                        {% if medium_challenges %}
-                            {% for ch in medium_challenges %}
-                            <div class="activity-item d-flex">
-                              <div class="activite-label"></div>
-                              <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
-                              <div class="activity-content">
-                                <a href="{% url 'instructor-challenge-details-url' course.id ch.id %}" class="fw-bold "  >{{ ch.title }}</a>
-                              </div>
-                            </div>
-                            {% endfor %}
-                        
-                      {% endif %}
-                      {% if hard_challenges %}
-                        
-                            {% for ch in hard_challenges %}
-                            <div class="activity-item d-flex">
-                              <div class="activite-label"></div>
-                              <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
-                              <div class="activity-content">
-                                <a href="{% url 'instructor-challenge-details-url' course.id ch.id %}" class="fw-bold "  >{{ ch.title }}</a>
-                              </div>
-                            </div>
-                            {% endfor %}
-                        
-                      {% endif %}
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card">
-                    <h5 class="card-header d-flex justify-content-between align-items-center">
-                      <span class="h3" style="color:#444444;">Students</span>
-                      {% if course.is_approved == "1" %}
-                      <button type="button" class="btn btn-sm btn-primary rounded-circle " style="margin-top: -60px;margin-right: -30px;" data-bs-target="#create_student_modal" data-bs-toggle="modal"><i class="bi bi-plus fs-5 "></i></button>
-                      {% endif %}
-                    
-                      <!-- Wrap with <div>...buttons...</div> if you have multiple buttons -->
-                    </h5>
-                    <div class="card-body p-3">
-                      <ul class="list-group list-group-flush">
-                        {% if students %}
-                          {% for std in students %}
-                            <li class="list-group-item">{{ std.student.email }}</li>
-                          {% endfor %}
-                        {% endif %}
-                      </ul><!-- End Clean list group -->
-                    </div>
-                  </div>
 
+                  <!-- Virtual Network Details -->
+                  {% include 'master_app/instructor/cd_network_details.html' %}
+                  <!-- End Virtual Network Details -->
+                  
+                  
+                  <!-- Challenges -->
+                  <!-- End Challenges -->
+                    
+                  
+                  <!-- Students List -->
+                    {% include 'master_app/instructor/cd_students.html' %}
+                  <!-- End Students List -->
+
+
+                  <!-- Results -->
                   {% if course.is_approved == "3" %}
                     {% include 'master_app/course_challenge_results.html' %}
                   {% endif %}
+                  <!-- End Results -->
 
 
 
@@ -210,106 +89,24 @@
             
 
 
-            {% comment %}
-            <div class="row ">
-                <div class="col-lg-12">
-                <h3>Relevant Paths</h3>
-                <p>This module progresses you towards the following Paths</p>
-                <!-- Card with an image on left -->
-          <div class="card mb-3">
-            <div class="row g-0">
-              <div class="col-md-4">
-                <img src="{% static 'assets/img/cyber_course.png' %}" class="img-fluid rounded-start h-100" alt="...">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h5 class="card-title">Information Security Foundations</h5>
-                  <p class="mt-2 m-0">
-                    <span class="badge bg-success ">Easy</span>
-                    <span class="badge bg-dark ">170 Sections</span>
-                </p>
-                    <p class="mt-2 small">
-                        Cubes Required: 200
-                        </p>
-                        <p class="mt-2">Information Security is a field with many specialized and highly technical disciplines. Job roles like Penetration Tester &amp; Information Security Analyst require a solid technical foundational understanding of core IT &amp; Information Security topics. </p>
-                </div>
-              </div>
-            </div>
-          </div><!-- End Card with an image on left -->
-                
-                </div>
-            </div>
-            {% endcomment %}
+            
         </div>
     </section>
 </main>
 
 
+
 <!-- offcanvas: virutal network details -->
-<div class="offcanvas offcanvas-end " tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-  <div class="offcanvas-header " style="background-color: #012970;">
-    <h5 class="offcanvas-title mx-auto text-white fw-bolder" id="offcanvasExampleLabel">Description</h5>
-  </div>
-  <div class="offcanvas-body bg-light">
-      <div class="d-flex align-items-center mt-3 mb-2 ">
-          <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-            <img src="{% static 'assets/img/caac8772de14a769c0bfe95756bceebe.png' %}" width="60" alt="">
-          </div>
-          <div class="ps-3">
-            <h4 class="mb-0">{{ course.get_virtual_network }}</h4>
-            <span class=" small pt-1 fw-bold h5">{{ course.get_virtual_network.rating }} Rating</span>
-
-          </div>
-        </div>
-
-
-    <div class="row justify-content-center my-3">
-      <div class="col-12">
-          <h6 class="">{{ course.get_virtual_network.description|safe }}</h6>
-      </div>
-    </div>
-    
-    
-    
-    
-  </div>
-</div>
-
-<!-- offcanvas: instructions -->
-<div class="offcanvas offcanvas-end " tabindex="-1" id="offcanvasExample2" aria-labelledby="offcanvasExampleLabel">
-  <div class="offcanvas-header " style="background-color: #012970;">
-    <h5 class="offcanvas-title mx-auto text-white fw-bolder" id="offcanvasExampleLabel">Instructions</h5>
-  </div>
-  <div class="offcanvas-body bg-light">
-      <div class="d-flex align-items-center mt-3 mb-2 ">
-          <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-            <img src="{% static 'assets/img/caac8772de14a769c0bfe95756bceebe.png' %}" width="60" alt="">
-          </div>
-          <div class="ps-3">
-            <h4 class="mb-0">{{ course.get_virtual_network }}</h4>
-            <span class=" small pt-1 fw-bold h5">{{ course.get_virtual_network.rating }} Rating</span>
-
-          </div>
-        </div>
-
-        
-    <div class="row justify-content-center my-3">
-      <div class="col-12">
-          <h6 class="">{{ course.get_virtual_network.instructions|safe }}</h6>
-      </div>
-    </div>
-    
-    
-    
-    
-  </div>
-</div>
+{% if course.get_virtual_network %}
+  {% include 'master_app/instructor/offcanvas_network.html' with network=course.get_virtual_network  %}
+{% endif %}
+<!-- End : offcanvas: virutal network details -->
 
 {% endblock %}
 
 {% block extra_js %}
 
-<script src="{% static 'assets/vendor/fancybox/fancybox.umd.js' %}"></script>
+
 
 
 <script>
@@ -467,21 +264,322 @@ var imgref_dict={
     $("#id_min_ram").val("" + ram_dict[this.value]);
     $("#id_min_disk").val("" + disk_dict[this.value]);
     $("#id_imageRef").val("" + imgref_dict[this.value]);
-    // console.debug(status);
-
-    // console.debug(status);
   });
 
-  // $(function(){
-  //   console.debug(os_types);
-  // });
-
 </script>
+
+<!-- add a student -->
+<script>
+
+var myModalEl = document.getElementById('create_student_modal');
+var myModal = new bootstrap.Modal(document.getElementById('create_student_modal'), {
+  keyboard: false
+})
+
+myModalEl.addEventListener('hidden.bs.modal', function (event) {
+  document.getElementById("student_add_form").reset();
+  $("#student_add_form").removeClass("was-validated");
+})
+
+
+  $("form#student_add_form").on("submit", function(event){
+    event.preventDefault();
+    event.stopPropagation();
+    var submit_form = $("form#student_add_form").get(0);
+    if(submit_form.checkValidity()){
+      var fd = new FormData($("form#student_add_form")[0]);
+      $.ajaxSetup({
+        beforeSend: function(xhr, settings){
+          xhr.setRequestHeader(
+            'X-CSRFToken', '{{ csrf_token }}'
+          )
+        }
+      });
+      $.ajax({
+        url : $(submit_form).attr("action"),
+        type  : "POST",
+        data: fd,
+        processData: false,
+        contentType: false,
+        success : function(response){
+          myModal.hide();
+          new Noty({
+        //  alert, success, error, warning, info
+        timeout: 2000 ,
+        type : "success",
+        theme: 'sunset',
+        // container : ".noty_layout",
+        force : false,
+        // layout: 'bottomLeft',
+        text: '<i class="fas fa-check-circle"></i>&nbsp; New student has been added successfully.',
+        animation: {
+        open: function (promise) {
+            var n = this;
+            var Timeline = new mojs.Timeline();
+            var body = new mojs.Html({
+                el        : n.barDom,
+                x         : {500: 0, delay: 0, duration: 500, easing: 'elastic.out'},
+                isForce3d : true,
+                onComplete: function () {
+                    promise(function(resolve) {
+                        resolve();
+                    })
+                }
+            });
+
+            var parent = new mojs.Shape({
+                parent: n.barDom,
+                width      : 200,
+                height     : n.barDom.getBoundingClientRect().height,
+                radius     : 0,
+                x          : {[150]: -150},
+                duration   : 1.2 * 500,
+                isShowStart: true
+            });
+
+            n.barDom.style['overflow'] = 'visible';
+            parent.el.style['overflow'] = 'hidden';
+
+            var burst = new mojs.Burst({
+                parent  : parent.el,
+                count   : 10,
+                top     : n.barDom.getBoundingClientRect().height + 75,
+                degree  : 90,
+                radius  : 75,
+                angle   : {[-90]: 40},
+                children: {
+                    fill     : '#EBD761',
+                    delay    : 'stagger(500, -50)',
+                    radius   : 'rand(8, 25)',
+                    direction: -1,
+                    isSwirl  : true
+                }
+            });
+
+            var fadeBurst = new mojs.Burst({
+                parent  : parent.el,
+                count   : 2,
+                degree  : 0,
+                angle   : 75,
+                radius  : {0: 100},
+                top     : '90%',
+                children: {
+                    fill     : '#EBD761',
+                    pathScale: [.65, 1],
+                    radius   : 'rand(12, 15)',
+                    direction: [-1, 1],
+                    delay    : .8 * 500,
+                    isSwirl  : true
+                }
+            });
+
+            Timeline.add(body, burst, fadeBurst, parent);
+            Timeline.play();
+        },
+        close: function (promise) {
+            var n = this;
+            new mojs.Html({
+                el        : n.barDom,
+                x         : {0: 500, delay: 10, duration: 500, easing: 'cubic.out'},
+                skewY     : {0: 10, delay: 10, duration: 500, easing: 'cubic.out'},
+                isForce3d : true,
+                onComplete: function () {
+                    promise(function(resolve) {
+                        resolve();
+                    })
+                }
+            }).play();
+        }
+        }
+    }).show();    
+
+        setTimeout(function(){
+          location.reload();
+        }, 2000);
+
+        },
+        error : function(response){
+          var text = "";
+          for (const [key, value] of Object.entries(JSON.parse(response["responseJSON"]["error"]))) {
+            // console.log(key, value);
+            if(key == "__all__"){
+              text  = text + '<i class="fas fa-exclamation-circle"></i>&nbsp;' + "Student already registered with this course";
+            }
+            else{
+              text  = text + '<i class="fas fa-exclamation-circle"></i>&nbsp;' + value;
+            }
+          }
+          new Noty({
+        //  alert, success, error, warning, info
+        timeout: 4000 ,
+        type : "error",
+        theme: 'sunset',
+        // container : ".noty_layout",
+        force : false,
+        // layout: 'bottomLeft',
+        text: text,
+        animation: {
+        open: function (promise) {
+            var n = this;
+            var Timeline = new mojs.Timeline();
+            var body = new mojs.Html({
+                el        : n.barDom,
+                x         : {500: 0, delay: 0, duration: 500, easing: 'elastic.out'},
+                isForce3d : true,
+                onComplete: function () {
+                    promise(function(resolve) {
+                        resolve();
+                    })
+                }
+            });
+
+            var parent = new mojs.Shape({
+                parent: n.barDom,
+                width      : 200,
+                height     : n.barDom.getBoundingClientRect().height,
+                radius     : 0,
+                x          : {[150]: -150},
+                duration   : 1.2 * 500,
+                isShowStart: true
+            });
+
+            n.barDom.style['overflow'] = 'visible';
+            parent.el.style['overflow'] = 'hidden';
+
+            var burst = new mojs.Burst({
+                parent  : parent.el,
+                count   : 10,
+                top     : n.barDom.getBoundingClientRect().height + 75,
+                degree  : 90,
+                radius  : 75,
+                angle   : {[-90]: 40},
+                children: {
+                    fill     : '#EBD761',
+                    delay    : 'stagger(500, -50)',
+                    radius   : 'rand(8, 25)',
+                    direction: -1,
+                    isSwirl  : true
+                }
+            });
+
+            var fadeBurst = new mojs.Burst({
+                parent  : parent.el,
+                count   : 2,
+                degree  : 0,
+                angle   : 75,
+                radius  : {0: 100},
+                top     : '90%',
+                children: {
+                    fill     : '#EBD761',
+                    pathScale: [.65, 1],
+                    radius   : 'rand(12, 15)',
+                    direction: [-1, 1],
+                    delay    : .8 * 500,
+                    isSwirl  : true
+                }
+            });
+
+            Timeline.add(body, burst, fadeBurst, parent);
+            Timeline.play();
+        },
+        close: function (promise) {
+            var n = this;
+            new mojs.Html({
+                el        : n.barDom,
+                x         : {0: 500, delay: 10, duration: 500, easing: 'cubic.out'},
+                skewY     : {0: 10, delay: 10, duration: 500, easing: 'cubic.out'},
+                isForce3d : true,
+                onComplete: function () {
+                    promise(function(resolve) {
+                        resolve();
+                    })
+                }
+            }).play();
+        }
+        }
+    }).show();    
+          
+          
+        },
+        complete : function(response){
+
+        }
+      });
+    }
+    else{
+      // console.debug("Form is invalid");
+    }
+  });
+</script>
+
+
 
 {% endblock %}
 
 
 {% comment %}
+
+
+<div class="offcanvas offcanvas-end " tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+  <div class="offcanvas-header " style="background-color: #012970;">
+    <h5 class="offcanvas-title mx-auto text-white fw-bolder" id="offcanvasExampleLabel">Description</h5>
+  </div>
+  <div class="offcanvas-body bg-light">
+      <div class="d-flex align-items-center mt-3 mb-2 ">
+          <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+            <img src="{% static 'assets/img/caac8772de14a769c0bfe95756bceebe.png' %}" width="60" alt="">
+          </div>
+          <div class="ps-3">
+            <h4 class="mb-0">{{ course.get_virtual_network }}</h4>
+            <span class=" small pt-1 fw-bold h5">{{ course.get_virtual_network.rating }} Rating</span>
+
+          </div>
+        </div>
+
+
+    <div class="row justify-content-center my-3">
+      <div class="col-12">
+          <h6 class="">{{ course.get_virtual_network.description|safe }}</h6>
+      </div>
+    </div>
+    
+    
+    
+    
+  </div>
+</div>
+
+
+<!-- offcanvas: instructions -->
+<div class="offcanvas offcanvas-end " tabindex="-1" id="offcanvasExample2" aria-labelledby="offcanvasExampleLabel">
+  <div class="offcanvas-header " style="background-color: #012970;">
+    <h5 class="offcanvas-title mx-auto text-white fw-bolder" id="offcanvasExampleLabel">Instructions</h5>
+  </div>
+  <div class="offcanvas-body bg-light">
+      <div class="d-flex align-items-center mt-3 mb-2 ">
+          <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+            <img src="{% static 'assets/img/caac8772de14a769c0bfe95756bceebe.png' %}" width="60" alt="">
+          </div>
+          <div class="ps-3">
+            <h4 class="mb-0">{{ course.get_virtual_network }}</h4>
+            <span class=" small pt-1 fw-bold h5">{{ course.get_virtual_network.rating }} Rating</span>
+
+          </div>
+        </div>
+
+        
+    <div class="row justify-content-center my-3">
+      <div class="col-12">
+          <h6 class="">{{ course.get_virtual_network.instructions|safe }}</h6>
+      </div>
+    </div>
+    
+    
+    
+    
+  </div>
+</div>
+
 <div class="row">
   <div class="col-lg-8">
     
@@ -841,3 +939,54 @@ var imgref_dict={
                             {% endif %}
 
 {% endcomment %}
+
+
+{% comment %}
+            <div class="row ">
+                <div class="col-lg-12">
+                <h3>Relevant Paths</h3>
+                <p>This module progresses you towards the following Paths</p>
+                <!-- Card with an image on left -->
+          <div class="card mb-3">
+            <div class="row g-0">
+              <div class="col-md-4">
+                <img src="{% static 'assets/img/cyber_course.png' %}" class="img-fluid rounded-start h-100" alt="...">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title">Information Security Foundations</h5>
+                  <p class="mt-2 m-0">
+                    <span class="badge bg-success ">Easy</span>
+                    <span class="badge bg-dark ">170 Sections</span>
+                </p>
+                    <p class="mt-2 small">
+                        Cubes Required: 200
+                        </p>
+                        <p class="mt-2">Information Security is a field with many specialized and highly technical disciplines. Job roles like Penetration Tester &amp; Information Security Analyst require a solid technical foundational understanding of core IT &amp; Information Security topics. </p>
+                </div>
+              </div>
+            </div>
+          </div><!-- End Card with an image on left -->
+                
+                </div>
+            </div>
+            {% endcomment %}
+
+
+            {% comment %}
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remodal/1.1.1/remodal.min.css" integrity="sha512-UO+dUiFTr6cCaPZKCzXEGhYsuK8DkGAS5iThyMUrtHsg+INCFyRM3GiqJ4rjuvfEyn81XGjpfmjSwwR1dAjAsw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remodal/1.1.1/remodal-default-theme.min.css" integrity="sha512-jRxwiuoe3nt8lMSnOzNEuQ7ckDrLl31dwVYFWS6jklXQ6Nzl7b05rrWF9gjSxgOow5nFerdoN6CBB4gY5m5nDw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<a data-remodal-target="modal">Call the modal with data-remodal-id="modal"</a>
+<div class="remodal" data-remodal-id="modal">
+  <button data-remodal-action="close" class="remodal-close"></button>
+  <h1>Remodal</h1>
+  <p>
+    Responsive, lightweight, fast, synchronized with CSS animations, fully customizable modal window plugin with declarative configuration and hash tracking.
+  </p>
+  <br>
+  <button data-remodal-action="cancel" class="remodal-cancel">Cancel</button>
+  <button data-remodal-action="confirm" class="remodal-confirm">OK</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/remodal/1.1.1/remodal.min.js" integrity="sha512-a/KwXZUMuN0N2aqT/nuvYp6mg1zKg8OfvovbIlh4ByLw+BJ4sDrJwQM/iSOd567gx+yS0pQixA4EnxBlHgrL6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            {% endcomment %}

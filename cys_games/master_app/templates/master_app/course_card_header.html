@@ -9,9 +9,9 @@
         <div class="card-body">
           <h5 class="card-title d-flex justify-content-between align-items-center mb-0">{{ course.name }} 
             {% if course.is_approved == "1" %}
-        <span class="badge bg-warning text-white">Pending</span>
+        <span class="badge bg-warning text-white">Draft</span>
       {% elif course.is_approved == "2" %}
-        <span class="badge bg-primary text-white">Sent Admin for Approval</span>
+        <span class="badge bg-primary text-white">Sent Approval Request</span>
       {% elif course.is_approved == "3" %}
         <span class="badge bg-success text-white">Approved</span>
       {% elif course.is_approved == "4"  %}

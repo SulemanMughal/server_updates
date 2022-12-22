@@ -9,11 +9,11 @@
      <div class="modal-dialog modal-dialog-scrollable ">
        <div class="modal-content">
          <div class="modal-header">
-           <h5 class="modal-title">Add a new student</h5>
+           <h5 class="modal-title fw-bolder fs-4" style="color:#012970;">Add a new student</h5>
            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
          </div>
          <div class="modal-body">
-            <form class="row g-3 needs-validation" novalidate action="{% url 'course-students-new-url' %}" method="POST">
+            <form class="row g-3 needs-validation" novalidate action="{% url 'course-students-new-url' %}" method="POST" id="student_add_form">
                 {% csrf_token %}
 
                 <!-- Course Name -->
@@ -33,11 +33,15 @@
                             {{ student }}
                         {% endfor %}
                     </select>
+                    <div class="invalid-feedback">
+                      Please select a student.
+
+                    </div>
                   </div>
                   <input type="hidden" name="next" value="{{ request.path }}">
                   <div class="text-end">
-                    <button type="button" class="btn btn-danger "  ><i class="fa-solid fa-chevron-left me-2"></i> Cancel</button>
-                  <button type="submit" class="btn btn-primary "  >Create <i class="fa-solid fa-chevron-right ms-2"></i></button>
+                    <button type="button" class="btn btn-danger w-25" data-bs-dismiss="modal" aria-label="Close"> Cancel</button>
+                  <button type="submit" class="btn btn-primary w-25"  >Add</button>
                   </div>
                   
             </form>

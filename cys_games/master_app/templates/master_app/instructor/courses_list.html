@@ -50,7 +50,7 @@
                 data-filter=".1card"
                 data-target="#portfolio"
               >
-                <span class="h6 text-uppercase  px-2">Pending</span>
+                <span class="h6 text-uppercase  px-2">Draft</span>
               </a>
               <a
                 class="badge border border-primary text-primary rounded-pill mr-1 mb-1 mx-2"
@@ -74,6 +74,7 @@
           </div>
         </div>
         <div class="row my-5 py-3" id="portfolio" data-isotope='{"layoutMode": "fitRows"}'>
+          
           {% for course in all_courses %}
             {% include 'master_app/course_card.html' with cURL=course.get_instructor_url %}
           {% endfor %}

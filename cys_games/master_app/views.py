@@ -888,14 +888,13 @@ def InstructorCreateStudent(request):
 def CreateCourse(request):
     template_name = 'master_app/instructor/create_course.html'
     if request.method == "POST":
-        # print(request.POST)
         form = CreateCourseForm(request.POST)
         if form.is_valid():
             new_course = form.save(commit=False)
             new_course.instructor = request.user
             new_course.save()
-            # messages.success(request, "New course has been created")
-            return redirect(reverse("courses-all-url"))
+            messages.success(request, "New course has been created")
+            return redirect(reverse("instructor-courses-details-url", args=[new_course.id]))
     else:
         form = CreateCourseForm()
     context = {
@@ -1079,26 +1078,62 @@ def InstructorMachineDetail(request, vn_id):
 @login_required
 @teacher_required
 def AddNewStudents(request):
-    template_name = 'master_app/instructor/add_new_student.html'
-    if request.method == "POST":
+    if request.method == "POST" :
         form = AddNewStudent(request.POST)
-        # print(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, "New Student has been added")
-            if request.POST.get("next", None):
-                return redirect(request.POST.get("next", None))
-            return redirect(reverse("students-all-url"))
-        # else:
-        #     print(form.errors)
-        #     messages.error(request, str())
-
+            return JsonResponse(
+                json.loads(
+                    json.dumps({
+                        "text" : "New Student has been added",
+                        "next" : request.POST.get("next", None)
+                    })
+                ),
+                status =200
+            )
+        else:
+            return JsonResponse(
+            json.loads(
+                json.dumps({
+                    "error" : json.dumps(form.errors)
+                })
+            ),
+            status =400
+        )
+        
     else:
-        form = AddNewStudent()
-    context = {
-        "form": form
-    }
-    return render(request, template_name, context)
+        return JsonResponse(
+            json.loads(
+                json.dumps({
+                    "error" : "Invalid request"
+                })
+            ),
+            status =400
+        )
+# =====================
+    # Original Code
+    # template_name = 'master_app/instructor/add_new_student.html'
+    # if request.method == "POST":
+    #     form = AddNewStudent(request.POST)
+    #     # print(request.POST)
+    #     if form.is_valid():
+    #         form.save()
+    #         messages.success(request, "New Student has been added")
+    #         if request.POST.get("next", None):
+    #             return redirect(request.POST.get("next", None))
+    #         return redirect(reverse("students-all-url"))
+    #     # else:
+    #     #     print(form.errors)
+    #     #     messages.error(request, str())
+
+    # else:
+    #     form = AddNewStudent()
+    # context = {
+    #     "form": form
+    # }
+    # return render(request, template_name, context)
+# ===================
+
 
 
 # TODO  :   Student Dashboard

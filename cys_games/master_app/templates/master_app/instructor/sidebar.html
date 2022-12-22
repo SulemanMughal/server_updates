@@ -29,12 +29,12 @@
                   <i class="bi bi-circle"></i><span>Create New Course</span>
                 </a>
               </li>
-              <li>
+              <li class="d-none">
                 <a href="{% url 'instructor-create-new-challenge-url' %}">
                   <i class="bi bi-circle"></i><span>Add Challenge</span>
                 </a>
               </li>
-              <li>
+              <li class="d-none">
                 <a href="{% url 'course-students-new-url' %}">
                   <i class="bi bi-circle"></i><span>Add Student</span>
                 </a>
@@ -77,7 +77,7 @@
             <i class="fas fa-server me-2"></i><span>Virtual Networks</span><i class="bi bi-chevron-down ms-auto"></i>
           </a>
           <ul id="networks-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-            <li>
+            <li class="d-none">
               <a href="{% url 'instructor-virutal-network-create-url' %}">
                 <i class="bi bi-circle"></i><span>Create New Network</span>
               </a>

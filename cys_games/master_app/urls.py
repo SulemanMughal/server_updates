@@ -78,8 +78,14 @@ urlpatterns = [
     # ? Instructor Profile
     path("instructor/profile", views.InsturctorProfile, name="instructor-profile-url"),
     
+    # ? Instructor Courses List
+    path("instructor/courses", views.CoursesList, name="courses-all-url"),
+
     # ? Instructor Create New Course
     path("instructor/course/new", views.CreateCourse, name="course-new-url"),
+
+    # ? Instructor Courses Detials
+    path("instructor/courses/<int:course_id>/details", views.InstructorCourseDetails, name="instructor-courses-details-url"),
 
     # ? Instructor Add Exising Student to a course
     path("instructor/course/students/new", views.AddNewStudents, name="course-students-new-url"),
@@ -89,12 +95,6 @@ urlpatterns = [
 
     # ? Instructor Create New Virtual Network
     path("instructor/virtual-network/create/new" , views.InstructorVirturalNetworkNew, name="instructor-virutal-network-create-url"),
-
-    # ? Instructor Courses List
-    path("instructor/courses", views.CoursesList, name="courses-all-url"),
-    
-    # ? Instructor Courses Detials
-    path("instructor/courses/<int:course_id>/details", views.InstructorCourseDetails, name="instructor-courses-details-url"),
 
     # ? Instructor Students List
     path("instructor/students", views.StudentList, name="students-all-url"),
