@@ -5,8 +5,8 @@ min-height: 150px;
 }
 </style>
 
-<div class="modal fade" id="virutal_network_modal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-scrollable ">
+<div class="modal fade" id="virutal_network_modal" tabindex="-1" data-url="{% url 'admin-fetch-network-images-url' %}">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Virtual Network Details</h5>
@@ -34,9 +34,7 @@ min-height: 150px;
 <div class="col-12  mb-3">
   <label for="id_scenarios" class="form-label">Scenarios </label>
   <select class="form-select" id="id_scenarios" required="" name="scenarios">
-      {% for scenario in form.scenarios  %}
-          {{ scenario }}
-      {% endfor %}
+      
   </select>
 </div>
 
@@ -51,17 +49,73 @@ min-height: 150px;
   </div>
 
 <!-- Operating System -->
-<div class="col-12 col-md-6 mb-3 d-none">
-    <label for="id_operating_system" class="form-label">Operating System </label>
-    <select class="form-select" id="id_operating_system" required="" name="operating_system">
-      <option value="1" selected="">Windows</option>
-    </select>
+<div class="col-12 col-md-6  mb-3 ">
+  <div class="form-floating">
+    <input type="text" name="operating_system" class="form-control" id="id_operating_system" placeholder="Operating System"  autocapitalize="none" autocomplete="off" maxlength="100" required readonly >
+    <label for="id_operating_system">Operating System</label>
+    <div class="invalid-feedback">
+      Please choose a valid Operating System.
+    </div>
+  </div>
   </div>
  
 
+<!-- Size -->
+<div class="col-12 col-md-6  mb-3 ">
+  <div class="form-floating">
+    <input type="text" name="size" class="form-control" id="id_size" placeholder="Size"  autocapitalize="none" autocomplete="off" maxlength="100" required readonly >
+    <label for="id_size">Size</label>
+    <div class="invalid-feedback">
+      Please choose a valid Size.
+    </div>
+  </div>
+  </div>
+
+  <!-- Status -->
+<div class="col-12 col-md-6  mb-3 ">
+  <div class="form-floating">
+    <input type="text" name="status" class="form-control" id="id_status" placeholder="Status"  autocapitalize="none" autocomplete="off" maxlength="100" required readonly >
+    <label for="id_status">Status</label>
+    <div class="invalid-feedback">
+      Please choose a valid status.
+    </div>
+  </div>
+  </div>
 
 
+    <!-- Image State -->
+<div class="col-12 col-md-6  mb-3 ">
+  <div class="form-floating">
+    <input type="text" name="state" class="form-control" id="id_state" placeholder="State"  autocapitalize="none" autocomplete="off" maxlength="100" required readonly >
+    <label for="id_state">State</label>
+    <div class="invalid-feedback">
+      Please choose a valid state.
+    </div>
+  </div>
+  </div>
 
+
+    <!-- Min Ram -->
+    <div class="col-12 col-md-6  mb-3 ">
+      <div class="form-floating">
+        <input type="text" name="min_ram" class="form-control" id="id_min_ram" placeholder="Min Ram"  autocapitalize="none" autocomplete="off" maxlength="100" required readonly >
+        <label for="id_min_ram">Min Ram</label>
+        <div class="invalid-feedback">
+          Please choose a valid min ram.
+        </div>
+      </div>
+      </div>
+
+      <!-- Min Disk -->
+    <div class="col-12 col-md-6  mb-3 ">
+      <div class="form-floating">
+        <input type="text" name="min_disk" class="form-control" id="id_min_disk" placeholder="Min Disk"  autocapitalize="none" autocomplete="off" maxlength="100" required readonly >
+        <label for="id_min_disk">Min Disk</label>
+        <div class="invalid-feedback">
+          Please choose a valid min disk.
+        </div>
+      </div>
+      </div>
 
 
 
@@ -75,6 +129,9 @@ min-height: 150px;
   </select>
 </div>
 
+
+<!-- ImageRef -->
+<input type="text" name="imageRef" class="form-control" id="id_imageRef"  hidden readonly >
 
 
   <!-- Description -->

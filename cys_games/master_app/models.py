@@ -162,8 +162,8 @@ class VirtualNetwork(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     description = RichTextField()
-    operating_system = models.CharField(max_length=3, default=1 , choices=OPERATING_SYSTEM_CHOICES)
-    scenarios = models.CharField(max_length=50, default="1" , choices=SCENARIOS_CATEGORYIES)
+    operating_system = models.CharField(max_length=100, default=1 )
+    scenarios = models.CharField(max_length=200, default="1" ,)
     rating  = models.CharField(max_length=1 , default="1", choices=RATING_CHOICES, blank=True, null=True)
     config_file_url = models.URLField(max_length=300 , default="" , blank=True, null=True)
     
@@ -173,6 +173,22 @@ class VirtualNetwork(models.Model):
     ssh_file = models.FileField(upload_to="sshFiles/" , blank=True, null=True)
     instructions = RichTextField(blank = True, null=True, default="")
 
+    is_instance_created = models.BooleanField(default=False, blank=True, null=True)
+
+
+    imageRef = models.CharField(max_length=200 , blank=True, null=True)
+    size = models.CharField(max_length=200 , blank=True, null=True)
+    status = models.CharField(max_length=200 , blank=True, null=True)
+    state = models.CharField(max_length=200 , blank=True, null=True)
+    min_ram = models.CharField(max_length=200 , blank=True, null=True)
+    min_disk = models.CharField(max_length=200 , blank=True, null=True)
+
+    server_id = models.CharField(max_length=200, blank=True, null=True)
+    
+    
+    
+    
+    
 
     def clean(self):
         if self.pk is None:
@@ -188,13 +204,13 @@ class VirtualNetwork(models.Model):
         try:
             return OPERATING_SYSTEM_CHOICES_TEXT[self.operating_system]
         except:
-            return None
+            return self.operating_system
 
     def get_scenarios(self):
         try:
             return SCENARIOS_CATEGORYIES_TEXT[self.scenarios]
         except:
-            return None
+            return self.scenarios
 
 
     def instructor_network_url(self):

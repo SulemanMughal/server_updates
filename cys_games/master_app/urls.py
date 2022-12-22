@@ -66,8 +66,10 @@ urlpatterns = [
     # ? Admin : Add a new student to an existing course
     path("admin/course/student/new", views.AdminCourseStudentCreate, name="admin-course-student-add-url"),
     
-    
+    # ? Admin : get open stack images details
+    path("admin/network/images/api", views.AdminFetchNetworkImages, name="admin-fetch-network-images-url"),
 
+    path("admin/network/<int:vn_id>/instance/create", views.AdminCreateNetworkInstance, name="admin-create-network-instance-url"),
 
     # ==========================================================
     # ? Instructor Dashbaord

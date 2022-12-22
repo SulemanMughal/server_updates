@@ -1,0 +1,28 @@
+
+<div class="modal fade" id="create_an_instance_modal" tabindex="-1" >
+    <div class="modal-dialog modal-dialog-scrollable ">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Create an instance</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="row g-3 needs-validation " novalidate  
+                        action=""  id="course_approval_form"   method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            
+
+
+                            
+<input type="hidden" name="next" value="{{ request.path }}">
+<div class="text-end">
+ <button type="button" class="btn btn-danger "  data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-chevron-left me-2"></i> Cancel</button>
+<button type="submit" class="btn btn-primary "  id="course_approval_btn">Create <i class="fa-solid fa-chevron-right ms-2"></i></button>
+</div>
+
+                       </form>
+        </div>
+      </div>
+    </div>
+</div>
+
