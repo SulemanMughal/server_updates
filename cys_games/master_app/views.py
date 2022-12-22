@@ -1344,3 +1344,165 @@ def StudentCreateNetworkInstance(request):
             ),
             status=400
         )
+
+
+
+def StudentFlagSubmission(request):
+    if request.method == "POST" :
+        
+        # print(request.POST)
+
+        try:
+            netObj = VirtualNetwork.objects.get(id = request.POST["vn_id"])
+
+            # ======open stack authentiation======
+
+            headers = {
+                'Content-Type': 'application/json',
+            }
+
+            json_data = {
+            'auth': {
+                'identity': {
+                    'methods': [
+                        'password',
+                    ],
+                    'password': {
+                        'user': {
+                            'name': 'admin',
+                            'domain': {
+                                'id': 'default',
+                            },
+                            'password': 'password',
+                        },
+                    },
+                },
+                "scope": {
+                "project": {
+                "name": "admin",
+                "domain": { "id": "default" }
+                }
+            }
+                
+            },
+            }
+
+            s = requests.Session()
+            response = s.post('http://10.1.2.9:5000/v3/auth/tokens', headers=headers, json=json_data)
+            # print(response.json())
+
+            if response.status_code == 201:
+                # print(response.headers["x-subject-token"])
+                headers = {
+                    'X-Auth-Token': f'{response.headers["x-subject-token"]}',
+                    
+                }
+
+                time.sleep(2)
+
+                # fetch images from open stack
+                response = s.get(f'http://10.1.2.9:9292/v2/images/{netObj.imageRef}', headers=headers )
+
+                # print(response.status_code)
+
+                if response.status_code == 200:
+                    # print(response.text)
+                    # with open('data.json', 'w') as f:
+                    #     json.dump(response.text, f)
+                    # with open('data.json', 'w', encoding='utf-8') as f:
+                    #     json.dump(response.json(), f, ensure_ascii=False, indent=4)
+                    if request.POST.get("Flag 1", None):
+                        flag_1 = response.json()["Flag 1"]
+                        # print(flag_1)
+                        if( request.POST["Flag 1"]  == flag_1):
+                            return JsonResponse(
+                                json.loads(
+                                    json.dumps({
+                                        "data" : response.json()
+                                    })
+                                ),
+                                status =200
+                            )
+                        else:
+                            return JsonResponse(
+                            json.loads(
+                                json.dumps({
+                                    "error" : "Invalid Flag Submit"
+                                })
+                            ),
+                            status = 400
+                        )
+                    
+                    elif request.POST.get("Flag 2", None):
+                        flag_2 = response.json()["Flag 2"]
+                        # print(flag_2)
+                        if( request.POST["Flag 2"]  == flag_2):
+                            return JsonResponse(
+                                json.loads(
+                                    json.dumps({
+                                        "data" : response.json()
+                                    })
+                                ),
+                                status =200
+                            )
+                        else:
+                            return JsonResponse(
+                            json.loads(
+                                json.dumps({
+                                    "error" : "Invalid Flag Submit"
+                                })
+                            ),
+                            status = 400
+                        )
+                    else:
+                        return JsonResponse(
+                        json.loads(
+                            json.dumps({
+                                "error" : "Invalid Flag Submit"
+                            })
+                        ),
+                        status = 400
+                    )
+                
+                            
+
+                    
+                else:
+                    return JsonResponse(
+                    json.loads(
+                        json.dumps({
+                            "error" : "Error in validating flag."
+                        })
+                    ),
+                    status = 400
+                )
+
+            return JsonResponse(
+            json.loads(
+                json.dumps({
+                    "text" : "Valid Submissoin"
+                })
+            ),
+            status =200
+        )
+        except:
+            return JsonResponse(
+            json.loads(
+                json.dumps({
+                    "error" : "Invalid flag submission. Please Try Again"
+                })
+            ),
+            status =400
+        )
+
+        
+        
+    else:
+        return JsonResponse(
+            json.loads(
+                json.dumps({
+                    "error" : "Invalid request method"
+                })
+            ),
+            status =400
+        )

@@ -5,6 +5,7 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'assets/vendor/flickity/flickity.min.css' %}">
 <script src="{% static 'assets/vendor/flickity/flickity.pkgd.min.js' %}"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/css-loader/3.3.3/loader-double.css"  />
 <link
       rel="stylesheet"
       href="{% static 'assets/vendor/fancybox/fancybox.css' %}"
@@ -25,10 +26,62 @@
   transition: box-shadow .25s ease,transform .25s ease,-webkit-transform .25s ease;
 }
 </style>
+
+
+
+<style>
+  .carousel-cell .card {
+
+transition: all ease-in-out 0.4s;
+
+}
+.services .icon-box .icon {
+margin-bottom: 10px;
+}
+.carousel-cell .card:hover {
+transform: translateY(-10px);
+}
+.services .icon-box .icon i {
+color: #47b2e4;
+font-size: 36px;
+transition: 0.3s;
+}
+.services .icon-box h4 {
+font-weight: 500;
+margin-bottom: 15px;
+font-size: 24px;
+}
+.services .icon-box h4 a {
+color: #37517e;
+transition: ease-in-out 0.3s;
+}
+.services .icon-box:hover h4 a {
+color: #47b2e4;
+}
+
+.flickity-slider {
+  width: 20%;
+}
+
+.carousel-cell{
+  margin-right: 10px;
+  min-width: 250px;
+}
+
+.nav-tabs-bordered .nav-link.active{
+  background-color: transparent;
+}
+
+</style>
+
+
 {% endblock %}
 
 
 {% block content %}
+
+
+<div class="loader loader-double "></div>
 <main id="main" class="main">
     <section class="section dashboard">
         <div class="container">
@@ -75,9 +128,9 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-start px-0 border-0" >
                           <div >
-                            <div ><i class="bi bi-list-check me-1"></i> Challenges</div>
+                            <div ><i class="bi bi-list-check me-1"></i> Flags</div>
                           </div>
-                          {{ course.total_challenges }}
+                          2
                         </li>
                       </ul>
                       <p class="my-2">Created By <strong class="text-primary fw-bolder">{{ course.instructor.username }}</strong></p>
@@ -92,6 +145,7 @@
                   {{ course.description|safe }}
                 </div>
               </div>
+              {% include 'master_app/student/flag_submission.html' %}
                 </div>
                 <div class="col-12 col-md-4">
                   <div class="card  p-0 ">
@@ -172,6 +226,8 @@
                       </div>
                     </div>
                   </div>
+
+                  
                   
                   <div class="card">
                     <div class="card-body">
@@ -286,6 +342,7 @@
 
 {% block extra_js %}
 <script src="{% static 'assets/vendor/fancybox/fancybox.umd.js' %}"></script>
+<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
 
 <script>
   $(".ql-editor").attr('contenteditable', false);
@@ -320,6 +377,41 @@ $("button#create-instance").on("click", function(event){
 
 
   </script>
+
+
+<!-- flag submission carousel -->
+<script>
+  $('#main-carousel-last').flickity({
+// options
+cellAlign: 'left',
+adaptiveHeight: true,
+pageDots: false,
+prevNextButtons: false,
+
+freeScroll: true
+
+});
+
+</script>
+
+
+<script>
+  var myOffcanvas = document.getElementById('offcanvasflag_2')
+myOffcanvas.addEventListener('shown.bs.offcanvas', function () {
+  $("#id_flag_1").val("");
+})
+
+var myOffcanvas = document.getElementById('offcanvasflag_1')
+myOffcanvas.addEventListener('shown.bs.offcanvas', function () {
+  $("#id_flag_2").val("");
+})
+
+</script>
+
+
+{% include 'master_app/student/flag_a_submission.html' %}
+{% include 'master_app/student/flag_b_submission.html' %}
+
 
   {% endblock %}
 
