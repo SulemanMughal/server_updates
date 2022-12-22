@@ -536,36 +536,23 @@ def AdminFetchNetworkImages(request):
         },
         "scope": {
         "project": {
-        "name": "admin",
-        "domain": { "id": "default" }
+            "name": "admin",
+            "domain": { 
+                "id": "default" 
+            }
         }
     }
         
     },
     }
-
     s = requests.Session()
     response = s.post('http://10.1.2.9:5000/v3/auth/tokens', headers=headers, json=json_data)
-    # print(response.json())
-
     if response.status_code == 201:
-        # print(response.headers["x-subject-token"])
         headers = {
-            'X-Auth-Token': f'{response.headers["x-subject-token"]}',
-            
+            'X-Auth-Token': f'{response.headers["x-subject-token"]}',   
         }
-
-        # fetch images from open stack
         response = s.get('http://10.1.2.9:9292/v2/images', headers=headers )
-
-        # print(response)
-
         if response.status_code == 200:
-            # print(response.text)
-            # with open('data.json', 'w') as f:
-            #     json.dump(response.text, f)
-            # with open('data.json', 'w', encoding='utf-8') as f:
-            #     json.dump(response.json(), f, ensure_ascii=False, indent=4)
             return JsonResponse(
                 json.loads(
                     json.dumps({
@@ -578,34 +565,21 @@ def AdminFetchNetworkImages(request):
             return JsonResponse(
             json.loads(
                 json.dumps({
-                    "error" : "Error in fetching images from OpenStach"
+                    # "error" : "Error in fetching images"
+                    "error" : str(response.json()["error"]["code"])  + " - " + response.json()["error"]["title"] + " : " + response.json()["error"]["message"]
                 })
             ),
             status = 400
         )
-
     else:
-        # print(type(response.status_code))
-        # print(response.status_code)
-        # print(response.json())
         return JsonResponse(
             json.loads(
                 json.dumps({
-                    "error" : "Error in Authentication with OpenStach"
+                    "error" : str(response.json()["error"]["code"])  + " - " + response.json()["error"]["title"] + " : " + response.json()["error"]["message"]
                 })
             ),
             status =400
         )
-        
-    # else:
-    #     return JsonResponse(
-    #         json.loads(
-    #             json.dumps({
-    #                 "error" : "Invalid request method"
-    #             })
-    #         ),
-    #         status =400
-    #     )
 
 
 def AdminCreateNetworkInstance(request, vn_id):
@@ -646,7 +620,6 @@ def AdminCreateNetworkInstance(request, vn_id):
         s = requests.Session()
         response = s.post('http://10.1.2.9:5000/v3/auth/tokens', headers=headers, json=json_data)
         if response.status_code == 201:
-        # print(response.headers["x-subject-token"])
             headers = {
                 'X-Auth-Token': f'{response.headers["x-subject-token"]}',
                 
@@ -662,15 +635,14 @@ def AdminCreateNetworkInstance(request, vn_id):
                 }
             }
             response = s.post('http://10.1.2.9:8774/v2.1/servers', headers=headers , json=json_data)
-            # print(response.json())
-            if response.status_code == 202:
+            if response.status_code in [200, 201, 202]:
                 netObj.server_id = response.json()["server"]["id"]
                 netObj.save()
                 json_data={
                     "pool": "public1"
                 }
                 response  =s.post('http://10.1.2.9:8774/v2.1/os-floating-ips', headers=headers , json=json_data)
-                if response.status_code == 200:
+                if response.status_code in [200, 201, 202]:
                     netObj.ip_address = response.json()["floating_ip"]["ip"]
                     netObj.save()
                     json_data = {
@@ -680,7 +652,7 @@ def AdminCreateNetworkInstance(request, vn_id):
                     }
                     time.sleep(5)
                     response = s.post(f'http://10.1.2.9:8774/v2.1/servers/{netObj.server_id}/action', headers=headers , json=json_data)
-                    if (response.status_code == 202):
+                    if (response.status_code in [200, 201, 202]):
                         netObj.is_instance_created = True
                         netObj.save()
                         return JsonResponse(
@@ -695,7 +667,7 @@ def AdminCreateNetworkInstance(request, vn_id):
                         return JsonResponse(
                             json.loads(
                                 json.dumps({
-                                    "error" : "Error in associating a floating IP Address."
+                                    "error" : str(response.json()["error"]["code"])  + " - " + response.json()["error"]["title"] + " : " + response.json()["error"]["message"]
                                 })
                             ),
                             status =400
@@ -704,7 +676,7 @@ def AdminCreateNetworkInstance(request, vn_id):
                     return JsonResponse(
                         json.loads(
                             json.dumps({
-                                "error" : "Error in assigning an IP Address."
+                                "error" : str(response.json()["error"]["code"])  + " - " + response.json()["error"]["title"] + " : " + response.json()["error"]["message"]
                             })
                         ),
                         status =400
@@ -713,7 +685,7 @@ def AdminCreateNetworkInstance(request, vn_id):
                 return JsonResponse(
                     json.loads(
                         json.dumps({
-                            "error" : "Error in creating an instance"
+                            "error" : str(response.json()["error"]["code"])  + " - " + response.json()["error"]["title"] + " : " + response.json()["error"]["message"]
                         })
                     ),
                     status =400
@@ -722,7 +694,7 @@ def AdminCreateNetworkInstance(request, vn_id):
            return JsonResponse(
             json.loads(
                 json.dumps({
-                    "error" : "Error in authentication with openstack"
+                    "error" : str(response.json()["error"]["code"])  + " - " + response.json()["error"]["title"] + " : " + response.json()["error"]["message"]
                 })
             ),
             status =400
@@ -982,15 +954,11 @@ def InstructorApproveCourse(request, course_id):
 @login_required
 @teacher_required
 def InstructorVirturalNetworkNew(request):
-    print(request.POST)
+    # print(request.POST)
     if request.method == "POST" :
         form = NewVirtualNetworkForm(request.POST)
         if form.is_valid():
             form.save()
-            # messages.success(request, "New Network Machine Has been added")
-            # if request.POST.get("next", None):
-            #     return redirect(request.POST.get("next", None))
-            # return redirect(reverse("instructor-virtual-network-url"))
             return JsonResponse(
                 json.loads(
                     json.dumps({
@@ -1000,6 +968,7 @@ def InstructorVirturalNetworkNew(request):
                 status =200
             )
         else:
+            # print(form.errors)
             return JsonResponse(
             json.loads(
                 json.dumps({
