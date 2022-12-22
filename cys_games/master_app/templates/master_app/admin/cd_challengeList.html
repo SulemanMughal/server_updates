@@ -1,0 +1,50 @@
+<div class="card d-none">
+
+    <div class="card-body p-3">
+      <h3>Challenges</h3>
+      <div class="activity">
+      
+        {% if easy_challenges %}
+            {% for ch in easy_challenges %}
+            {% include 'master_app/instructor/challenges_modals.html' with ch=ch %}
+            <div class="activity-item d-flex">
+              <div class="activite-label"></div>
+              <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
+              <div class="activity-content">
+                <a href="#verticalycentered_{{ ch.course.id }}_{{ ch.id }}" class="fw-bold " data-bs-toggle="modal" >{{ ch.title }}</a>
+              </div>
+            </div><!-- End activity item-->
+            {% endfor %}
+          
+      {% endif %}
+      {% if medium_challenges %}
+        
+            {% for ch in medium_challenges %}
+            {% include 'master_app/instructor/challenges_modals.html' with ch=ch %}
+            <div class="activity-item d-flex">
+              <div class="activite-label"></div>
+              <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
+              <div class="activity-content">
+                <a href="#verticalycentered_{{ ch.course.id }}_{{ ch.id }}" class="fw-bold " data-bs-toggle="modal" >{{ ch.title }}</a>
+              </div>
+            </div><!-- End activity item-->
+            {% endfor %}
+        
+      {% endif %}
+      {% if hard_challenges %}
+        
+            {% for ch in hard_challenges %}
+            {% include 'master_app/instructor/challenges_modals.html' with ch=ch %}
+            <div class="activity-item d-flex">
+              <div class="activite-label"></div>
+              <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
+              <div class="activity-content">
+                <a href="#verticalycentered_{{ ch.course.id }}_{{ ch.id }}" class="fw-bold " data-bs-toggle="modal" >{{ ch.title }}</a>
+              </div>
+            </div><!-- End activity item-->
+            {% endfor %}
+        
+      {% endif %}
+      </div>
+    </div>
+  </div>

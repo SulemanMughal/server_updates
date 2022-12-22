@@ -5,17 +5,13 @@
 
 {% block extra_css %}
 
-<link rel="stylesheet" href="{% static 'assets/vendor/flatpickr/flatpickr.min.css' %}">
+
 <link href="{% static 'assets/vendor/quill/quill.snow.css' %}" rel="stylesheet">
 <link href="{% static 'assets/vendor/quill/quill.bubble.css' %}" rel="stylesheet">
 <script src="{% static 'assets/vendor/quill/quill.min.js' %}"></script>
 <link rel="stylesheet" href="{% static 'assets/vendor/flickity/flickity.min.css' %}">
 <script src="{% static 'assets/vendor/flickity/flickity.pkgd.min.js' %}"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/css-loader/3.3.3/loader-double.css"  />
-<link
-      rel="stylesheet"
-      href="{% static 'assets/vendor/fancybox/fancybox.css' %}"
-    />
+<link rel="stylesheet" href="{% static 'assets/vendor/loader/loader-double.css' %}"  />
 <style>
 .dashboard .activity .activity-item .activite-label{
   min-width: 0px;
@@ -61,186 +57,24 @@ width: 45%!important;
               {% include 'master_app/course_card_header.html' %}
             </div>
             <div class="col-12 col-md-4 mb-5">
-                <div class="card {% if not course.get_virtual_network %} bg-transparent shadow-none {% endif %} p-0 ">
-                  <div class="card-body  px-0">
-                    
-                    
-                    {% if course.get_virtual_network %}
-                    {% if course.is_approved == "1" %}
-                    <a class="btn btn-warning py-3 shadow-lg w-100 "    href="#!">Pending Request</a>
-                {% elif course.is_approved == "2" %}
-                    {% if course.get_virtual_network.is_instance_created %}
-                      <div class="container-fluid">
-                        <div class="row justify-content-center">
-                          <a class="btn btn-danger py-3  col-6 rounded-0" type="button" href="{% url 'admin-course-reject-url' course.id %}" >Reject Course</a>
-                          <button class="btn btn-primary py-3   col-6 rounded-0" type="button"  data-href="{% url 'admin-course-approval-url' course.get_virtual_network.id %}" id="course_approval_btn">Approve Course</button>
-                        </div>
-                      </div>
-                    {% else %}
-                      <div class="container-fluid">
-                        <div class="row justify-content-center">
-                          <button class="btn btn-primary py-3  rounded-0" type="button" data-url="{% url 'admin-create-network-instance-url' course.get_virtual_network.id  %}" id="create_network_isntance"  >Create an instance</button>
-                        </div>
-                      </div>
-                    {% endif %}
-                  {% elif course.is_approved == "3" %}
-                    <div class="container-fluid">
-                      <div class="row justify-content-center">
-                        <a class="btn btn-danger py-3  col-12 rounded-0" type="button" href="{% url 'admin-course-reject-url' course.id %}" >Reject Course</a>
-                      </div>
-                    </div>
-                    <h3 class="p-3">Virtual Network</h3>
-                  {% else %}
-                  <div class="container-fluid">
-                    <div class="row justify-content-center">
-                      <button class="btn btn-primary py-3   col-12 rounded-0" type="button" data-href="{% url 'admin-course-approval-url' course.get_virtual_network.id %}" id="course_approval_btn">Approve Course</button>
-                    </div>
-                  </div>
-                  <h3 class="p-3">Virtual Network</h3>
-                  {% endif %}
-                  
+
+                <!-- Virtual Network Details -->
+                {% include 'master_app/admin/cd_networkList.html' %}
+                <!-- End : Virtual Network Details -->
                 
-                      
-                      <ul class="list-group list-group-flush">
-                        <li class="list-group-item d-flex justify-content-between align-items-start">
-                          <div class="ms-2 me-auto">
-                            <div class="fw-bold">Status</div>
-                          </div>
-                          {% if course.get_virtual_network %}
-                    {% if course.is_approved == "1" %}
-                          <span class="badge bg-warning">Pending</span>
-                {% elif course.is_approved == "2" %}
-                  
-                  <span class="badge bg-primary">Sent Admin for Approval</span>
-                {% elif course.is_approved == "3" %}
-                <span class="badge bg-success">Approved</span>
-                  
-                {% elif course.is_approved == "4"  %}
-                <span class="badge bg-danger">Rejected</span>
-                  
-                {% endif %}
-                {% endif %}
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-start">
-                          <div class="ms-2 me-auto">
-                            <div class="fw-bold">Name</div>
-                          </div>
-                          <p class="w-50 text-end">{{ course.get_virtual_network.name }}</p>
-                        </li>
-                        {% if course.get_virtual_network.is_instance_created %}
-                          <li class="list-group-item d-flex justify-content-between align-items-start">
-                            <div class="ms-2 me-auto">
-                              <div class="fw-bold">IP Address</div>
-                            </div>
-                            <p class="w-50 text-end">{{ course.get_virtual_network.ip_address }}</p></li>
-                        {% endif %}
-                        <li class="list-group-item d-flex justify-content-between align-items-start">
-                          <div class="ms-2 me-auto">
-                            <div class="fw-bold">OS</div>
-                          </div>
-                          <p class="w-50 text-end">{{ course.get_virtual_network.get_operating_system }}</p></li>
-                        <li class="list-group-item d-flex justify-content-between align-items-start">
-                          <div class="ms-2 me-auto">
-                            <div class="fw-bold">Scenario</div>
-                          </div><p class="w-50 text-end">{{ course.get_virtual_network.get_scenarios }}</p>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-start">
-                          <div class="ms-2 me-auto">
-                            <div class="fw-bold">Size</div>
-                          </div><p class="w-50 text-end">{{ course.get_virtual_network.size }}</p>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-start">
-                          <div class="ms-2 me-auto">
-                            <div class="fw-bold">Status</div>
-                          </div><p class="w-50 text-end">{{ course.get_virtual_network.status }}</p>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-start">
-                          <div class="ms-2 me-auto">
-                            <div class="fw-bold">State</div>
-                          </div><p class="w-50 text-end">{{ course.get_virtual_network.state }}</p>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-start">
-                          <div class="ms-2 me-auto">
-                            <div class="fw-bold">Min. Ram</div>
-                          </div><p class="w-50 text-end">{{ course.get_virtual_network.min_ram }}</p>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-start">
-                          <div class="ms-2 me-auto">
-                            <div class="fw-bold">Min. Disk</div>
-                          </div><p class="w-50 text-end">{{ course.get_virtual_network.min_disk }}</p>
-                        </li>
-                        
-                        <li class="list-group-item text-center" aria-disabled="true"><a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">See Details<i class="fas fa-chevron-right fs-5 ms-3 pt-2"></i></a></li>
-                      </ul>
-                    {% endif %}
-                  </div>
-                </div>
-                <div class="card d-none">
+                <!-- Challenges List -->
+                <!-- End : Challenges List -->
 
-                  <div class="card-body p-3">
-                    <h3>Challenges</h3>
-                    <div class="activity">
-                    
-                      {% if easy_challenges %}
-                          {% for ch in easy_challenges %}
-                          {% include 'master_app/instructor/challenges_modals.html' with ch=ch %}
-                          <div class="activity-item d-flex">
-                            <div class="activite-label"></div>
-                            <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
-                            <div class="activity-content">
-                              <a href="#verticalycentered_{{ ch.course.id }}_{{ ch.id }}" class="fw-bold " data-bs-toggle="modal" >{{ ch.title }}</a>
-                            </div>
-                          </div><!-- End activity item-->
-                          {% endfor %}
-                        
-                    {% endif %}
-                    {% if medium_challenges %}
-                      
-                          {% for ch in medium_challenges %}
-                          {% include 'master_app/instructor/challenges_modals.html' with ch=ch %}
-                          <div class="activity-item d-flex">
-                            <div class="activite-label"></div>
-                            <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
-                            <div class="activity-content">
-                              <a href="#verticalycentered_{{ ch.course.id }}_{{ ch.id }}" class="fw-bold " data-bs-toggle="modal" >{{ ch.title }}</a>
-                            </div>
-                          </div><!-- End activity item-->
-                          {% endfor %}
-                      
-                    {% endif %}
-                    {% if hard_challenges %}
-                      
-                          {% for ch in hard_challenges %}
-                          {% include 'master_app/instructor/challenges_modals.html' with ch=ch %}
-                          <div class="activity-item d-flex">
-                            <div class="activite-label"></div>
-                            <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
-                            <div class="activity-content">
-                              <a href="#verticalycentered_{{ ch.course.id }}_{{ ch.id }}" class="fw-bold " data-bs-toggle="modal" >{{ ch.title }}</a>
-                            </div>
-                          </div><!-- End activity item-->
-                          {% endfor %}
-                      
-                    {% endif %}
-                    </div>
-                  </div>
-                </div>
-                <div class="card">
 
-                  <div class="card-body p-3">
-                    <h3>Students</h3>
-                    <ul class="list-group list-group-flush">
-                      {% if students %}
-                        {% for std in students %}
-                          <li class="list-group-item">{{std.student.email }}</li>
-                        {% endfor %}
-                      {% endif %}
-                    </ul><!-- End Clean list group -->
-                  </div>
-                </div>
+                <!-- Student List -->
+                  {% include 'master_app/admin/cd_studentList.html' %}
+                <!-- END : Student List -->
+                
+                <!-- Results -->
                 {% if course.is_approved == "3" %}
-                    {% include 'master_app/course_challenge_results.html' %}
-                  {% endif %}
+                  {% include 'master_app/course_challenge_results.html' %}
+                {% endif %}
+                <!-- End : Results -->
 
             </div>
         </div>
@@ -311,7 +145,7 @@ width: 45%!important;
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'assets/vendor/fancybox/fancybox.umd.js' %}"></script>
+
 
 
 <script>
@@ -582,226 +416,9 @@ for (const [key, value] of Object.entries(JSON.parse(response["responseJSON"]["e
 </script>
 
 
-
-<script>
-  $('#create_network_isntance').on('click', function (event) {
-    event.preventDefault();
-    event.stopPropagation();
-      $(".loader-double").addClass("is-active");
-      $.ajax({
-        url : $('#create_network_isntance').attr("data-url"),
-        type  : "GET",
-        processData: false,
-        contentType: false,
-        success : function(response){
-          new Noty({
-        //  alert, success, error, warning, info
-        timeout: 4000 ,
-        type : "success",
-        theme: 'sunset',
-        // container : ".noty_layout",
-        force : false,
-        // layout: 'bottomLeft',
-        text: '<i class="fas fa-check-circle"></i>&nbsp;Instance has been created.',
-        animation: {
-        open: function (promise) {
-            var n = this;
-            var Timeline = new mojs.Timeline();
-            var body = new mojs.Html({
-                el        : n.barDom,
-                x         : {500: 0, delay: 0, duration: 500, easing: 'elastic.out'},
-                isForce3d : true,
-                onComplete: function () {
-                    promise(function(resolve) {
-                        resolve();
-                    })
-                }
-            });
-
-            var parent = new mojs.Shape({
-                parent: n.barDom,
-                width      : 200,
-                height     : n.barDom.getBoundingClientRect().height,
-                radius     : 0,
-                x          : {[150]: -150},
-                duration   : 1.2 * 500,
-                isShowStart: true
-            });
-
-            n.barDom.style['overflow'] = 'visible';
-            parent.el.style['overflow'] = 'hidden';
-
-            var burst = new mojs.Burst({
-                parent  : parent.el,
-                count   : 10,
-                top     : n.barDom.getBoundingClientRect().height + 75,
-                degree  : 90,
-                radius  : 75,
-                angle   : {[-90]: 40},
-                children: {
-                    fill     : '#EBD761',
-                    delay    : 'stagger(500, -50)',
-                    radius   : 'rand(8, 25)',
-                    direction: -1,
-                    isSwirl  : true
-                }
-            });
-
-            var fadeBurst = new mojs.Burst({
-                parent  : parent.el,
-                count   : 2,
-                degree  : 0,
-                angle   : 75,
-                radius  : {0: 100},
-                top     : '90%',
-                children: {
-                    fill     : '#EBD761',
-                    pathScale: [.65, 1],
-                    radius   : 'rand(12, 15)',
-                    direction: [-1, 1],
-                    delay    : .8 * 500,
-                    isSwirl  : true
-                }
-            });
-
-            Timeline.add(body, burst, fadeBurst, parent);
-            Timeline.play();
-        },
-        close: function (promise) {
-            var n = this;
-            new mojs.Html({
-                el        : n.barDom,
-                x         : {0: 500, delay: 10, duration: 500, easing: 'cubic.out'},
-                skewY     : {0: 10, delay: 10, duration: 500, easing: 'cubic.out'},
-                isForce3d : true,
-                onComplete: function () {
-                    promise(function(resolve) {
-                        resolve();
-                    })
-                }
-            }).play();
-        }
-        }
-    }).show(); 
-    setTimeout(function(){
-      location.reload();
-    }, 2000);
-        },
-        error : function(response){
-          // alert(response["responseJSON"]["error"]);
-
-          var text = "";
-                  // for(index in response["responseJSON"]["error"]){
-                  //   text  = text + '<i class="fas fa-exclamation-circle"></i>&nbsp;' + response["responseJSON"]["error"]
-                  // }
-//                   for (const [key, value] of JSON.parse(response["responseJSON"]["error"])) {
-//   console.log(key, value);  
-//   // text  = text + '<i class="fas fa-exclamation-circle"></i>&nbsp;' + value;
-// }
-// console.debug(JSON.parse(response["responseJSON"]["error"]));
-// for (const [key, value] of Object.entries(JSON.parse(response["responseJSON"]["error"]))) {
-//   // console.log(key, value);
-//   text  = text + '<i class="fas fa-exclamation-circle"></i>&nbsp;' + value;
-// }
-                  // alert(response["responseJSON"]["error"]);
-                  new Noty({
-        //  alert, success, error, warning, info
-        timeout: 5000 ,
-        type : "error",
-        theme: 'sunset',
-        // container : ".noty_layout",
-        force : false,
-        // layout: 'bottomLeft',
-        // text: '<i class="fas fa-exclamation-circle"></i>&nbsp;' + response["responseJSON"]["error"],
-        text:'<i class="fas fa-exclamation-circle"></i>&nbsp;' +  response["responseJSON"]["error"],
-        animation: {
-        open: function (promise) {
-            var n = this;
-            var Timeline = new mojs.Timeline();
-            var body = new mojs.Html({
-                el        : n.barDom,
-                x         : {500: 0, delay: 0, duration: 500, easing: 'elastic.out'},
-                isForce3d : true,
-                onComplete: function () {
-                    promise(function(resolve) {
-                        resolve();
-                    })
-                }
-            });
-
-            var parent = new mojs.Shape({
-                parent: n.barDom,
-                width      : 200,
-                height     : n.barDom.getBoundingClientRect().height,
-                radius     : 0,
-                x          : {[150]: -150},
-                duration   : 1.2 * 500,
-                isShowStart: true
-            });
-
-            n.barDom.style['overflow'] = 'visible';
-            parent.el.style['overflow'] = 'hidden';
-
-            var burst = new mojs.Burst({
-                parent  : parent.el,
-                count   : 10,
-                top     : n.barDom.getBoundingClientRect().height + 75,
-                degree  : 90,
-                radius  : 75,
-                angle   : {[-90]: 40},
-                children: {
-                    fill     : '#EBD761',
-                    delay    : 'stagger(500, -50)',
-                    radius   : 'rand(8, 25)',
-                    direction: -1,
-                    isSwirl  : true
-                }
-            });
-
-            var fadeBurst = new mojs.Burst({
-                parent  : parent.el,
-                count   : 2,
-                degree  : 0,
-                angle   : 75,
-                radius  : {0: 100},
-                top     : '90%',
-                children: {
-                    fill     : '#EBD761',
-                    pathScale: [.65, 1],
-                    radius   : 'rand(12, 15)',
-                    direction: [-1, 1],
-                    delay    : .8 * 500,
-                    isSwirl  : true
-                }
-            });
-
-            Timeline.add(body, burst, fadeBurst, parent);
-            Timeline.play();
-        },
-        close: function (promise) {
-            var n = this;
-            new mojs.Html({
-                el        : n.barDom,
-                x         : {0: 500, delay: 10, duration: 500, easing: 'cubic.out'},
-                skewY     : {0: 10, delay: 10, duration: 500, easing: 'cubic.out'},
-                isForce3d : true,
-                onComplete: function () {
-                    promise(function(resolve) {
-                        resolve();
-                    })
-                }
-            }).play();
-        }
-        }
-    }).show(); 
-        },
-        complete : function(response){
-          $(".loader-double").removeClass("is-active");
-        }
-        
-      });
-});
-</script>
+<!-- Admin : Send Request : Create an instance -->
+{% include 'master_app/admin/create_instance_script.html' %}
+<!-- END : Admin : Send Request : Create an instance -->
 
 
 

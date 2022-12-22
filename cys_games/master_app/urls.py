@@ -19,25 +19,25 @@ urlpatterns = [
 
     # ==========================================================
     # ? Admin Dashbaord
-    path("admininstrator/", views.AdminDashboard, name="admin-dasboard-url"),
+    path("admin/", views.AdminDashboard, name="admin-dasboard-url"),
 
     # ? Admin Profile
-    path("admininstrator/profile", views.AdminProfile, name="admin-profile-url"),
+    path("admin/profile", views.AdminProfile, name="admin-profile-url"),
 
     # ? Admin Course List
-    path("admininstrator/course/all", views.AdminCourseList, name="admin-course-list-url"),
+    path("admin/course/all", views.AdminCourseList, name="admin-course-list-url"),
 
     # ? Admin Create New Course
-    path("admininstrator/course/new", views.AdminCreateCourse, name="admin-course-new-url"),
+    path("admin/course/new", views.AdminCreateCourse, name="admin-course-new-url"),
     
     # ? Admin Course Details
-    path("admininstrator/course/<int:course_id>/details", views.AdminCourseDetails, name="admin-courses-details-url"),
+    path("admin/course/<int:course_id>/details", views.AdminCourseDetails, name="admin-courses-details-url"),
 
     # ? Admin Course Approval Form Submission
-    path("admininstrator/course/<int:vn_id>/approval", views.AdminCourseApproval, name="admin-course-approval-url"),
+    path("admin/course/<int:vn_id>/approval", views.AdminCourseApproval, name="admin-course-approval-url"),
 
     # ? Admin Course Reject
-    path("admininstrator/course/<int:course_id>/reject", views.AdminCourseReject, name="admin-course-reject-url"),
+    path("admin/course/<int:course_id>/reject", views.AdminCourseReject, name="admin-course-reject-url"),
 
     # ? Admin Virutal Networks
     path("admin/virtaul-networks", views.AdminVirtualNetworkList, name="admin-virtual-network-url"),

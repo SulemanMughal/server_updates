@@ -1,0 +1,114 @@
+<div class="card {% if not course.get_virtual_network %} bg-transparent shadow-none {% endif %} p-0 ">
+    <div class="card-body  px-0">
+      
+      
+      {% if course.get_virtual_network %}
+      {% if course.is_approved == "1" %}
+      <h3 class="p-3">Virtual Network</h3>
+        {% elif course.is_approved == "2" %}
+      {% if course.get_virtual_network.is_instance_created %}
+        <div class="container-fluid">
+          <div class="row justify-content-center">
+            <a class="btn btn-danger py-3  col-6 rounded-0" type="button" href="{% url 'admin-course-reject-url' course.id %}" >Reject Course</a>
+            <button class="btn btn-primary py-3   col-6 rounded-0" type="button"  data-href="{% url 'admin-course-approval-url' course.get_virtual_network.id %}" id="course_approval_btn">Approve Course</button>
+          </div>
+        </div>
+      {% else %}
+        <div class="container-fluid">
+          <div class="row justify-content-center">
+            <button class="btn btn-primary py-3  rounded-0" type="button" data-url="{% url 'admin-create-network-instance-url' course.get_virtual_network.id  %}" id="create_network_isntance"  >Create an instance</button>
+          </div>
+        </div>
+      {% endif %}
+    {% elif course.is_approved == "3" %}
+      <div class="container-fluid">
+        <div class="row justify-content-center">
+          <a class="btn btn-danger py-3  col-12 rounded-0" type="button" href="{% url 'admin-course-reject-url' course.id %}" >Reject Course</a>
+        </div>
+      </div>
+      <h3 class="p-3">Virtual Network</h3>
+    {% else %}
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <button class="btn btn-primary py-3   col-12 rounded-0" type="button" data-href="{% url 'admin-course-approval-url' course.get_virtual_network.id %}" id="course_approval_btn">Approve Course</button>
+      </div>
+    </div>
+    <h3 class="p-3">Virtual Network</h3>
+    {% endif %}
+    
+  
+        
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item d-flex justify-content-between align-items-start">
+            <div class="ms-2 me-auto">
+              <div class="fw-bold">Status</div>
+            </div>
+            {% if course.get_virtual_network %}
+      {% if course.is_approved == "1" %}
+            <span class="badge bg-warning">Draft</span>
+  {% elif course.is_approved == "2" %}
+    
+    <span class="badge bg-primary">Sent Admin for Approval</span>
+  {% elif course.is_approved == "3" %}
+  <span class="badge bg-success">Approved</span>
+    
+  {% elif course.is_approved == "4"  %}
+  <span class="badge bg-danger">Rejected</span>
+    
+  {% endif %}
+  {% endif %}
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-start">
+            <div class="ms-2 me-auto">
+              <div class="fw-bold">Name</div>
+            </div>
+            <p class="w-50 text-end">{{ course.get_virtual_network.name }}</p>
+          </li>
+          {% if course.get_virtual_network.is_instance_created %}
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+              <div class="ms-2 me-auto">
+                <div class="fw-bold">IP Address</div>
+              </div>
+              <p class="w-50 text-end">{{ course.get_virtual_network.ip_address }}</p></li>
+          {% endif %}
+          <li class="list-group-item d-flex justify-content-between align-items-start">
+            <div class="ms-2 me-auto">
+              <div class="fw-bold">OS</div>
+            </div>
+            <p class="w-50 text-end">{{ course.get_virtual_network.get_operating_system }}</p></li>
+          <li class="list-group-item d-flex justify-content-between align-items-start">
+            <div class="ms-2 me-auto">
+              <div class="fw-bold">Scenario</div>
+            </div><p class="w-50 text-end">{{ course.get_virtual_network.get_scenarios }}</p>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-start">
+            <div class="ms-2 me-auto">
+              <div class="fw-bold">Size</div>
+            </div><p class="w-50 text-end">{{ course.get_virtual_network.size }}</p>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-start">
+            <div class="ms-2 me-auto">
+              <div class="fw-bold">Status</div>
+            </div><p class="w-50 text-end">{{ course.get_virtual_network.status }}</p>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-start">
+            <div class="ms-2 me-auto">
+              <div class="fw-bold">State</div>
+            </div><p class="w-50 text-end">{{ course.get_virtual_network.state }}</p>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-start">
+            <div class="ms-2 me-auto">
+              <div class="fw-bold">Min. Ram</div>
+            </div><p class="w-50 text-end">{{ course.get_virtual_network.min_ram }}</p>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-start">
+            <div class="ms-2 me-auto">
+              <div class="fw-bold">Min. Disk</div>
+            </div><p class="w-50 text-end">{{ course.get_virtual_network.min_disk }}</p>
+          </li>
+          
+          <li class="list-group-item text-center" aria-disabled="true"><a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">See Details<i class="fas fa-chevron-right fs-5 ms-3 pt-2"></i></a></li>
+        </ul>
+      {% endif %}
+    </div>
+  </div>

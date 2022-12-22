@@ -183,7 +183,7 @@ def AdminProfile(request):
 @admin_required
 def AdminCourseList(request):
     template_name = 'master_app/admin/courses_list.html'
-    courses = Course.objects.all()
+    courses = Course.objects.all().order_by("-id")
     context = {
         "courses": courses
     }
@@ -662,44 +662,23 @@ def AdminCreateNetworkInstance(request, vn_id):
                 }
             }
             response = s.post('http://10.1.2.9:8774/v2.1/servers', headers=headers , json=json_data)
-            # print(netObj.name, netObj.imageRef)
-            
+            # print(response.json())
             if response.status_code == 202:
-                # print(response)
-
                 netObj.server_id = response.json()["server"]["id"]
                 netObj.save()
-                # print(netObj.server_id)
-
                 json_data={
                     "pool": "public1"
                 }
-
                 response  =s.post('http://10.1.2.9:8774/v2.1/os-floating-ips', headers=headers , json=json_data)
-                # print(response)
-
                 if response.status_code == 200:
-
-                    # print("=============OKAY++++++++++++++++")
-
                     netObj.ip_address = response.json()["floating_ip"]["ip"]
                     netObj.save()
-
                     json_data = {
-    
                         "addFloatingIp" : {
                             "address": response.json()["floating_ip"]["ip"]
                         }
                     }
-
-                    # print(netObj.server_id, response.json()["floating_ip"]["ip"] , f"http://10.1.2.9:8774/v2.1/servers/{netObj.server_id}/action")
-
                     time.sleep(5)
-
-                    # response = s.post(f"http://10.1.2.9:9696/v2.0/floatingips", headers=headers , json=json_data)
-                    
-
-                    # try:
                     response = s.post(f'http://10.1.2.9:8774/v2.1/servers/{netObj.server_id}/action', headers=headers , json=json_data)
                     if (response.status_code == 202):
                         netObj.is_instance_created = True
@@ -711,53 +690,34 @@ def AdminCreateNetworkInstance(request, vn_id):
                                 })
                             ),
                             status =200
-                            
                         )
                     else:
                         return JsonResponse(
-            json.loads(
-                json.dumps({
-                    "error" : "Error in associating a floating IP Address."
-                })
-            ),
-            status =400
-            ) 
-                    # print(response.text)
-
-                    #     print(response)
-
-                    #     print(response.json())
-                    # except Exception as e:
-                    #     print(e)
-
-
-                    # return JsonResponse(
-                    #         json.loads(
-                    #             json.dumps({
-                    #                 "data" : response.json()
-                    #             })
-                    #         ),
-                    #         status =200
-                            
-                    #     )
+                            json.loads(
+                                json.dumps({
+                                    "error" : "Error in associating a floating IP Address."
+                                })
+                            ),
+                            status =400
+                        )
                 else:
                     return JsonResponse(
-            json.loads(
-                json.dumps({
-                    "error" : "Error in assigning an IP Address."
-                })
-            ),
-            status =400
-            ) 
+                        json.loads(
+                            json.dumps({
+                                "error" : "Error in assigning an IP Address."
+                            })
+                        ),
+                        status =400
+                    ) 
             else:
                 return JsonResponse(
-            json.loads(
-                json.dumps({
-                    "error" : "Error in creating an instance"
-                })
-            ),
-            status =400
-        ) 
+                    json.loads(
+                        json.dumps({
+                            "error" : "Error in creating an instance"
+                        })
+                    ),
+                    status =400
+                ) 
         else:
            return JsonResponse(
             json.loads(
@@ -1022,22 +982,61 @@ def InstructorApproveCourse(request, course_id):
 @login_required
 @teacher_required
 def InstructorVirturalNetworkNew(request):
-    template_name = 'master_app/instructor/virutal_netwroks_new.html'
-    if request.method == "POST":
+    print(request.POST)
+    if request.method == "POST" :
         form = NewVirtualNetworkForm(request.POST)
-        # print(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, "New Network Machine Has been added")
-            if request.POST.get("next", None):
-                return redirect(request.POST.get("next", None))
-            return redirect(reverse("instructor-virtual-network-url"))
+            # messages.success(request, "New Network Machine Has been added")
+            # if request.POST.get("next", None):
+            #     return redirect(request.POST.get("next", None))
+            # return redirect(reverse("instructor-virtual-network-url"))
+            return JsonResponse(
+                json.loads(
+                    json.dumps({
+                        "text" : "Valid method"
+                    })
+                ),
+                status =200
+            )
+        else:
+            return JsonResponse(
+            json.loads(
+                json.dumps({
+                    "error" : json.dumps(form.errors)
+                })
+            ),
+            status =400
+        )
+        
     else:
-        form = NewVirtualNetworkForm()
-    context = {
-        "form": form
-    }
-    return render(request, template_name, context)
+        return JsonResponse(
+            json.loads(
+                json.dumps({
+                    "error" : "Invalid request method"
+                })
+            ),
+            status =400
+        )
+    # ===========================
+    # Oiginal code
+    # template_name = 'master_app/instructor/virutal_netwroks_new.html'
+    # if request.method == "POST":
+    #     form = NewVirtualNetworkForm(request.POST)
+    #     # print(request.POST)
+    #     if form.is_valid():
+    #         form.save()
+    #         messages.success(request, "New Network Machine Has been added")
+    #         if request.POST.get("next", None):
+    #             return redirect(request.POST.get("next", None))
+    #         return redirect(reverse("instructor-virtual-network-url"))
+    # else:
+    #     form = NewVirtualNetworkForm()
+    # context = {
+    #     "form": form
+    # }
+    # return render(request, template_name, context)
+    # ============================================
 
 # TODO  :   Instructor Virutal Networks List
 

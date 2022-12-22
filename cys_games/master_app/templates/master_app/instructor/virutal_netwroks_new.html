@@ -5,7 +5,6 @@
 
 {% block extra_css %}
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <link href="{% static 'assets/vendor/quill/quill.snow.css' %}" rel="stylesheet">
 <link href="{% static 'assets/vendor/quill/quill.bubble.css' %}" rel="stylesheet">
 <script src="{% static 'assets/vendor/quill/quill.min.js' %}"></script>
@@ -32,7 +31,7 @@
             <div class="col-12 col-md-6 ">
                 <div class="card" >
                     <div class="card-body px-5 py-3">
-                      <h5 class="card-title ">Add a new virtual network</h5>
+                      <h5 class="card-title ">Request Virtual Network</h5>
                         {% include 'master_app/errors.html' %}
                         {% if messages %}
                           {% for message in messages %}

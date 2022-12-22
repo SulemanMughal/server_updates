@@ -147,7 +147,7 @@
 
 </script>
 
-<!-- scenario -->
+<!-- scenario fetching -->
 <script>
 // var os_types = [];
 
@@ -186,19 +186,13 @@ var imgref_dict={
                 processData: false,
                 contentType: false,
                 success : function(response){
-
-
                   var images = response.data.images.filter(
                   function(value) {
                     return value.image_type == "snapshot"; 
                   });
-
                   function onlyUnique(value, index, self) {
                     return self.indexOf(value) === index;
                   }
-
-                  
-
                   for (var index= 0; index < images.length ; index ++){
                     $('#id_scenarios').append(`<option value="${images[index]["name"]}"> ${images[index]["name"]} </option>`);
                     os_type_dict[images[index]["name"]] = images[index]["OS Type"];
@@ -209,42 +203,108 @@ var imgref_dict={
                     ram_dict[images[index]["name"]] = images[index]["min_ram"];
                     disk_dict[images[index]["name"]] = images[index]["min_disk"];
                     imgref_dict[images[index]["name"]] = images[index]["id"];
-                    
-                    
-                    
-                    
                   }
-
-                  // console.debug(status_dict);
-                  
-
                   $("#id_operating_system").val("" +  os_type_dict[$('#id_scenarios').val()]);
                   $("#modalEditor .ql-editor").html("" + description[$('#id_scenarios').val()]);
                   $("#id_size").val(filesize(  size[$('#id_scenarios').val()], {base: 2, standard: "jedec"}) );
                   $("#id_status").val("" + status_dict[$('#id_scenarios').val()]);
                   $("#id_state").val("" + state_dict[$('#id_scenarios').val()]);
-                  $("#id_min_ram").val("" + ram_dict[$('#id_scenarios').val()]);
-                  $("#id_min_disk").val("" + disk_dict[$('#id_scenarios').val()]);
+                  $("#id_min_ram").val(filesize( ram_dict[$('#id_scenarios').val()] *1024*1024, {base : 2, standard : "jedec"}) );
+                  $("#id_min_disk").val(filesize( disk_dict[$('#id_scenarios').val()] *1024*1024*1024, {base : 2, standard : "jedec"})  );
                   $("#id_imageRef").val("" + imgref_dict[$('#id_scenarios').val()]);
-                  
-                  
-
-                  // console.debug(filesize(265318, {base: 2, standard: "jedec"}));
-                  
-                  // os_types = os_types.filter(onlyUnique);
-                  // for (var index= 0; index < os_types.length ; index ++){
-                  //   $('#id_operating_system').append(`<option value="${os_types[index]}"> ${os_types[index]} </option>`);
-                  // }
-
-                  
-
-                  // console.debug(os_type_dict);
-
-
-
                 },
                 error : function(response){
-                  alert(response["responseJSON"]["error"]);
+                  // alert(response["responseJSON"]["error"]);
+                  new Noty({
+        //  alert, success, error, warning, info
+        timeout: 4000 ,
+        type : "error",
+        theme: 'sunset',
+        // container : ".noty_layout",
+        force : false,
+        // layout: 'bottomLeft',
+        text: `<i class="fas fa-check-circle"></i>&nbsp; ${response["responseJSON"]["error"]}`,
+        animation: {
+        open: function (promise) {
+            var n = this;
+            var Timeline = new mojs.Timeline();
+            var body = new mojs.Html({
+                el        : n.barDom,
+                x         : {500: 0, delay: 0, duration: 500, easing: 'elastic.out'},
+                isForce3d : true,
+                onComplete: function () {
+                    promise(function(resolve) {
+                        resolve();
+                    })
+                }
+            });
+
+            var parent = new mojs.Shape({
+                parent: n.barDom,
+                width      : 200,
+                height     : n.barDom.getBoundingClientRect().height,
+                radius     : 0,
+                x          : {[150]: -150},
+                duration   : 1.2 * 500,
+                isShowStart: true
+            });
+
+            n.barDom.style['overflow'] = 'visible';
+            parent.el.style['overflow'] = 'hidden';
+
+            var burst = new mojs.Burst({
+                parent  : parent.el,
+                count   : 10,
+                top     : n.barDom.getBoundingClientRect().height + 75,
+                degree  : 90,
+                radius  : 75,
+                angle   : {[-90]: 40},
+                children: {
+                    fill     : '#EBD761',
+                    delay    : 'stagger(500, -50)',
+                    radius   : 'rand(8, 25)',
+                    direction: -1,
+                    isSwirl  : true
+                }
+            });
+
+            var fadeBurst = new mojs.Burst({
+                parent  : parent.el,
+                count   : 2,
+                degree  : 0,
+                angle   : 75,
+                radius  : {0: 100},
+                top     : '90%',
+                children: {
+                    fill     : '#EBD761',
+                    pathScale: [.65, 1],
+                    radius   : 'rand(12, 15)',
+                    direction: [-1, 1],
+                    delay    : .8 * 500,
+                    isSwirl  : true
+                }
+            });
+
+            Timeline.add(body, burst, fadeBurst, parent);
+            Timeline.play();
+        },
+        close: function (promise) {
+            var n = this;
+            new mojs.Html({
+                el        : n.barDom,
+                x         : {0: 500, delay: 10, duration: 500, easing: 'cubic.out'},
+                skewY     : {0: 10, delay: 10, duration: 500, easing: 'cubic.out'},
+                isForce3d : true,
+                onComplete: function () {
+                    promise(function(resolve) {
+                        resolve();
+                    })
+                }
+            }).play();
+        }
+        }
+    }).show();    
+          
                 },
                 complete : function(response){
                   $(".loader-double").removeClass("is-active");
@@ -253,7 +313,6 @@ var imgref_dict={
               });
 });
 </script>
-
 <script>
   $('#id_scenarios').on('change', function() {
     $("#id_operating_system").val("" +  os_type_dict[this.value]);
@@ -261,33 +320,28 @@ var imgref_dict={
     $("#modalEditor .ql-editor").html("" + description[this.value]);
     $("#id_size").val(filesize(  size[this.value], {base: 2, standard: "jedec"})   );
     $("#id_state").val("" + state_dict[this.value]);
-    $("#id_min_ram").val("" + ram_dict[this.value]);
-    $("#id_min_disk").val("" + disk_dict[this.value]);
+    // $("#id_min_ram").val("" + ram_dict[this.value]);
+    // $("#id_min_disk").val("" + disk_dict[this.value]);
+    $("#id_min_ram").val(filesize( ram_dict[this.value] *1024*1024, {base : 2, standard : "jedec"}) );
+    $("#id_min_disk").val(filesize( disk_dict[this.value] *1024*1024*1024, {base : 2, standard : "jedec"})  );
     $("#id_imageRef").val("" + imgref_dict[this.value]);
   });
-
 </script>
+<!-- end : senario fetching -->
 
-<!-- add a student -->
+<!-- Add a new student script -->
+  {% include 'master_app/instructor/new_student_script.html' %}
+<!-- End : Add a new student script -->
+
+<!-- Submit request for virtual network by instructor-->
 <script>
-
-var myModalEl = document.getElementById('create_student_modal');
-var myModal = new bootstrap.Modal(document.getElementById('create_student_modal'), {
-  keyboard: false
-})
-
-myModalEl.addEventListener('hidden.bs.modal', function (event) {
-  document.getElementById("student_add_form").reset();
-  $("#student_add_form").removeClass("was-validated");
-})
-
-
-  $("form#student_add_form").on("submit", function(event){
+  $("form#identifier").on("submit",function(event){
     event.preventDefault();
     event.stopPropagation();
-    var submit_form = $("form#student_add_form").get(0);
+    var submit_form = $("form#identifier").get(0);
     if(submit_form.checkValidity()){
-      var fd = new FormData($("form#student_add_form")[0]);
+      // console.debug("Form is valid");
+      var fd = new FormData($("form#identifier")[0]);
       $.ajaxSetup({
         beforeSend: function(xhr, settings){
           xhr.setRequestHeader(
@@ -302,103 +356,105 @@ myModalEl.addEventListener('hidden.bs.modal', function (event) {
         processData: false,
         contentType: false,
         success : function(response){
-          myModal.hide();
-          new Noty({
-        //  alert, success, error, warning, info
-        timeout: 2000 ,
-        type : "success",
-        theme: 'sunset',
-        // container : ".noty_layout",
-        force : false,
-        // layout: 'bottomLeft',
-        text: '<i class="fas fa-check-circle"></i>&nbsp; New student has been added successfully.',
-        animation: {
-        open: function (promise) {
-            var n = this;
-            var Timeline = new mojs.Timeline();
-            var body = new mojs.Html({
-                el        : n.barDom,
-                x         : {500: 0, delay: 0, duration: 500, easing: 'elastic.out'},
-                isForce3d : true,
-                onComplete: function () {
-                    promise(function(resolve) {
-                        resolve();
-                    })
-                }
-            });
-
-            var parent = new mojs.Shape({
-                parent: n.barDom,
-                width      : 200,
-                height     : n.barDom.getBoundingClientRect().height,
-                radius     : 0,
-                x          : {[150]: -150},
-                duration   : 1.2 * 500,
-                isShowStart: true
-            });
-
-            n.barDom.style['overflow'] = 'visible';
-            parent.el.style['overflow'] = 'hidden';
-
-            var burst = new mojs.Burst({
-                parent  : parent.el,
-                count   : 10,
-                top     : n.barDom.getBoundingClientRect().height + 75,
-                degree  : 90,
-                radius  : 75,
-                angle   : {[-90]: 40},
-                children: {
-                    fill     : '#EBD761',
-                    delay    : 'stagger(500, -50)',
-                    radius   : 'rand(8, 25)',
-                    direction: -1,
-                    isSwirl  : true
-                }
-            });
-
-            var fadeBurst = new mojs.Burst({
-                parent  : parent.el,
-                count   : 2,
-                degree  : 0,
-                angle   : 75,
-                radius  : {0: 100},
-                top     : '90%',
-                children: {
-                    fill     : '#EBD761',
-                    pathScale: [.65, 1],
-                    radius   : 'rand(12, 15)',
-                    direction: [-1, 1],
-                    delay    : .8 * 500,
-                    isSwirl  : true
-                }
-            });
-
-            Timeline.add(body, burst, fadeBurst, parent);
-            Timeline.play();
-        },
-        close: function (promise) {
-            var n = this;
-            new mojs.Html({
-                el        : n.barDom,
-                x         : {0: 500, delay: 10, duration: 500, easing: 'cubic.out'},
-                skewY     : {0: 10, delay: 10, duration: 500, easing: 'cubic.out'},
-                isForce3d : true,
-                onComplete: function () {
-                    promise(function(resolve) {
-                        resolve();
-                    })
-                }
-            }).play();
-        }
-        }
-    }).show();    
-
-        setTimeout(function(){
-          location.reload();
-        }, 2000);
-
-        },
+              myModal.hide();
+              new Noty({
+            //  alert, success, error, warning, info
+            timeout: 2000 ,
+            type : "success",
+            theme: 'sunset',
+            // container : ".noty_layout",
+            force : false,
+            // layout: 'bottomLeft',
+            text: '<i class="fas fa-check-circle"></i>&nbsp; Request for Virtual Network has been added.',
+            animation: {
+            open: function (promise) {
+                var n = this;
+                var Timeline = new mojs.Timeline();
+                var body = new mojs.Html({
+                    el        : n.barDom,
+                    x         : {500: 0, delay: 0, duration: 500, easing: 'elastic.out'},
+                    isForce3d : true,
+                    onComplete: function () {
+                        promise(function(resolve) {
+                            resolve();
+                        })
+                    }
+                });
+    
+                var parent = new mojs.Shape({
+                    parent: n.barDom,
+                    width      : 200,
+                    height     : n.barDom.getBoundingClientRect().height,
+                    radius     : 0,
+                    x          : {[150]: -150},
+                    duration   : 1.2 * 500,
+                    isShowStart: true
+                });
+    
+                n.barDom.style['overflow'] = 'visible';
+                parent.el.style['overflow'] = 'hidden';
+    
+                var burst = new mojs.Burst({
+                    parent  : parent.el,
+                    count   : 10,
+                    top     : n.barDom.getBoundingClientRect().height + 75,
+                    degree  : 90,
+                    radius  : 75,
+                    angle   : {[-90]: 40},
+                    children: {
+                        fill     : '#EBD761',
+                        delay    : 'stagger(500, -50)',
+                        radius   : 'rand(8, 25)',
+                        direction: -1,
+                        isSwirl  : true
+                    }
+                });
+    
+                var fadeBurst = new mojs.Burst({
+                    parent  : parent.el,
+                    count   : 2,
+                    degree  : 0,
+                    angle   : 75,
+                    radius  : {0: 100},
+                    top     : '90%',
+                    children: {
+                        fill     : '#EBD761',
+                        pathScale: [.65, 1],
+                        radius   : 'rand(12, 15)',
+                        direction: [-1, 1],
+                        delay    : .8 * 500,
+                        isSwirl  : true
+                    }
+                });
+    
+                Timeline.add(body, burst, fadeBurst, parent);
+                Timeline.play();
+            },
+            close: function (promise) {
+                var n = this;
+                new mojs.Html({
+                    el        : n.barDom,
+                    x         : {0: 500, delay: 10, duration: 500, easing: 'cubic.out'},
+                    skewY     : {0: 10, delay: 10, duration: 500, easing: 'cubic.out'},
+                    isForce3d : true,
+                    onComplete: function () {
+                        promise(function(resolve) {
+                            resolve();
+                        })
+                    }
+                }).play();
+            }
+            }
+        }).show();    
+    
+            setTimeout(function(){
+              location.reload();
+            }, 2000);
+    
+            },
+            
         error : function(response){
+          // alert(response["responseJSON"]["error"]);
           var text = "";
           for (const [key, value] of Object.entries(JSON.parse(response["responseJSON"]["error"]))) {
             // console.log(key, value);
@@ -410,6 +466,101 @@ myModalEl.addEventListener('hidden.bs.modal', function (event) {
             }
           }
           new Noty({
+            //  alert, success, error, warning, info
+            timeout: 4000 ,
+            type : "error",
+            theme: 'sunset',
+            // container : ".noty_layout",
+            force : false,
+            // layout: 'bottomLeft',
+            text: text,
+            animation: {
+            open: function (promise) {
+                var n = this;
+                var Timeline = new mojs.Timeline();
+                var body = new mojs.Html({
+                    el        : n.barDom,
+                    x         : {500: 0, delay: 0, duration: 500, easing: 'elastic.out'},
+                    isForce3d : true,
+                    onComplete: function () {
+                        promise(function(resolve) {
+                            resolve();
+                        })
+                    }
+                });
+    
+                var parent = new mojs.Shape({
+                    parent: n.barDom,
+                    width      : 200,
+                    height     : n.barDom.getBoundingClientRect().height,
+                    radius     : 0,
+                    x          : {[150]: -150},
+                    duration   : 1.2 * 500,
+                    isShowStart: true
+                });
+    
+                n.barDom.style['overflow'] = 'visible';
+                parent.el.style['overflow'] = 'hidden';
+    
+                var burst = new mojs.Burst({
+                    parent  : parent.el,
+                    count   : 10,
+                    top     : n.barDom.getBoundingClientRect().height + 75,
+                    degree  : 90,
+                    radius  : 75,
+                    angle   : {[-90]: 40},
+                    children: {
+                        fill     : '#EBD761',
+                        delay    : 'stagger(500, -50)',
+                        radius   : 'rand(8, 25)',
+                        direction: -1,
+                        isSwirl  : true
+                    }
+                });
+    
+                var fadeBurst = new mojs.Burst({
+                    parent  : parent.el,
+                    count   : 2,
+                    degree  : 0,
+                    angle   : 75,
+                    radius  : {0: 100},
+                    top     : '90%',
+                    children: {
+                        fill     : '#EBD761',
+                        pathScale: [.65, 1],
+                        radius   : 'rand(12, 15)',
+                        direction: [-1, 1],
+                        delay    : .8 * 500,
+                        isSwirl  : true
+                    }
+                });
+    
+                Timeline.add(body, burst, fadeBurst, parent);
+                Timeline.play();
+            },
+            close: function (promise) {
+                var n = this;
+                new mojs.Html({
+                    el        : n.barDom,
+                    x         : {0: 500, delay: 10, duration: 500, easing: 'cubic.out'},
+                    skewY     : {0: 10, delay: 10, duration: 500, easing: 'cubic.out'},
+                    isForce3d : true,
+                    onComplete: function () {
+                        promise(function(resolve) {
+                            resolve();
+                        })
+                    }
+                }).play();
+            }
+            }
+        }).show();    
+              
+          
+        }
+      });
+    }
+    else{
+      new Noty({
         //  alert, success, error, warning, info
         timeout: 4000 ,
         type : "error",
@@ -417,7 +568,7 @@ myModalEl.addEventListener('hidden.bs.modal', function (event) {
         // container : ".noty_layout",
         force : false,
         // layout: 'bottomLeft',
-        text: text,
+        text: '<i class="fas fa-exclamation-circle"></i>&nbsp; Please input all required fields.',
         animation: {
         open: function (promise) {
             var n = this;
@@ -499,19 +650,10 @@ myModalEl.addEventListener('hidden.bs.modal', function (event) {
         }
     }).show();    
           
-          
-        },
-        complete : function(response){
-
-        }
-      });
-    }
-    else{
-      // console.debug("Form is invalid");
     }
   });
 </script>
-
+<!-- End : Submit request for virtual network by instructor-->
 
 
 {% endblock %}

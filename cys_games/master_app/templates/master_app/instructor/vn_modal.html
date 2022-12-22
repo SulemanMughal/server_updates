@@ -6,7 +6,7 @@ min-height: 150px;
 </style>
 
 <div class="modal fade" id="virutal_network_modal" tabindex="-1" data-url="{% url 'admin-fetch-network-images-url' %}">
-    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+    <div class="modal-dialog modal-dialog-scrollable ">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title fw-bolder fs-4" style="color:#012970;">Virtual Network Details</h5>
@@ -153,8 +153,8 @@ min-height: 150px;
 <input type="hidden" name="next" value="{{ request.path }}">
 
 <div class="text-end">
-  <button type="button" class="btn btn-danger " data-bs-dismiss="modal" aria-label="Close"  ><i class="fa-solid fa-chevron-left me-2"></i> Cancel</button>
-<button type="submit" class="btn btn-primary "  >Create <i class="fa-solid fa-chevron-right ms-2"></i></button>
+  <button type="button" class="btn btn-danger w-25" data-bs-dismiss="modal" aria-label="Close"  > Cancel</button>
+<button type="submit" class="btn btn-primary w-25"  >Request</button>
 </div>
 
                             
