@@ -25,7 +25,7 @@ from .forms import (
 
 
 # ? Models
-from .models import Course, AssignedStudents, CourseChallenge, VirtualNetwork, ChallengeSubmission
+from .models import Course, AssignedStudents, CourseChallenge, VirtualNetwork, ChallengeSubmission,NetworkFlag, NetworkFlagSubmission
 
 # ? Decorators
 from .decorators import (
@@ -34,12 +34,22 @@ from .decorators import (
     admin_required
 )
 
+# import settigns
+from django.conf import settings
+
 # import user
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
 # Create your views here.
 
+
+# ? Development Print Functions
+def customPrint(message):
+    if settings.DEBUG:
+        print("="*70)
+        print(message)
+        print("="*70)
 
 # ? Home View
 def index(request):
@@ -650,11 +660,49 @@ def AdminCreateNetworkInstance(request, vn_id):
                             "address": response.json()["floating_ip"]["ip"]
                         }
                     }
+
+                    # extra time to request
                     time.sleep(5)
                     response = s.post(f'http://10.1.2.9:8774/v2.1/servers/{netObj.server_id}/action', headers=headers , json=json_data)
                     if (response.status_code in [200, 201, 202]):
                         netObj.is_instance_created = True
                         netObj.save()
+
+                        # save flags to local database
+                        try:
+                            time.sleep(3)
+                            response = s.get(f'http://10.1.2.9:9292/v2/images/{netObj.imageRef}', headers=headers )
+                            if response.status_code in [200, 201, 202]:
+                                for i in response.json():
+                                    if i[:4].lower() == "flag":
+                                        # print(response.json()[i])
+                                        # NetworkFlag.objects.create(
+                                        #     course = netObj.course,
+                                        #     flag_id = i,
+                                        #     original_answer = response.json()[i],
+                                        #     points=50,
+                                        #     imageRef = netObj.imageRef
+                                        # )
+
+                                        try:
+                                            netFlag = NetworkFlag.objects.get_or_create(
+                                                course = netObj.course,
+                                                flag_id = i
+                                            )
+                                            netFlag[0].original_answer = response.json()[i]
+                                            netFlag[0].points = 50
+                                            netFlag[0].imageRef = netObj.imageRef
+                                            netFlag[0].save()
+                                        except Exception as e:
+                                            print(e)
+                                        
+                                        # netFlag.save()
+                                        # flag_id = i,
+                                        # original_answer = response.json()[i],
+                                        # points=50,
+                                        # imageRef = netObj.imageRef
+                        except:
+                            pass
                         return JsonResponse(
                             json.loads(
                                 json.dumps({
@@ -748,7 +796,7 @@ def CoursesList(request):
     template_name = 'master_app/instructor/courses_list.html'
 
     # TODO : Retrieve All Instructor Courses
-    all_courses = Course.objects.filter(instructor=request.user)
+    all_courses = Course.objects.filter(instructor=request.user).order_by("-id")
 
     # print(all_courses)
     context = {
@@ -1121,7 +1169,12 @@ def StudentDashboard(request):
 def StudentCourses(request):
     template_name = 'master_app/student/courseList.html'
     courses = AssignedStudents.objects.filter(
-        student__id=request.user.id).filter(course__is_approved="3")
+        student__id=request.user.id
+        ).filter(
+            course__is_approved="3"
+        ).order_by(
+            '-id'
+        )
     # print(courses)
 
     context = {
@@ -1350,156 +1403,80 @@ def StudentCreateNetworkInstance(request):
 
 
 
+
 def StudentFlagSubmission(request):
+    # print(request.POST)
+    customPrint(request.POST)
     if request.method == "POST" :
-        
-        # print(request.POST)
-
         try:
-            netObj = VirtualNetwork.objects.get(id = request.POST["vn_id"])
-
-            # ======open stack authentiation======
-
-            headers = {
-                'Content-Type': 'application/json',
-            }
-
-            json_data = {
-            'auth': {
-                'identity': {
-                    'methods': [
-                        'password',
-                    ],
-                    'password': {
-                        'user': {
-                            'name': 'admin',
-                            'domain': {
-                                'id': 'default',
-                            },
-                            'password': 'password',
-                        },
-                    },
-                },
-                "scope": {
-                "project": {
-                "name": "admin",
-                "domain": { "id": "default" }
-                }
-            }
-                
-            },
-            }
-
-            s = requests.Session()
-            response = s.post('http://10.1.2.9:5000/v3/auth/tokens', headers=headers, json=json_data)
-            # print(response.json())
-
-            if response.status_code == 201:
-                # print(response.headers["x-subject-token"])
-                headers = {
-                    'X-Auth-Token': f'{response.headers["x-subject-token"]}',
-                    
-                }
-
-                time.sleep(2)
-
-                # fetch images from open stack
-                response = s.get(f'http://10.1.2.9:9292/v2/images/{netObj.imageRef}', headers=headers )
-
-                # print(response.status_code)
-
-                if response.status_code == 200:
-                    # print(response.text)
-                    # with open('data.json', 'w') as f:
-                    #     json.dump(response.text, f)
-                    # with open('data.json', 'w', encoding='utf-8') as f:
-                    #     json.dump(response.json(), f, ensure_ascii=False, indent=4)
-                    if request.POST.get("Flag 1", None):
-                        flag_1 = response.json()["Flag 1"]
-                        # print(flag_1)
-                        if( request.POST["Flag 1"]  == flag_1):
-                            return JsonResponse(
-                                json.loads(
-                                    json.dumps({
-                                        "data" : response.json()
-                                    })
-                                ),
-                                status =200
-                            )
-                        else:
-                            return JsonResponse(
-                            json.loads(
-                                json.dumps({
-                                    "error" : "Invalid Flag Submit"
-                                })
-                            ),
-                            status = 400
-                        )
-                    
-                    elif request.POST.get("Flag 2", None):
-                        flag_2 = response.json()["Flag 2"]
-                        # print(flag_2)
-                        if( request.POST["Flag 2"]  == flag_2):
-                            return JsonResponse(
-                                json.loads(
-                                    json.dumps({
-                                        "data" : response.json()
-                                    })
-                                ),
-                                status =200
-                            )
-                        else:
-                            return JsonResponse(
-                            json.loads(
-                                json.dumps({
-                                    "error" : "Invalid Flag Submit"
-                                })
-                            ),
-                            status = 400
-                        )
-                    else:
-                        return JsonResponse(
+            netFlag = NetworkFlag.objects.get(
+                course__id = request.POST['course_id'],
+                flag_id = request.POST['flag_id']
+            )
+            customPrint(netFlag.original_answer)
+            student = AssignedStudents.objects.get(
+                course__id = request.POST['course_id'],
+                student__id = request.user.id
+            )
+            subObj = NetworkFlagSubmission.objects.get_or_create(
+                student = student,
+                flag_id = netFlag.flag_id
+            )
+            if(subObj[0].submit_status != 1):
+                subObj[0].attemptUsed = subObj[0].attemptUsed + 1
+                subObj[0].submittedAnswer = request.POST.get("flag", None)
+                subObj[0].save()
+                if netFlag.original_answer == request.POST.get("flag", None):
+                    # Retrieve student id
+                    # student = AssignedStudents.objects.get(
+                    #     course__id = request.POST['course_id'],
+                    #     student__id = request.user.id
+                    # )
+                    # customPrint(student)
+                    # subObj = NetworkFlagSubmission.objects.get_or_create(
+                    #     student = student,
+                    #     flag_id = netFlag.flag_id
+                    # )
+                    # customPrint(subObj[0].attemptUsed)
+                    subObj[0].obtainedPoints = netFlag.points
+                    subObj[0].status = "SUBMITTED"
+                    subObj[0].save()
+                    return JsonResponse(
                         json.loads(
                             json.dumps({
-                                "error" : "Invalid Flag Submit"
+                                "text" : "Flag has been submitted successfully"
                             })
                         ),
-                        status = 400
+                        status =200
                     )
-                
-                            
-
-                    
                 else:
                     return JsonResponse(
+                        json.loads(
+                            json.dumps({
+                                "error" : "Wrong Flag Submission"
+                            })
+                        ),
+                        status =400
+                    )
+            else:
+                return JsonResponse(
                     json.loads(
                         json.dumps({
-                            "error" : "Error in validating flag."
+                            "error" : "Flag already has been submitted"
                         })
                     ),
-                    status = 400
+                    status =400
                 )
-
+        except Exception as e:
+            customPrint(e)
             return JsonResponse(
-            json.loads(
-                json.dumps({
-                    "text" : "Valid Submissoin"
-                })
-            ),
-            status =200
-        )
-        except:
-            return JsonResponse(
-            json.loads(
-                json.dumps({
-                    "error" : "Invalid flag submission. Please Try Again"
-                })
-            ),
-            status =400
-        )
-
-        
-        
+                json.loads(
+                    json.dumps({
+                        "error" : "Invalid Flag Submission."
+                    })
+                ),
+                status =400
+            )
     else:
         return JsonResponse(
             json.loads(
@@ -1509,3 +1486,164 @@ def StudentFlagSubmission(request):
             ),
             status =400
         )
+
+# # orignal_code
+# def StudentFlagSubmission(request):
+#     if request.method == "POST" :
+        
+#         # print(request.POST)
+
+#         try:
+#             netObj = VirtualNetwork.objects.get(id = request.POST["vn_id"])
+
+#             # ======open stack authentiation======
+
+#             headers = {
+#                 'Content-Type': 'application/json',
+#             }
+
+#             json_data = {
+#             'auth': {
+#                 'identity': {
+#                     'methods': [
+#                         'password',
+#                     ],
+#                     'password': {
+#                         'user': {
+#                             'name': 'admin',
+#                             'domain': {
+#                                 'id': 'default',
+#                             },
+#                             'password': 'password',
+#                         },
+#                     },
+#                 },
+#                 "scope": {
+#                 "project": {
+#                 "name": "admin",
+#                 "domain": { "id": "default" }
+#                 }
+#             }
+                
+#             },
+#             }
+
+#             s = requests.Session()
+#             response = s.post('http://10.1.2.9:5000/v3/auth/tokens', headers=headers, json=json_data)
+#             # print(response.json())
+
+#             if response.status_code == 201:
+#                 # print(response.headers["x-subject-token"])
+#                 headers = {
+#                     'X-Auth-Token': f'{response.headers["x-subject-token"]}',
+                    
+#                 }
+
+#                 time.sleep(2)
+
+#                 # fetch images from open stack
+#                 response = s.get(f'http://10.1.2.9:9292/v2/images/{netObj.imageRef}', headers=headers )
+
+#                 # print(response.status_code)
+
+#                 if response.status_code == 200:
+#                     # print(response.text)
+#                     # with open('data.json', 'w') as f:
+#                     #     json.dump(response.text, f)
+#                     # with open('data.json', 'w', encoding='utf-8') as f:
+#                     #     json.dump(response.json(), f, ensure_ascii=False, indent=4)
+#                     if request.POST.get("Flag 1", None):
+#                         flag_1 = response.json()["Flag 1"]
+#                         # print(flag_1)
+#                         if( request.POST["Flag 1"]  == flag_1):
+#                             return JsonResponse(
+#                                 json.loads(
+#                                     json.dumps({
+#                                         "data" : response.json()
+#                                     })
+#                                 ),
+#                                 status =200
+#                             )
+#                         else:
+#                             return JsonResponse(
+#                             json.loads(
+#                                 json.dumps({
+#                                     "error" : "Invalid Flag Submit"
+#                                 })
+#                             ),
+#                             status = 400
+#                         )
+                    
+#                     elif request.POST.get("Flag 2", None):
+#                         flag_2 = response.json()["Flag 2"]
+#                         # print(flag_2)
+#                         if( request.POST["Flag 2"]  == flag_2):
+#                             return JsonResponse(
+#                                 json.loads(
+#                                     json.dumps({
+#                                         "data" : response.json()
+#                                     })
+#                                 ),
+#                                 status =200
+#                             )
+#                         else:
+#                             return JsonResponse(
+#                             json.loads(
+#                                 json.dumps({
+#                                     "error" : "Invalid Flag Submit"
+#                                 })
+#                             ),
+#                             status = 400
+#                         )
+#                     else:
+#                         return JsonResponse(
+#                         json.loads(
+#                             json.dumps({
+#                                 "error" : "Invalid Flag Submit"
+#                             })
+#                         ),
+#                         status = 400
+#                     )
+                
+                            
+
+                    
+#                 else:
+#                     return JsonResponse(
+#                     json.loads(
+#                         json.dumps({
+#                             "error" : "Error in validating flag."
+#                         })
+#                     ),
+#                     status = 400
+#                 )
+
+#             return JsonResponse(
+#             json.loads(
+#                 json.dumps({
+#                     "text" : "Valid Submissoin"
+#                 })
+#             ),
+#             status =200
+#         )
+#         except:
+#             return JsonResponse(
+#             json.loads(
+#                 json.dumps({
+#                     "error" : "Invalid flag submission. Please Try Again."
+#                 })
+#             ),
+#             status =400
+#         )
+
+        
+        
+#     else:
+#         return JsonResponse(
+#             json.loads(
+#                 json.dumps({
+#                     "error" : "Invalid request "
+#                 })
+#             ),
+#             status =400
+#         )

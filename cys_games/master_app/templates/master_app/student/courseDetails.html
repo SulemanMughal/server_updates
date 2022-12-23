@@ -97,7 +97,11 @@ color: #47b2e4;
                   <!-- end : card header summary -->
                   
                   <!-- Flag Submission -->
-                  {% include 'master_app/student/flag_submission.html' %}
+                  {% if course.course_status == 2 %}
+                    {% if course.get_network_flags %}
+                      {% include 'master_app/student/flag_submission.html' with flags=course.get_network_flags %}
+                    {% endif %}
+                  {% endif %}
                   <!-- End : Flag Submission -->
 
 
@@ -236,13 +240,14 @@ myOffcanvas.addEventListener('shown.bs.offcanvas', function () {
 
 
 {% include 'master_app/student/flag_a_submission.html' %}
-{% include 'master_app/student/flag_b_submission.html' %}
+
 
 
   {% endblock %}
 
 
 {% comment %}
+{% include 'master_app/student/flag_b_submission.html' %}
 <div class="row">
   <div class="col-lg-12">
   <h3>Relevant Paths</h3>

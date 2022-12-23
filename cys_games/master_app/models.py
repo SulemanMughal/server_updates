@@ -6,7 +6,7 @@ from ckeditor.fields import RichTextField
 from django.core.exceptions import ValidationError
 from django.urls import reverse
 
-from .choices import OPERATING_SYSTEM_CHOICES,  SCENARIOS_CATEGORYIES, RATING_CHOICES, CHALLENGE_LEVELS, CHALLENGE_LEVELS_TEXT, OPERATING_SYSTEM_CHOICES_TEXT, SCENARIOS_CATEGORYIES_TEXT, APPROVED_CHOICES, CHALLENGE_SUBMISSION_CHOICES
+from .choices import OPERATING_SYSTEM_CHOICES,  SCENARIOS_CATEGORYIES, RATING_CHOICES, CHALLENGE_LEVELS, CHALLENGE_LEVELS_TEXT, OPERATING_SYSTEM_CHOICES_TEXT, SCENARIOS_CATEGORYIES_TEXT, APPROVED_CHOICES, CHALLENGE_SUBMISSION_CHOICES, FLAG_SUBMISSION_CHOICES
 
 
 User = get_user_model()
@@ -100,6 +100,13 @@ class Course(models.Model):
             return 0
 
 
+    def get_network_flags(self):
+        try:
+            return self.networkflag_set.all()
+        except:
+            return None
+
+
 class AssignedStudents(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     student = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -152,11 +159,6 @@ class AssignedStudents(models.Model):
             except:
                 return False
         return True
-
-
-
-
-
 
 class VirtualNetwork(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
@@ -293,3 +295,33 @@ class ChallengeSubmission(models.Model):
     obtained_points = models.IntegerField( blank=True, null=True, default=0)
     timestamp=models.DateTimeField(auto_now_add=True)
     attempts = models.IntegerField(blank=True, null=True, default=0)
+
+
+class NetworkFlag(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    flag_id = models.CharField(max_length=50, default="", blank=True, null=True)
+    points = models.IntegerField(default=50 , blank=True, null=True)
+    original_answer = models.CharField(max_length=200, default="" , blank=True, null=True)
+    imageRef = models.CharField(max_length=100, blank=True, null=True)
+
+
+    def __str__(self):
+        if self.flag_id == "Flag 1":
+            return "User Flag"
+        else:
+            return "Root Flag"
+
+class NetworkFlagSubmission(models.Model):
+    student = models.ForeignKey(AssignedStudents, on_delete=models.CASCADE)
+    flag_id = models.CharField(max_length=50, blank=True, null=True, default="")
+    obtainedPoints = models.IntegerField(default=0, blank=True, null=True)
+    submittedAnswer = models.CharField(max_length=100, blank=True, default="")
+    attemptUsed = models.IntegerField(default=0 , blank=True)
+    status = models.CharField(max_length=12, choices=FLAG_SUBMISSION_CHOICES, default="PENDING", blank=True)
+
+
+    def submit_status(self):
+        if self.status == "SUBMITTED":
+            return 1
+        else:
+            return 2

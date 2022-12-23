@@ -1,15 +1,19 @@
 <!-- flag submission -->
 <script>
-    $(document).on("submit", "form#flag_a_form", function(event){
+    $(document).on("submit", "form.flag-form", function(event){
       
       event.preventDefault();
       event.stopPropagation();
-      var fd = new FormData();
+    //   console.debug(event.target);
+      var fd = new FormData($(event.target)[0]);
+      var sibmit_form = $(event.target)[0];
       // console.debug($(this));
-      if($("form#flag_a_form").get(0).checkValidity()){
+      if($(sibmit_form).get(0).checkValidity()){
         $(".loader-double").addClass("is-active");
-        fd.append("vn_id" , "{{ course.get_virtual_network.id }}");
-        fd.append("Flag 1" , $("#id_flag_1").val());
+        fd.append("course_id" , "{{ course.id }}");
+        // fd.append("flag_id" , "Flag " +  $(sibmit_form).attr("data-flag-id") + "");
+        fd.append("flag_id" , $(sibmit_form).attr("data-flag-id"));
+        // fd.append("Flag 1" , $("#id_flag_1").val());
       $.ajaxSetup({
         beforeSend: function(xhr, settings){
           xhr.setRequestHeader(
@@ -18,7 +22,7 @@
         }
       });
       $.ajax({
-        url : $("#flag_a_form").attr("action"),
+        url : $(sibmit_form).attr("action"),
         type  : "POST",
         data: fd,
         processData: false,

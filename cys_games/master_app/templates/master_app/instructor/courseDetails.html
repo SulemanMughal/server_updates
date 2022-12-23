@@ -121,11 +121,11 @@
     
     $("#modalEditor .ql-editor").attr('contenteditable', true);
     $("#modalEditor .ql-clipboard, #modalEditor .ql-tooltip").hide();
-    $(function(){
-        $("#identifier").on("submit",function(event) {
-        $("#id_description").val($(".quill-editor-full").html());
-        })
-    });
+    // $(function(){
+    //     $("#identifier").on("submit",function(event) {
+    //     $("#id_description").val($(".quill-editor-full").html());
+    //     })
+    // });
   }
 
 
@@ -339,6 +339,7 @@ var imgref_dict={
   $("form#identifier").on("submit",function(event){
     event.preventDefault();
     event.stopPropagation();
+    $("#id_description").val($(".quill-editor-full").html());
     var submit_form = $("form#identifier").get(0);
     if(submit_form.checkValidity()){
       // console.debug("Form is valid");
