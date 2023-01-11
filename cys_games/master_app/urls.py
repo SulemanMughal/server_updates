@@ -148,5 +148,7 @@ urlpatterns = [
 
     path("contact", views.ContactView, name="contact_url"),
 
+    path("about", views.AboutView, name="about_url"),
+
 ]
 

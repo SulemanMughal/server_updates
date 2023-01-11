@@ -1655,3 +1655,10 @@ def ContactView(request):
     context = {
     }
     return render(request, template_name, context)
+
+
+def AboutView(request):
+    template_name = 'master_app/about.html'
+    context = {
+    }
+    return render(request, template_name, context)
