@@ -1,0 +1,157 @@
+<style>
+    .circles {
+  margin-bottom: -10px;
+}
+
+.circle {
+  width: 200px;
+  margin: 6px 6px 20px;
+  display: inline-block;
+  position: relative;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.circle canvas {
+  vertical-align: top;
+}
+
+.circle strong {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  line-height: 40px;
+  font-size: 30px;
+}
+
+.circle strong i {
+  font-style: normal;
+  font-size: 0.6em;
+  font-weight: normal;
+}
+
+.circle span {
+  display: block;
+  /* color: #aaa; */
+  margin-top: 12px;
+}
+
+.circle span b{
+  display: block;
+  
+  margin-bottom: 10px;
+}
+</style>
+
+<div class="card p-3">
+    <div class="card-body">
+      
+
+
+      <div data-flickity='{"pageDots":true,"cellAlign": "left", "wrapAround": true, "imagesLoaded": true, "prevNextButtons": false, "adaptiveHeight" : true}' class="flickity-viewport-visible">
+        <div class="col-12 "  aria-hidden="true">
+          <h5 class="card-title">OpenStack Compute Summary</h5>
+      
+      <!-- Instances -->
+      <div class="circle"><strong>100<i>%</i></strong>
+        <span><b>Instances</b>  Used 0 of 10</span></div>
+      <script>
+       $('.circle').circleProgress({
+    value: 1
+  }).on('circle-animation-progress', function(event, progress) {
+    $(this).find('strong').html(Math.round(100 * progress) + '<i>%</i>');
+  });
+      </script>
+
+      <!-- VCPUs -->
+      <div class="circle"><strong>100<i>%</i></strong>
+        <span><b>VCPUs</b>  Used 0 of 10</span></div>
+      <script>
+       $('.circle').circleProgress({
+    value: 1
+  }).on('circle-animation-progress', function(event, progress) {
+    $(this).find('strong').html(Math.round(100 * progress) + '<i>%</i>');
+  });
+      </script>
+
+      <!-- RAM -->
+      <div class="circle"><strong>100<i>%</i></strong>
+        <span><b>RAM</b>  Used 16.15GB of 320GB</span></div>
+      <script>
+       $('.circle').circleProgress({
+    value: 1
+  }).on('circle-animation-progress', function(event, progress) {
+    $(this).find('strong').html(Math.round(100 * progress) + '<i>%</i>');
+  });
+      </script>
+        </div>
+        <div class="col-12 "  aria-hidden="true">
+          <h5 class="card-title">OpenStack Volume Summary</h5>
+      
+      <!-- Volumes -->
+      <div class="circle"><strong>100<i>%</i></strong>
+        <span><b>Volumes</b>  Used 4</span></div>
+      <script>
+       $('.circle').circleProgress({
+    value: 1
+  }).on('circle-animation-progress', function(event, progress) {
+    $(this).find('strong').html(Math.round(100 * progress) + '<i>%</i>');
+  });
+      </script>
+
+      <!-- Volume Snapshots -->
+      <div class="circle"><strong>100<i>%</i></strong>
+        <span><b>Volume Snapshots</b>  Used 0</span></div>
+      <script>
+       $('.circle').circleProgress({
+    value: 1
+  }).on('circle-animation-progress', function(event, progress) {
+    $(this).find('strong').html(Math.round(100 * progress) + '<i>%</i>');
+  });
+      </script>
+
+      <!-- Volume Storage -->
+      <div class="circle"><strong>100<i>%</i></strong>
+        <span><b>Volume Storage</b>  Used 172GB of 500GB</span></div>
+      <script>
+       $('.circle').circleProgress({
+    value: 1
+  }).on('circle-animation-progress', function(event, progress) {
+    $(this).find('strong').html(Math.round(100 * progress) + '<i>%</i>');
+  });
+      </script>
+        </div>
+        <div class="col-12 "  aria-hidden="true">
+          <h5 class="card-title">OpenStack Network Summary</h5>
+      
+      <!-- Volumes -->
+      <div class="circle"><strong>100<i>%</i></strong>
+        <span><b>Floating IPs</b>  Allocated 0 of 10</span></div>
+      <script>
+       $('.circle').circleProgress({
+    value: 1
+  }).on('circle-animation-progress', function(event, progress) {
+    $(this).find('strong').html(Math.round(100 * progress) + '<i>%</i>');
+  });
+      </script>
+
+      <!-- Volume Snapshots -->
+      <div class="circle"><strong>100<i>%</i></strong>
+        <span><b>Networks</b>  Used 0 of 10</span></div>
+      <script>
+       $('.circle').circleProgress({
+    value: 1
+  }).on('circle-animation-progress', function(event, progress) {
+    $(this).find('strong').html(Math.round(100 * progress) + '<i>%</i>');
+  });
+      </script>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+  
+  

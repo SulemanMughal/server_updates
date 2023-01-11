@@ -1647,3 +1647,11 @@ def StudentFlagSubmission(request):
 #             ),
 #             status =400
 #         )
+
+
+
+def ContactView(request):
+    template_name = 'master_app/contact.html'
+    context = {
+    }
+    return render(request, template_name, context)

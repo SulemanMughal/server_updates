@@ -145,5 +145,8 @@ urlpatterns = [
 
     path("student/flag/submission", views.StudentFlagSubmission, name="student-flag-submission"),
 
+
+    path("contact", views.ContactView, name="contact_url"),
+
 ]
 

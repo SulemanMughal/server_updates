@@ -1,6 +1,6 @@
 {%  extends 'base.html' %}
 {% load static %}
-{% block title %} Cyber Range {% endblock %}
+{% block title %} Home {% endblock %}
 
 {% block content %}
 
@@ -9,6 +9,8 @@
 {% block extra_css %}
 
 <link href="{% static 'assets/vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+
+
 {% endblock extra_css %}
 
 <style>
@@ -21,9 +23,9 @@
   padding: 60px 0;
   overflow: hidden;
 }
-    #hero .animated {
+    /* #hero .animated {
   animation: up-down 2s ease-in-out infinite alternate-reverse both;
-}
+} */
 .section-title {
   text-align: center;
   padding-bottom: 30px;
@@ -85,6 +87,28 @@
 } */
 </style>
 
+
+<style>
+  
+  img.vert-move {
+    -webkit-animation: mover 1s infinite  alternate;
+    animation: mover 1s infinite  alternate;
+  }
+  img.vert-move {
+    -webkit-animation: mover 1s infinite  alternate;
+    animation: mover 1s infinite  alternate;
+  }
+  @-webkit-keyframes mover {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-10px); }
+  }
+  @keyframes mover {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-10px); }
+  }
+  
+  </style>
+
 <main id="main" class="main">
     <section id="hero" class="d-flex align-items-center" >
 
@@ -96,7 +120,7 @@
               
             </div>
             <div class="col-lg-6 order-1 order-lg-2 hero-img"  >
-              <img src="{% static 'assets/img/hero-img.png' %}" class="img-fluid animated" alt="">
+              <img src="{% static 'assets/img/hero-img.png' %}" class="img-fluid animated vert-move" alt="">
             </div>
           </div>
         </div>

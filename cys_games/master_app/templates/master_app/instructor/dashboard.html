@@ -6,8 +6,9 @@
 {% block extra_css %}
 
 
-<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
-<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+<link rel="stylesheet" href="{% static 'assets/vendor/flickity/flickity.min.css' %}">
+<script src="{% static 'assets/vendor/flickity/flickity.pkgd.min.js' %}"></script>
+
 
 <style>
   .dashboard .news h4 , .dashboard .news p{
@@ -270,6 +271,7 @@
             </div>
 
             <div class="col-12">
+              
               <div class="card pb-3">
                 <div class="card-body">
                   <h5 class="card-title">Active Course Progress</h5>

@@ -1,4 +1,8 @@
 
+{% load static %}
+<link rel="stylesheet" href="{% static 'assets/vendor/themify/css/themify-icons.css' %}">
+
+
 <style>
     /* #footer {
   font-size: 14px;
@@ -50,7 +54,8 @@
 }
 #footer .footer-top {
   padding: 60px 0 30px 0;
-  background: #fff;
+  background: #37517e;
+  
 }
 #footer .footer-top .footer-contact {
   margin-bottom: 30px;
@@ -62,7 +67,7 @@
   line-height: 1;
   text-transform: uppercase;
   font-weight: 600;
-  color: #37517e;
+  color: white;
 }
 
 #footer .footer-top .footer-contact p {
@@ -70,7 +75,7 @@
   line-height: 24px;
   margin-bottom: 0;
   font-family: "Jost", sans-serif;
-  color: #5e5e5e;
+  color: white;
 }
 
 
@@ -90,7 +95,7 @@
 #footer .footer-top h4 {
   font-size: 16px;
   font-weight: bold;
-  color: #37517e;
+  color: white;
   position: relative;
   padding-bottom: 12px;
 }
@@ -121,7 +126,7 @@
 }
 
 #footer .footer-top .footer-links ul a {
-  color: #777777;
+  color: white;
   transition: 0.3s;
   display: inline-block;
   line-height: 1;
@@ -159,36 +164,47 @@
         <div class="row">
 
           <div class="col-lg-3 col-md-6 footer-contact">
-            <h3 class="fw-bolder">Cyber Range</h3>
-            <p>
-                A108 Adam Street <br>
-                New York, NY 535022<br>
-                United States <br><br>
-                <strong>Phone:</strong> +1 5589 55488 55<br>
-                <strong>Email:</strong> info@example.com<br>
+            <h3 class="fw-bolder fs-2">Cyber Range</h3>
+            <p class="w-75">
+              Times are the pain of pleasures, for if we take pleasure in pleasure, it is easy for us to be blinded to them, and the distinction of the truth will come about.
               </p>
           </div>
 
           <div class="col-lg-3 col-md-6 footer-links">
-            <h4>Useful Links</h4>
+            <h3 class="text-white fw-bold">Company</h3>
             <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Home</a></li>
               <li><i class="bx bx-chevron-right"></i> <a href="#">About us</a></li>
               <li><i class="bx bx-chevron-right"></i> <a href="#">Services</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Team</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'contact_url' %}">Contact</a></li>
             </ul>
           </div>
 
           <div class="col-lg-3 col-md-6 footer-links">
-            <h4>Resources</h4>
+            <h3 class="text-white fw-bold">Support</h3>
             <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Knowledge Base</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Blog</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Forum</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Community</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Meetups</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Terms & Conditions</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy Policy</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Support</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">FAQ</a></li>
+              
             </ul>
+          </div>
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h3 class="text-white fw-bold">Get in Touch</h3>
+            <ul>
+              <li>
+                <a href="tel:+23-345-67890" > <i class="ti-headphone-alt me-3 text-white"></i>Support@megakit.com</a>
+              </li>
+              <li>
+                <a href="mailto:support@gmail.com" > <i class="ti-mobile me-3 text-white"></i>+23-456-6588</a>
+              </li>
+            </ul>
+              <ul class="list-inline footer-socials mt-3">
+                <li class="d-inline-block"><a href="#!"><i class="ti-facebook  text-white fs-4"></i></a></li>
+                <li class="d-inline-block"><a href="#!"><i class="ti-twitter mx-4 text-white fs-4"></i></a></li>
+                <li class="d-inline-block"><a href="#!"><i class="ti-linkedin   text-white fs-4"></i></a></li>
+              </ul>
           </div>
 
 

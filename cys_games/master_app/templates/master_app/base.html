@@ -41,7 +41,7 @@ input[type=number]:focus,
     {% endblock extra_css %}
     <title>{% block title %}Cyber Range{% endblock title %} | Cyber Range</title>
 </head>
-<body class="toggle-sidebar">
+<body  class="toggle-sidebar" >
     
     
     {% block header %}
@@ -60,7 +60,7 @@ input[type=number]:focus,
         {% else %}
             {% include 'master_app/sidebar.html' %}
         {% endif %}
-    {% else %}
+        {% else %}
         {% include 'master_app/sidebar.html' %}
     {% endif %}
         

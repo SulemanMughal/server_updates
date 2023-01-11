@@ -3,7 +3,9 @@
 <!-- ======= Header ======= -->
 <header   class="header fixed-top d-flex align-items-center sticky-top">
   <div class="d-flex align-items-center justify-content-between">
-    <i class="bi bi-list toggle-sidebar-btn"></i>
+    {% if request.user.is_authenticated %}
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    {% endif %}
     <a href="{% url 'master_index' %}" class="logo d-flex align-items-center ms-2">
       <span class="d-none d-lg-block">Cyber Range</span>
     </a>
