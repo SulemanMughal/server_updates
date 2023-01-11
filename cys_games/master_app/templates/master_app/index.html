@@ -109,24 +109,13 @@
   
   </style>
 
-<main id="main" class="main">
-    <section id="hero" class="d-flex align-items-center" >
 
-        <div class="container">
-          <div class="row" id="section_herosection_about">
-            <div class="col-lg-6 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" >
-              <h1 class="fw-bold">Securing your world</h1>
-              <p>A global team with one mission, create a safer cyber world by making cybersecurity training fun and accessible to everyone.</p>
-              
-            </div>
-            <div class="col-lg-6 order-1 order-lg-2 hero-img"  >
-              <img src="{% static 'assets/img/hero-img.png' %}" class="img-fluid animated vert-move" alt="">
-            </div>
-          </div>
-        </div>
+
+<main id="main" class="main">
     
-      </section><!-- End Hero -->
     
+      {% include 'master_app/hero.html' %}
+      {% include 'master_app/clients.html' %}
       {% include 'master_app/about_us_section.html' %}
       {% include 'master_app/faq_section.html' %}
       {% include 'master_app/cta_section.html' %}

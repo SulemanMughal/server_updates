@@ -1,0 +1,36 @@
+{% load static %}
+
+
+<style>
+    #hero {
+    width: 100%;
+    height: 91vh;
+    background: #37517e;
+    color: white;
+    padding-top: 100px;
+    padding-bottom: 100px;
+    
+  }
+    #hero h2 {
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 50px;
+    font-size: 24px;
+  }
+  </style>
+
+<section id="hero" class="d-flex align-items-center" >
+
+    <div class="container">
+      <div class="row" id="section_herosection_about">
+        <div class="col-lg-6 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1 " data-aos="fade-up" data-aos-delay="300" data-aos-easing="ease-out-quart" data-aos-duration="1000">
+          <h1 class="fw-bold display-3">Securing Your World</h1>
+          <p class="h5">A global team with one mission, create a safer cyber world by making cybersecurity training fun and accessible to everyone.</p>
+          
+        </div>
+        <div class="col-lg-6 order-1 order-lg-2 hero-img"  >
+          <img src="{% static 'assets/img/hero-img.png' %}" class="img-fluid animated vert-move" alt="" data-aos="zoom-in" data-aos-delay="300" data-aos-easing="ease-out-quart" data-aos-duration="1000"> 
+        </div>
+      </div>
+    </div>
+
+  </section><!-- End Hero -->

@@ -1,9 +1,14 @@
+{% load static %}
+
 <!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">    
     
+    <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+    
+
     {% include 'style.html' %}
 
 
@@ -41,7 +46,7 @@ input[type=number]:focus,
     {% endblock extra_css %}
     <title>{% block title %}Cyber Range{% endblock title %} | Cyber Range</title>
 </head>
-<body  class="toggle-sidebar" >
+<body   class="toggle-sidebar"  data-aos-easing="ease-in-out" data-aos-duration="1000" data-aos-delay="0">
     
     
     {% block header %}
@@ -73,7 +78,7 @@ input[type=number]:focus,
     {% block footer %}
     {% endblock footer %}
     
-    {% include 'script.html' %}
+    {% include 'master_app/script.html' %}
     
     {% block extra_js %}
     {% endblock extra_js %}
