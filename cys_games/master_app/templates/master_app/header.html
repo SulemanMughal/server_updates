@@ -45,9 +45,15 @@
           Contact Us</a>
       </li>
 
+      {% if request.user.vpn_file %}
       <li class="nav-item">
-        <a href="{% static 'assets/client.ovpn' %}" class="nav-link nav-profile d-flex align-items-center px-3 fw-bold"> VPN </a>
+        <a href="{{ request.user.vpn_file.url }}" class="nav-link nav-profile d-flex align-items-center px-3 fw-bold">Downlaod VPN </a>
       </li>
+      {% else %}
+        <li class="nav-item">
+          <a href="{% url 'create_vpn_url' %}" class="nav-link nav-profile d-flex align-items-center px-3 fw-bold create-vpn">Create VPN </a>
+        </li>
+      {% endif %}
 
       <li class="nav-item dropdown px-3">
 

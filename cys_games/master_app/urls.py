@@ -150,5 +150,9 @@ urlpatterns = [
 
     path("about", views.AboutView, name="about_url"),
 
+
+    # Create VPN File
+    path("create-vpn", views.CreateVPN, name="create_vpn_url"),
+
 ]
 

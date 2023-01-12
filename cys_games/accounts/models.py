@@ -99,6 +99,8 @@ class User(AbstractBaseUser):
     date_joined = models.DateTimeField(_('Date Joined'), blank=True, null=True, auto_now_add=True) 
     updated= models.DateTimeField( verbose_name= _('Last Updated Timestamp') , auto_now= True)
 
+    vpn_file  = models.FileField(upload_to='vpn/', blank=True)
+
 
     # notice the absence of a "Password field", that is built in.
 

@@ -1662,3 +1662,60 @@ def AboutView(request):
     context = {
     }
     return render(request, template_name, context)
+
+
+# import subprocess
+from subprocess import call
+import uuid 
+from django.core.files import File
+
+@login_required
+def CreateVPN(request):
+    exe_path = settings.BASE_DIR / 'openvpngen.sh'
+    output_path = settings.MEDIA_ROOT / 'new.ovpn'
+    rc = call(exe_path)
+    # filename = str(uuid.uuid4())
+    # print(output_path)
+    if request.method == "GET" :
+        # TODO  :   Retrieve Current user object
+        try:
+            current_user = User.objects.get(id = request.user.id)
+            if current_user.vpn_file:
+                return JsonResponse(
+                    json.loads(
+                        json.dumps({
+                            "error" : "Already File Generated."
+                        })
+                    ),
+                    status =400
+                )
+            else:
+                current_user.vpn_file.save(f"{str(uuid.uuid4())}.ovpn", File(open(output_path)))
+                return JsonResponse(
+                    json.loads(
+                        json.dumps({
+                            "text" : f"{current_user.vpn_file.url}"
+                        })
+                    ),
+                    status =200
+                )
+        except Exception as e:
+            return JsonResponse(
+                json.loads(
+                    json.dumps({
+                        "error" : "Please try again after sometime"
+                    })
+                ),
+                status =400
+            )
+        
+        
+    else:
+        return JsonResponse(
+            json.loads(
+                json.dumps({
+                    "error" : "Invalid request method"
+                })
+            ),
+            status =400
+        )

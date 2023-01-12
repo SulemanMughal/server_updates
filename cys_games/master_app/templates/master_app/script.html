@@ -88,3 +88,28 @@ $.ripple(".btn", {
 });
 </script>
 
+
+
+{% if request.user.is_authenticated %}
+<script>
+  $(function(){
+    $("a.create-vpn").on("click", function(event){
+      event.preventDefault();
+      event.stopPropagation();
+      $.ajax({
+        url : $("a.create-vpn").attr("href"),
+        type  : "GET",
+        success : function(response){
+          // console.debug(response);
+          // $("a.create-vpn").removeClass("create-vpn").html("Download VPN").attr("href" , response["text"]);
+          window.location.reload();
+        },
+        error : function(response){
+          alert(response["responseJSON"]["error"]);
+        }
+      });
+    });
+    
+  });
+</script>
+{% endif %}
