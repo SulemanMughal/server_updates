@@ -25,7 +25,8 @@ class CreateCourseForm(forms.ModelForm):
             "name",
             "start_time",
             "end_time",
-            "description"
+            "description",
+            "course_img"
         ]
 
 

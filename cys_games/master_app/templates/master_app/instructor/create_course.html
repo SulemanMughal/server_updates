@@ -46,7 +46,7 @@
                 <div class="card-body px-5 py-3">
                   <h5 class="card-title ">Add a new course</h5>
                   {% include 'errors.html' %}
-                  <form class="row g-3 needs-validation" novalidate  action="{% url 'course-new-url' %}"  id="identifier"  method="POST">
+                  <form class="row g-3 needs-validation" novalidate  action="{% url 'course-new-url' %}"  id="identifier"  method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     <!-- Course Name -->
@@ -89,6 +89,15 @@
                     </div>
 
                     <textarea  style="display:none" id="id_description" name="description"></textarea>
+
+
+                    <div class="mb-3">
+                      <label for="formFile" class="form-label">Course Image</label>
+                      <input class="form-control" type="file" id="formFile" name="course_img" id="id_course_img" required>
+                      <div class="invalid-feedback">
+                        Please choose a course image.
+                      </div>
+                    </div>
 
                     
                       <div class="text-end">

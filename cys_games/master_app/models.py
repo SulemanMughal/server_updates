@@ -23,6 +23,7 @@ class Course(models.Model):
     description = RichTextField()
     is_approved = models.CharField(max_length=2, choices=APPROVED_CHOICES, default="1")
     points = models.IntegerField(blank=True, null=True, default=60)
+    course_img = models.ImageField(blank=True, upload_to="courses/")
     
     def __str__(self):
         return self.name

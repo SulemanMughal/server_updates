@@ -8,6 +8,10 @@ from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 import time
+import subprocess
+import uuid 
+from django.core.files import File
+import os
 
 # requests module
 import requests
@@ -205,13 +209,11 @@ def AdminCourseList(request):
 def AdminCreateCourse(request):
     template_name = 'master_app/admin/create_course.html'
     if request.method == "POST":
-        # print(request.POST)
-        form = CreateCourseForm(request.POST)
+        form = CreateCourseForm(request.POST, request.FILES)
         if form.is_valid():
             new_course = form.save(commit=False)
             new_course.instructor = request.user
             new_course.save()
-            # messages.success(request, "New course has been created")
             return redirect(reverse("admin-course-list-url"))
     else:
         form = CreateCourseForm()
@@ -868,12 +870,12 @@ def InstructorCreateStudent(request):
 def CreateCourse(request):
     template_name = 'master_app/instructor/create_course.html'
     if request.method == "POST":
-        form = CreateCourseForm(request.POST)
+        form = CreateCourseForm(request.POST ,  request.FILES)
         if form.is_valid():
             new_course = form.save(commit=False)
             new_course.instructor = request.user
             new_course.save()
-            messages.success(request, "New course has been created")
+            # messages.success(request, "New course has been created")
             return redirect(reverse("instructor-courses-details-url", args=[new_course.id]))
     else:
         form = CreateCourseForm()
@@ -1665,56 +1667,71 @@ def AboutView(request):
 
 
 # import subprocess
-from subprocess import call
-import uuid 
-from django.core.files import File
+# from subprocess import call
+
 
 @login_required
 def CreateVPN(request):
-    exe_path = settings.BASE_DIR / 'openvpngen.sh'
-    output_path = settings.MEDIA_ROOT / 'new.ovpn'
-    rc = call(exe_path)
-    # filename = str(uuid.uuid4())
-    # print(output_path)
-    if request.method == "GET" :
-        # TODO  :   Retrieve Current user object
-        try:
-            current_user = User.objects.get(id = request.user.id)
-            if current_user.vpn_file:
+    try:
+        filename = str(uuid.uuid4())
+        exe_path = f"{settings.BASE_DIR / 'openvpngen.sh'}  {filename}"
+        output_path = settings.MEDIA_ROOT / f'{filename}.ovpn'
+        subprocess.check_call(exe_path, shell=True)
+        if request.method == "GET" :
+            # TODO  :   Retrieve Current user object
+            
+            try:
+                current_user = User.objects.get(id = request.user.id)
+                if current_user.vpn_file:
+                    return JsonResponse(
+                        json.loads(
+                            json.dumps({
+                                "error" : "Already File Generated."
+                            })
+                        ),
+                        status =400
+                    )
+                else:
+                    current_user.vpn_file.save(f"{str(uuid.uuid4())}.ovpn", File(open(output_path)))
+                    if os.path.exists(output_path):
+                        os.remove(output_path)
+                    return JsonResponse(
+                        json.loads(
+                            json.dumps({
+                                "text" : f"{current_user.vpn_file.url}"
+                            })
+                        ),
+                        status =200
+                    )
+            except Exception as e:
+                print("="*50)
+                traceback.print_exc()
+                print("="*50)
                 return JsonResponse(
                     json.loads(
                         json.dumps({
-                            "error" : "Already File Generated."
+                            "error" : "Please try again after sometime"
                         })
                     ),
                     status =400
                 )
-            else:
-                current_user.vpn_file.save(f"{str(uuid.uuid4())}.ovpn", File(open(output_path)))
-                return JsonResponse(
-                    json.loads(
-                        json.dumps({
-                            "text" : f"{current_user.vpn_file.url}"
-                        })
-                    ),
-                    status =200
-                )
-        except Exception as e:
+        else:
             return JsonResponse(
                 json.loads(
                     json.dumps({
-                        "error" : "Please try again after sometime"
+                        "error" : "Invalid request method"
                     })
                 ),
                 status =400
             )
-        
-        
-    else:
+    except :
+        print("="*50)
+        traceback.print_exc()
+        print("="*50)
         return JsonResponse(
             json.loads(
                 json.dumps({
-                    "error" : "Invalid request method"
+                    "error" : "Please try again after sometime"
                 })
             ),
             status =400

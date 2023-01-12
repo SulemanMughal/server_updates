@@ -8,29 +8,29 @@ new_client () {
         cat /etc/openvpn/server/easy-rsa/pki/ca.crt
         echo "</ca>"
         echo "<cert>"
-        sed -ne '/BEGIN CERTIFICATE/,$ p' /etc/openvpn/server/easy-rsa/pki/issued/"new".crt
+        sed -ne '/BEGIN CERTIFICATE/,$ p' /etc/openvpn/server/easy-rsa/pki/issued/"$client".crt
         echo "</cert>"
         echo "<key>"
-        cat /etc/openvpn/server/easy-rsa/pki/private/"new".key
+        cat /etc/openvpn/server/easy-rsa/pki/private/"$client".key
         echo "</key>"
         echo "<tls-crypt>"
         sed -ne '/BEGIN OpenVPN Static key/,$ p' /etc/openvpn/server/tc.key
         echo "</tls-crypt>"
-        } > ../media/"new".ovpn
+        } > ../media/"$client".ovpn
 }
 
 
 unsanitized_client="$1"
 client=$(sed 's/[^0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-]/_/g' <<< "$unsanitized_client")
-while [[ -z "new" || -e /etc/openvpn/server/easy-rsa/pki/issued/"new".crt ]]; do
-    # echo "new: invalid name."
+while [[ -z "$client" || -e /etc/openvpn/server/easy-rsa/pki/issued/"$client".crt ]]; do
+    # echo "$client: invalid name."
     read -p "Name: " unsanitized_client
     client=$(sed 's/[^0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-]/_/g' <<< "$unsanitized_client")
 done
 cd /etc/openvpn/server/easy-rsa/
-/usr/share/easy-rsa/easyrsa --batch --days=3650 build-client-full "new" nopass
+/usr/share/easy-rsa/easyrsa --batch --days=3650 build-client-full "$client" nopass
 # Generates the custom client.ovpn
 new_client
 # echo
-# echo "/home/suleman/Downloads/updated/crfront/cys_games/new.ovpn"
+# echo "$client added. Configuration available in:" ~/"$client.ovpn"
 exit
