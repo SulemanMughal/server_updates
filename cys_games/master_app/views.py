@@ -1,20 +1,19 @@
-import json
-import traceback
-from django.shortcuts import render, redirect
-from django.http.response import JsonResponse
-from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from django.contrib.auth.decorators import login_required
-from django.urls import reverse
-from django.utils.decorators import method_decorator
-from django.contrib import messages
-import time
-import subprocess
-import uuid 
-from django.core.files import File
 import os
-
-# requests module
+import uuid 
+import json
+import time
 import requests
+import traceback
+import subprocess
+from django.urls import reverse
+from django.core.files import File
+from django.contrib import messages
+from django.http.response import JsonResponse
+from django.shortcuts import render, redirect
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+
 
 # ? forms
 from .forms import (
@@ -630,7 +629,9 @@ def AdminCreateNetworkInstance(request, vn_id):
         }
 
         s = requests.Session()
+        print("=======================\nsession started\n=================")
         response = s.post('http://10.1.2.9:5000/v3/auth/tokens', headers=headers, json=json_data)
+        print("authortization")
         if response.status_code == 201:
             headers = {
                 'X-Auth-Token': f'{response.headers["x-subject-token"]}',
@@ -642,11 +643,13 @@ def AdminCreateNetworkInstance(request, vn_id):
                     "imageRef": f"{netObj.imageRef}",
                     "flavorRef": "http://10.1.2.9:8774/v2.1/flavors/3",
                     "networks": [{
-                        "uuid" : "50b235b6-e4c0-44f4-972d-f03f1357dae7"
+                        "uuid" : "f3744a3d-a45a-4b38-9d7d-ab0d7b0eeb91"
                     }]
                 }
             }
+            
             response = s.post('http://10.1.2.9:8774/v2.1/servers', headers=headers , json=json_data)
+            print("server created")
             if response.status_code in [200, 201, 202]:
                 netObj.server_id = response.json()["server"]["id"]
                 netObj.save()
@@ -654,7 +657,9 @@ def AdminCreateNetworkInstance(request, vn_id):
                     "pool": "public1"
                 }
                 response  =s.post('http://10.1.2.9:8774/v2.1/os-floating-ips', headers=headers , json=json_data)
+                
                 if response.status_code in [200, 201, 202]:
+                    print("floating-ip created")
                     netObj.ip_address = response.json()["floating_ip"]["ip"]
                     netObj.save()
                     json_data = {
@@ -664,11 +669,64 @@ def AdminCreateNetworkInstance(request, vn_id):
                     }
 
                     # extra time to request
-                    time.sleep(5)
+                    time.sleep(15)
                     response = s.post(f'http://10.1.2.9:8774/v2.1/servers/{netObj.server_id}/action', headers=headers , json=json_data)
+                    print(response)
                     if (response.status_code in [200, 201, 202]):
+                        print("server action created")
                         netObj.is_instance_created = True
                         netObj.save()
+
+                        time.sleep(15)
+
+                        # ====================
+                        # Spawn Final Domain Controller
+                        # headers = {
+                        #     'X-Auth-Token': f'{response.headers["x-subject-token"]}',
+                            
+                        # }
+                        
+                        json_data={
+                            "server": {
+                                "name": f"{netObj.name} DC",
+                                "imageRef": f"49b06979-f863-4f29-b31c-682a4085ccb2",
+                                "flavorRef": "http://10.1.2.9:8774/v2.1/flavors/3",
+                                "networks": [{
+                                    "uuid" : "f3744a3d-a45a-4b38-9d7d-ab0d7b0eeb91"
+                                }]
+                            }
+                        }
+                        
+                        response = s.post('http://10.1.2.9:8774/v2.1/servers', headers=headers , json=json_data)
+                        if response.status_code in [200, 201, 202]:
+                            # netObj.server_id = response.json()["server"]["id"]
+                            # netObj.save()
+                            dc_server_id = response.json()["server"]["id"]
+                            json_data={
+                                "pool": "public1"
+                            }
+                            response  =s.post('http://10.1.2.9:8774/v2.1/os-floating-ips', headers=headers , json=json_data)
+                            # extra time to request
+                            time.sleep(15)
+                            # response = s.post(f'http://10.1.2.9:8774/v2.1/servers/{netObj.server_id}/action', headers=headers , json=json_data)
+                            if response.status_code in [200, 201, 202]:
+                                print("floating-ip created")
+                                # netObj.ip_address = response.json()["floating_ip"]["ip"]
+                                # netObj.save()
+                                json_data = {
+                                    "addFloatingIp" : {
+                                        "address": response.json()["floating_ip"]["ip"]
+                                    }
+                                }
+
+                                # extra time to request
+                                print("DC Server ID  : "  , dc_server_id)
+                                time.sleep(15)
+                                response = s.post(f'http://10.1.2.9:8774/v2.1/servers/{dc_server_id}/action', headers=headers , json=json_data)
+                                print(response.content)
+                                if (response.status_code in [200, 201, 202]):
+                                    print("server action created")
+                        # ================
 
                         # save flags to local database
                         try:
@@ -677,14 +735,7 @@ def AdminCreateNetworkInstance(request, vn_id):
                             if response.status_code in [200, 201, 202]:
                                 for i in response.json():
                                     if i[:4].lower() == "flag":
-                                        # print(response.json()[i])
-                                        # NetworkFlag.objects.create(
-                                        #     course = netObj.course,
-                                        #     flag_id = i,
-                                        #     original_answer = response.json()[i],
-                                        #     points=50,
-                                        #     imageRef = netObj.imageRef
-                                        # )
+                                        
 
                                         try:
                                             netFlag = NetworkFlag.objects.get_or_create(
@@ -715,41 +766,83 @@ def AdminCreateNetworkInstance(request, vn_id):
                         )
                     else:
                         return JsonResponse(
-                            json.loads(
-                                json.dumps({
-                                    "error" : str(response.json()["error"]["code"])  + " - " + response.json()["error"]["title"] + " : " + response.json()["error"]["message"]
-                                })
-                            ),
-                            status =400
-                        )
-                else:
-                    return JsonResponse(
-                        json.loads(
-                            json.dumps({
-                                "error" : str(response.json()["error"]["code"])  + " - " + response.json()["error"]["title"] + " : " + response.json()["error"]["message"]
-                            })
-                        ),
-                        status =400
-                    ) 
-            else:
-                return JsonResponse(
-                    json.loads(
-                        json.dumps({
-                            "error" : str(response.json()["error"]["code"])  + " - " + response.json()["error"]["title"] + " : " + response.json()["error"]["message"]
-                        })
-                    ),
-                    status =400
-                ) 
-        else:
-           return JsonResponse(
             json.loads(
                 json.dumps({
-                    "error" : str(response.json()["error"]["code"])  + " - " + response.json()["error"]["title"] + " : " + response.json()["error"]["message"]
+                    "error" : "Request does not proceed. Please try again after sometime."
                 })
             ),
             status =400
-        ) 
+        )
+
+                        # return JsonResponse(
+                        #     json.loads(
+                        #         json.dumps({
+                        #             "error" : str(response.json()["error"]["code"])  + " - " + response.json()["error"]["title"] + " : " + response.json()["error"]["message"]
+                        #         })
+                        #     ),
+                        #     status =400
+                        # )
+                else:
+                    # return JsonResponse(
+                    #     json.loads(
+                    #         json.dumps({
+                    #             "error" : str(response.json()["error"]["code"])  + " - " + response.json()["error"]["title"] + " : " + response.json()["error"]["message"]
+                    #         })
+                    #     ),
+                    #     status =400
+                    # ) 
+                    return JsonResponse(
+            json.loads(
+                json.dumps({
+                    # "error" : "Invalid request method"
+                    "error" : "Request does not proceed. Please try again after sometime."
+                })
+            ),
+            status =400
+        )
+
+            else:
+                print(response.content)
+                return JsonResponse(
+                    json.loads(
+                        json.dumps({
+                            # "error" : "Invalid request method"
+                            "error" : "Request does not proceed. Please try again after sometime."
+                        })
+                    ),
+                    status =400
+                )
+
+                # return JsonResponse(
+                #     json.loads(
+                #         json.dumps({
+                #             "error" : str(response.json()["error"]["code"])  + " - " + response.json()["error"]["title"] + " : " + response.json()["error"]["message"]
+                #         })
+                #     ),
+                #     status =400
+                # ) 
+        else:
+            print(response.content)
+        #     return JsonResponse(
+        #     json.loads(
+        #         json.dumps({
+        #             "error" : str(response.json()["error"]["code"])  + " - " + response.json()["error"]["title"] + " : " + response.json()["error"]["message"]
+        #         })
+        #     ),
+        #     status =400
+        # ) 
+        return JsonResponse(
+            json.loads(
+                json.dumps({
+                    # "error" : "Invalid request method"
+                    "error" : "Request does not proceed. Please try again after sometime."
+                })
+            ),
+            status =400
+        )
+
     except:
+        traceback.print_exc()
         return JsonResponse(
             json.loads(
                 json.dumps({
@@ -1665,21 +1758,20 @@ def AboutView(request):
     }
     return render(request, template_name, context)
 
-
-# import subprocess
-# from subprocess import call
-
-
 @login_required
 def CreateVPN(request):
     try:
         filename = str(uuid.uuid4())
-        exe_path = f"{settings.BASE_DIR / 'openvpngen.sh'}  {filename}"
+        exe_path = f"{settings.BASE_DIR / 'openvpngen.sh'}"
         output_path = settings.MEDIA_ROOT / f'{filename}.ovpn'
-        subprocess.check_call(exe_path, shell=True)
+        try:
+            subprocess.Popen(['sudo', '-S',  exe_path, filename], stdin=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True).communicate(settings.OPENSTACK + '\n')[1]
+        except:
+            print("="*50)
+            traceback.print_exc()
+            print("="*50)
         if request.method == "GET" :
             # TODO  :   Retrieve Current user object
-            
             try:
                 current_user = User.objects.get(id = request.user.id)
                 if current_user.vpn_file:
@@ -1692,13 +1784,13 @@ def CreateVPN(request):
                         status =400
                     )
                 else:
-                    current_user.vpn_file.save(f"{str(uuid.uuid4())}.ovpn", File(open(output_path)))
+                    current_user.vpn_file.save(f"{filename}.ovpn", File(open(output_path)))
                     if os.path.exists(output_path):
-                        os.remove(output_path)
+                       os.remove(output_path)
                     return JsonResponse(
                         json.loads(
                             json.dumps({
-                                "text" : f"{current_user.vpn_file.url}"
+                                 "text" : "created" 
                             })
                         ),
                         status =200
@@ -1736,3 +1828,13 @@ def CreateVPN(request):
             ),
             status =400
         )
+
+
+
+
+
+# sudo systemctl daemon-reload
+# sudo systemctl restart gunicorn
+# sudo systemctl restart nginx
+# sudo journalctl -u gunicorn
+

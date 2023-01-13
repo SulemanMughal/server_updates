@@ -23,7 +23,7 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {'fields': ('username','email', 'password')}),
         ('Personal info', {'fields': (
-
+            'vpn_file',
         )}),
         ('Permissions', {'fields': ('groups', 'permissions',  'is_superuser', 'is_student' , 'is_instructor', 'is_admin')}),
     )
