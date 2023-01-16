@@ -1734,7 +1734,8 @@ def StudentCourseDetails(request, course_id):
         "easy_challenges": easy_challenges,
         "medium_challenges": medium_challenges,
         "hard_challenges": hard_challenges,
-        "wazuh_server_ip" : wazuh_server_ip
+        "wazuh_server_ip" : wazuh_server_ip,
+        "WAZUH_SERVER_PASSWORD" : settings.WAZUH_SERVER_PASSWORD
     }
     return render(request, template_name, context)
 
