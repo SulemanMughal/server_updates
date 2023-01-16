@@ -71,9 +71,13 @@
                   <!-- End Challenges -->
                     
                   
-                  <!-- Students List -->
+                  <!-- Attack Group Students List -->
                     {% include 'master_app/instructor/cd_students.html' %}
-                  <!-- End Students List -->
+                  <!-- End : Attack Group Students List -->
+
+                  <!-- Defense Group Students List -->
+                  {% include 'master_app/instructor/cd_students_2.html' %}
+                  <!-- End : Defense Group Students List -->
 
 
                   <!-- Results -->
@@ -116,27 +120,16 @@
   });
   $(".ql-editor").attr('contenteditable', false);
   $(".ql-clipboard, .ql-tooltip").hide();
-  
   if($("#modalEditor").length){
-    
     $("#modalEditor .ql-editor").attr('contenteditable', true);
     $("#modalEditor .ql-clipboard, #modalEditor .ql-tooltip").hide();
-    // $(function(){
-    //     $("#identifier").on("submit",function(event) {
-    //     $("#id_description").val($(".quill-editor-full").html());
-    //     })
-    // });
   }
 
 
   if($("#challengeEditor").length){
-
-    
   var quill = new Quill('#challengeEditor', {
     theme: 'snow'
   });
-
-    
     $("#challengeEditor .ql-editor").attr('contenteditable', true);
     $("#challengeEditor .ql-clipboard, #challengeEditor .ql-tooltip").hide();
     $(function(){
@@ -189,14 +182,14 @@ var imgref_dict={
                 success : function(response){
                   var images = response.data.images.filter(
                   function(value) {
-                    return value.image_type == "snapshot"; 
+                    return value.image_type == "active"; 
                   });
                   function onlyUnique(value, index, self) {
                     return self.indexOf(value) === index;
                   }
                   for (var index= 0; index < images.length ; index ++){
                     $('#id_scenarios').append(`<option value="${images[index]["name"]}"> ${images[index]["name"]} </option>`);
-                    os_type_dict[images[index]["name"]] = images[index]["OS Type"];
+                    os_type_dict[images[index]["name"]] = images[index]["os_type"];
                     description[images[index]["name"]] = images[index]["description"];
                     size[images[index]["name"]] = images[index]["size"];
                     status_dict[images[index]["name"]] = images[index]["status"];
@@ -205,6 +198,7 @@ var imgref_dict={
                     disk_dict[images[index]["name"]] = images[index]["min_disk"];
                     imgref_dict[images[index]["name"]] = images[index]["id"];
                   }
+                  // console.debug(os_type_dict);
                   $("#id_operating_system").val("" +  os_type_dict[$('#id_scenarios').val()]);
                   $("#modalEditor .ql-editor").html("" + description[$('#id_scenarios').val()]);
                   $("#id_size").val(filesize(  size[$('#id_scenarios').val()], {base: 2, standard: "jedec"}) );
@@ -224,7 +218,7 @@ var imgref_dict={
         // container : ".noty_layout",
         force : false,
         // layout: 'bottomLeft',
-        text: `<i class="fas fa-check-circle"></i>&nbsp; ${response["responseJSON"]["error"]}`,
+        text: `<i class="fas fa-exclamation-circle"></i>&nbsp; ${response["responseJSON"]["error"]}`,
         animation: {
         open: function (promise) {
             var n = this;
@@ -321,8 +315,6 @@ var imgref_dict={
     $("#modalEditor .ql-editor").html("" + description[this.value]);
     $("#id_size").val(filesize(  size[this.value], {base: 2, standard: "jedec"})   );
     $("#id_state").val("" + state_dict[this.value]);
-    // $("#id_min_ram").val("" + ram_dict[this.value]);
-    // $("#id_min_disk").val("" + disk_dict[this.value]);
     $("#id_min_ram").val(filesize( ram_dict[this.value] *1024*1024, {base : 2, standard : "jedec"}) );
     $("#id_min_disk").val(filesize( disk_dict[this.value] *1024*1024*1024, {base : 2, standard : "jedec"})  );
     $("#id_imageRef").val("" + imgref_dict[this.value]);

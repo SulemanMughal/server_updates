@@ -1,0 +1,68 @@
+<div class="col-12 ">
+    <div class="card  overflow-auto">
+
+
+        <!-- filter -->  
+        <div class="filter">
+          <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+            <li class="dropdown-header text-start">
+            </li>
+      
+            <li><a class="dropdown-item" href="{% url 'admin-course-list-url' %}">All Courses</a></li>
+          </ul>
+        </div>
+        <!-- end: filter -->
+
+      <div class="card-body">
+        <h5 class="card-title">Courses</h5>
+
+        <table class="table table-borderless datatable">
+          <thead>
+            <tr>
+              <th scope="col">Course</th>
+              <th scope="col">Instructor</th>
+              <th scope="col">Students</th>
+              <th scope="col">Flags</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for course in courses|slice:":10" %}
+                <tr>
+                    <td><a href="{{ course.get_admin_url }}" class="card-link">{{ course.name|truncatechars:37 }}</a></td>
+                    <td>{{ course.instructor }}</td>
+                    <td>{{ course.assignedstudents_set.all.count }}</td>
+                    <td>{{ course.networkflag_set.all.count }}</td>
+                    <td>{{ course.is_approved_display }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">
+                        <p>There is no course available</p>
+                    </td>
+                </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+      </div>
+
+    </div>
+  </div>
+
+
+{% comment %}
+<div class="filter">
+    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+      <li class="dropdown-header text-start">
+        <h6>Filter</h6>
+      </li>
+
+      <li><a class="dropdown-item" href="#">Today</a></li>
+      <li><a class="dropdown-item" href="#">This Month</a></li>
+      <li><a class="dropdown-item" href="#">This Year</a></li>
+    </ul>
+  </div>
+{% endcomment %}

@@ -5,8 +5,9 @@ from django.utils import timezone
 from ckeditor.fields import RichTextField
 from django.core.exceptions import ValidationError
 from django.urls import reverse
+from django.utils.html import format_html
 
-from .choices import OPERATING_SYSTEM_CHOICES,  SCENARIOS_CATEGORYIES, RATING_CHOICES, CHALLENGE_LEVELS, CHALLENGE_LEVELS_TEXT, OPERATING_SYSTEM_CHOICES_TEXT, SCENARIOS_CATEGORYIES_TEXT, APPROVED_CHOICES, CHALLENGE_SUBMISSION_CHOICES, FLAG_SUBMISSION_CHOICES
+from .choices import OPERATING_SYSTEM_CHOICES,  SCENARIOS_CATEGORYIES, RATING_CHOICES, CHALLENGE_LEVELS, CHALLENGE_LEVELS_TEXT, OPERATING_SYSTEM_CHOICES_TEXT, SCENARIOS_CATEGORYIES_TEXT, APPROVED_CHOICES, CHALLENGE_SUBMISSION_CHOICES, FLAG_SUBMISSION_CHOICES, USER_TYPE
 
 
 User = get_user_model()
@@ -27,6 +28,24 @@ class Course(models.Model):
     
     def __str__(self):
         return self.name
+
+    def is_approved_display(self):
+        if self.is_approved == "1":
+            return format_html(
+                '<span class="badge bg-warning">Draft</span>'
+            )
+        elif self.is_approved == "2":
+            return format_html(
+                '<span class="badge bg-primary">Approval Request Sent</span>'
+            )
+        elif self.is_approved == "3":
+            return format_html(
+                '<span class="badge bg-success">Approved</span>'
+            )
+        elif self.is_approved == "4":
+            return format_html(
+                '<span class="badge bg-danger">Rejected</span>'
+            )
 
 
     def get_virtual_network(self):
@@ -112,6 +131,7 @@ class AssignedStudents(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     student = models.ForeignKey(User, on_delete=models.CASCADE)
     created_timestamp = models.DateTimeField( auto_now_add=True)
+    user_type = models.CharField(max_length=2, choices=USER_TYPE, default="1", blank=True)
 
 
     def __str__(self):
@@ -307,10 +327,11 @@ class NetworkFlag(models.Model):
 
 
     def __str__(self):
-        if self.flag_id == "Flag 1":
-            return "User Flag"
-        else:
-            return "Root Flag"
+        return self.flag_id
+        # if self.flag_id == "Flag 1":
+        #     return "User Flag"
+        # else:
+        #     return "Root Flag"
 
 class NetworkFlagSubmission(models.Model):
     student = models.ForeignKey(AssignedStudents, on_delete=models.CASCADE)

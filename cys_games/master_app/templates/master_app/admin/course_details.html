@@ -66,9 +66,13 @@ width: 45%!important;
                 <!-- End : Challenges List -->
 
 
-                <!-- Student List -->
+                 <!-- Attack Group Students List -->
                   {% include 'master_app/admin/cd_studentList.html' %}
-                <!-- END : Student List -->
+                 <!-- End : Attack Group Students List -->
+
+                 <!-- Defense Group Students List -->
+                 {% include 'master_app/admin/cd_students_2.html' %}
+                 <!-- End : Defense Group Students List -->
                 
                 <!-- Results -->
                 {% if course.is_approved == "3" %}

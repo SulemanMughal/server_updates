@@ -1,0 +1,46 @@
+{% load count_os %}
+
+
+<script>
+    var os_type_arr = [];
+    var count_os = [];
+</script>
+
+{% for network in networks %}
+<script>
+    if(os_type_arr.indexOf("{{ network.operating_system }}") ===-1)
+    {
+        os_type_arr.push("{{ network.operating_system }}");
+        count_os.push(Number("{% count_os network.operating_system  %}"));
+    }    
+</script>
+{% endfor %}
+
+
+
+<div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Operating System</h5>
+
+      <!-- Pie Chart -->
+      <div id="pieChart3"></div>
+
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          new ApexCharts(document.querySelector("#pieChart3"), {
+            series: count_os,
+            chart: {
+              height: 350,
+              type: 'pie',
+              toolbar: {
+                show: true
+              }
+            },
+            labels: os_type_arr
+          }).render();
+        });
+      </script>
+      <!-- End Pie Chart -->
+
+    </div>
+  </div>

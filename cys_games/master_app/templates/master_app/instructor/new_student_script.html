@@ -1,6 +1,12 @@
 <!-- add a student -->
 <script>
 
+
+  $(document).on("click", 'button[data-bs-target="#create_student_modal"]', function(event){
+    // console.debug($(this).attr("data-user-type"));
+    $("input[name='user_type']").val($(this).attr("data-user-type"));
+  })
+
     var myModalEl = document.getElementById('create_student_modal');
     var myModal = new bootstrap.Modal(document.getElementById('create_student_modal'), {
       keyboard: false

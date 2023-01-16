@@ -1,0 +1,54 @@
+{% load count_course_status %}
+
+
+
+<div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Courses By Status</h5>
+
+      <!-- Bar Chart -->
+      <canvas id="barChart" style="max-height: 400px; "></canvas>
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          new Chart(document.querySelector('#barChart'), {
+            type: 'bar',
+            data: {
+              labels: ['Approved', 'Draft', 'Rejected', 'Admin Approval'],
+              datasets: [{
+                label: '',
+                data: [
+                    Number("{% count_course_status 3 %}"),
+                    Number("{% count_course_status 1 %}"),
+                    Number("{% count_course_status 4 %}"),
+                    Number("{% count_course_status 2 %}"),
+                ],
+                backgroundColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255, 205, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                ],
+                borderColor: [
+                  'rgb(255, 99, 132)',
+                  'rgb(255, 159, 64)',
+                  'rgb(255, 205, 86)',
+                  'rgb(75, 192, 192)',
+                ],
+                borderWidth: 1
+              }]
+            },
+            options: {
+                indexAxis: 'y',
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+          });
+        });
+      </script>
+      <!-- End Bar CHart -->
+
+    </div>
+  </div>

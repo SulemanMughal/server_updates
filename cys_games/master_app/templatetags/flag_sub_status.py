@@ -5,7 +5,6 @@ register = template.Library()
 @register.filter
 def flag_sub_status(flag_id, user_id , *args, **kwargs):
     try:
-        # customPrint(flag_id)
         netFlag = NetworkFlag.objects.get(
             id = flag_id
         )

@@ -35,10 +35,10 @@
                     </select>
                     <div class="invalid-feedback">
                       Please select a student.
-
                     </div>
                   </div>
                   <input type="hidden" name="next" value="{{ request.path }}">
+                  <input type="hidden" name="user_type" value="1">
                   <div class="text-end">
                     <button type="button" class="btn btn-danger w-25" data-bs-dismiss="modal" aria-label="Close"> Cancel</button>
                   <button type="submit" class="btn btn-primary w-25"  >Add</button>

@@ -1,12 +1,18 @@
-{% load static %}
+{% load static  thumbnail %}
+
+<style>
+  .course-summary img{
+    width: 100%;
+  }
+</style>
+
+
 <div class="card mb-3">
     <div class="row g-0">
       <div class="col-md-5">
-        {% if course.course_img %}
-        <img src="{{ course.course_img.url }}" class="img-fluid rounded-start h-100" alt="...">
-        {% else %}
-          <img src="{% static 'assets/img/Ad.webp' %}" class="img-fluid rounded-start h-100" alt="...">
-        {% endif %}
+        {% thumbnail course.course_img "x300" crop="center" as im %}
+            <img src="{{ im.url }}" width="100%"  height="{{ im.height }}" class="img-fluid rounded-start h-100">
+        {% endthumbnail %}
         
       </div>
       <div class="col-md-7">
@@ -44,7 +50,7 @@
       </div>
     </div>
   </div>
-  <div class="card">
+  <div class="card course-summary">
     <div class="card-body p-3">
       <h3>Summary</h3>
       {{ course.description|safe }}

@@ -5,7 +5,6 @@ register = template.Library()
 @register.simple_tag
 def flag_sub_points(flag_id, user_id , *args, **kwargs):
     try:
-        # customPrint(flag_id)
         netFlag = NetworkFlag.objects.get(
             id = flag_id
         )
@@ -13,17 +12,6 @@ def flag_sub_points(flag_id, user_id , *args, **kwargs):
             course = netFlag.course,
             student__id = user_id
         )
-        # if NetworkFlagSubmission.objects.filter(
-        #     flag_id = netFlag.flag_id,
-        #     student = student,
-        #     status= "SUBMITTED"
-        # ).count():
-        #     return 1
-        # customPrint(NetworkFlagSubmission.objects.filter(
-        #     flag_id = netFlag.flag_id,
-        #     student = student,
-        #     status= "SUBMITTED"
-        # ).obtainedPoints)
         return NetworkFlagSubmission.objects.get(
             flag_id = netFlag.flag_id,
             student = student,

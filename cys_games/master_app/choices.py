@@ -89,3 +89,9 @@ FLAG_SUBMISSION_CHOICES=(
     ("PENDING", "PENDING"),
     ("SUBMITTED", "SUBMITTED"),
 )
+
+
+USER_TYPE=(
+    ("1", "ATTACKER"),
+    ("2", "DEFENSER"),
+)

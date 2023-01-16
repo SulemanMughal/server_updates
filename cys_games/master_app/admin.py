@@ -21,11 +21,23 @@ class CourseAdmin(admin.ModelAdmin):
         AssignedStudentInline,
         VirtualNetworkInline
     ]
+    list_display=[
+        "name",
+        "is_approved"
+    ]
 
+
+class VirtualNetworkAdmin(admin.ModelAdmin):
+    list_display=[
+        "name",
+        "course",
+        "operating_system",
+        "scenarios"
+    ]
 
 admin.site.register(Course, CourseAdmin)
 
-admin.site.register(VirtualNetwork)
+admin.site.register(VirtualNetwork, VirtualNetworkAdmin)
 admin.site.register(CourseChallenge)
 admin.site.register(ChallengeSubmission)
 admin.site.register(NetworkFlag)

@@ -1,0 +1,15 @@
+<div class="card">
+
+    <div class="card-body p-3">
+      <h3>Defense Team</h3>
+      <ul class="list-group list-group-flush">
+        {% if students %}
+          {% for std in students %}
+            {% if std.user_type == "2" %}
+              <li class="list-group-item">{{ std.student.email }}</li>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </ul><!-- End Clean list group -->
+    </div>
+  </div>

@@ -1,5 +1,5 @@
 {%  extends 'base.html' %}
-{% load static %}
+{% load static  thumbnail %}
 {% block title %} Courses {% endblock %}
 
 {% block extra_css %}
@@ -148,11 +148,9 @@
                 <div class="col-12 col-md-4 col-lg-4  align-items-stretch {{ course.course.course_status }}card">
                         <div class="card  ">
                             <div class="card-header p-0 border-0 ">
-                              {% if course.course_img %}
-                              <img src="{{ course.course_img.url }}" class="card-img-top  " alt="...">
-                              {% else %}
-                                <img class="card-img-top" src="{% static 'assets/img/Ad.webp' %}" alt="">
-                              {% endif %}
+                                {% thumbnail course.course.course_img "x300" crop="center" as im %}
+                                    <img src="{{ im.url }}" width="100%"  height="{{ im.height }}" class="card-img-top">
+                                {% endthumbnail %}
                                 
                             </div>
                             <div class="card-body p-3 bg-white">
@@ -180,7 +178,7 @@
                                       <div >
                                         <div ><i class="bi bi-list-check me-1"></i> Flags</div>
                                       </div>
-                                      2
+                                      {{ course.course.networkflag_set.all.count }}
                                     </li>
                                   </ul>
                             </div>

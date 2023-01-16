@@ -69,7 +69,11 @@ urlpatterns = [
     # ? Admin : get open stack images details
     path("admin/network/images/api", views.AdminFetchNetworkImages, name="admin-fetch-network-images-url"),
 
-    path("admin/network/<int:vn_id>/instance/create", views.AdminCreateNetworkInstance, name="admin-create-network-instance-url"),
+    # TODO  :  # ? Start an instance in openstack
+    path("admin/network/<int:vn_id>/instance/active", views.AdminStartNetworkInstance, name="admin-create-network-instance-url"),
+    
+    # # ? Create an instance in openstack for requested virtual image
+    # path("admin/network/<int:vn_id>/instance/create", views.AdminCreateNetworkInstance, name="admin-create-network-instance-url"),
 
     # ==========================================================
     # ? Instructor Dashbaord

@@ -4,10 +4,8 @@
 
 
 {% block extra_css %}
-
-
-<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
-<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+<link rel="stylesheet" href="{% static 'assets/vendor/flickity/flickity.min.css' %}">
+<script src="{% static 'assets/vendor/flickity/flickity.pkgd.min.js' %}"></script>
 
 <style>
   .dashboard .news h4 , .dashboard .news p{
@@ -82,48 +80,27 @@
         <div class="col-lg-8">
           <div class="row">
 
-            <!-- Instructors -->
-            <div class="col-xll-3 col-lg-6 col-md-4 new">
-              <div class="card gradient-3">
-                <div class="card-body">
-                    <h3 class="card-title text-white py-0">Instructors</h3>
-                    <div class="d-inline-block">
-                        <h2 class="text-white fw-bolder fs-1">8541</h2>
-                        <p class="text-white mb-0">Jan - March 2022</p>
-                    </div>
-                    <span class="float-end display-5 opacity-5"><i class="fas fa-chalkboard-teacher"></i>
-                    </span>
-                </div>
-            </div>
-            </div>
+            
 
-            <!-- Students -->
-            <div class="col-xll-3 col-lg-6 col-md-4 new">
-              <div class="card gradient-2">
-                <div class="card-body">
-                    <h3 class="card-title text-white py-0">Students</h3>
-                    <div class="d-inline-block">
-                        <h2 class="text-white fw-bolder fs-1">8541</h2>
-                        <p class="text-white mb-0">Jan - March 2022</p>
-                    </div>
-                    <span class="float-end display-5 opacity-5"><i class="fa-solid fa-graduation-cap "></i></span>
-                </div>
-            </div>
-            </div>
+            
 
-            <!-- Courses -->
+            <!-- Courses Counter -->
             <div class="col-xll-3 col-lg-6 col-md-4 new">
               <div class="card gradient-1">
                 <div class="card-body">
                     <h3 class="card-title text-white py-0">Courses</h3>
                     <div class="d-inline-block">
-                        <h2 class="text-white fw-bolder fs-1">8541</h2>
-                        <p class="text-white mb-0">Jan - March 2022</p>
+                        <h2 class="text-white fw-bolder fs-1">
+                          <span data-purecounter-start="50" data-purecounter-end="{{ courses.count }}" data-purecounter-duration="0.5" class="purecounter"></span>
+                        </h2>
+                        <p class="text-white mb-0 fw-bold">{% now "M Y" %}</p>
                     </div>
                     <span class="float-end display-5 opacity-5"><i class="bi bi-menu-button-wide"></i></span>
                 </div>
             </div>
             </div>
+            <!-- END : Courses Counter -->
+            
 
 
 
@@ -132,22 +109,26 @@
 
             
 
-            <!-- Virtual Networks -->
+            <!-- Networks Counter -->
             <div class="col-xll-3 col-lg-6 col-md-4 new">
               <div class="card gradient-4">
                 <div class="card-body">
                     <h3 class="card-title text-white py-0">Virtual Networks</h3>
                     <div class="d-inline-block">
-                        <h2 class="text-white fw-bolder fs-1">8541</h2>
-                        <p class="text-white mb-0">Jan - March 2022</p>
+                        <h2 class="text-white fw-bolder fs-1">
+                          <span data-purecounter-start="50" data-purecounter-end="{{ networks|length }}" data-purecounter-duration="0.5" class="purecounter"></span>
+                        </h2>
+                        <p class="text-white mb-0 fw-bold">{% now "M Y" %}</p>
                     </div>
                     <span class="float-end display-5 opacity-5"><i class="fas fa-server"></i></span>
                 </div>
             </div>
             </div>
+            <!-- END : Networks Counter -->
 
             
             <!-- Reports -->
+            {% comment %}
             <div class="col-12 d-none">
               <div class="card">
 
@@ -227,8 +208,12 @@
                 </div>
 
               </div>
-            </div><!-- End Reports -->
+            </div>
+            {% endcomment %}
+            <!-- End Reports -->
 
+             <!-- Donut Chart -->
+             {% comment %}
             <div class="col-12 col-md-6 d-none">
               <div class="card  mb-0 pb-0">
                 <div class="card-body pb-0">
@@ -268,7 +253,12 @@
                 </div>
               </div>
             </div>
+            {% endcomment %}
+            <!-- End : Donut Chart -->
 
+
+            <!-- Active Course Progress -->
+            {% comment %}
             <div class="col-12">
               <div class="card pb-3">
                 <div class="card-body">
@@ -486,79 +476,67 @@ text: 'Windows Exploitation'
                 </div>
               </div>
             </div>
+            {% endcomment %}
+            <!-- End : Active Course Progress -->
+            
 
             
 
 
-            <!-- Recent Sales -->
+            <!-- Courses Table -->
             <div class="col-12 ">
-              <div class="card recent-sales overflow-auto">
-
-                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
-
-                    <li><a class="dropdown-item" href="#">Today</a></li>
-                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-                </div>
-
+              <div class="card  overflow-auto">
+          
+          
+                  <!-- filter -->  
+                  <div class="filter">
+                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                      <li class="dropdown-header text-start">
+                      </li>
+                
+                      <li><a class="dropdown-item" href="{% url 'student-courses-url' %}">All Courses</a></li>
+                    </ul>
+                  </div>
+                  <!-- end: filter -->
+          
                 <div class="card-body">
-                  <h5 class="card-title">Recent Courses</h5>
-
+                  <h5 class="card-title">Courses</h5>
+          
                   <table class="table table-borderless datatable">
                     <thead>
                       <tr>
                         <th scope="col">Course</th>
-                        
                         <th scope="col">Instructor</th>
-                        
-                        <th scope="col">No. of Challenges</th>
-                        <th scope="col">No. of Students</th>
-                        
+                        <th scope="col">Flags</th>
+                        <th scope="col">Status</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>Cross-site scripting (XSS) attack</td>
-                        
-                        <td>Brandon Jacob</td>
-                        <td>5</td>
-                        <td>8</td>
-                        
-                      </tr>
-                      <tr>
-                        <td>Eavesdropping attack</td>
-                        <td>Bridie Kessler</td>
-                        <td>3</td>
-                        <td>6</td>
-                      </tr>
-                      <tr>
-                        <td>Drive-by attack</td>
-                        
-                        <td>Ashleigh Langosh</td>
-                        <td>10</td>
-                        <td>5</td>
-                      </tr>
-                      <tr>
-                        <td>Phishing and spear phishing attacks</td>
-                        <td>Raheem Lehner</td>
-                        <td>3</td>
-                        <td>7</td>
-                      </tr>
+                      {% for course in courses|slice:":10" %}
+                          <tr>
+                              <td><a href="{{ course.course.get_student_url }}" class="card-link">{{ course.course.name|truncatechars:37 }}</a></td>
+                              <td>{{ course.course.instructor }}</td>
+                              <td>{{ course.course.networkflag_set.all.count }}</td>
+                              <td>{{ course.course.is_approved_display }}</td>
+                          </tr>
+                      {% empty %}
+                          <tr>
+                              <td colspan="5">
+                                  <p>There is no course available</p>
+                              </td>
+                          </tr>
+                      {% endfor %}
                     </tbody>
                   </table>
-
+          
                 </div>
-
+          
               </div>
             </div>
 
             <!-- Top Selling -->
+            {% comment %}
             <div class="col-12 d-none">
               <div class="card top-selling overflow-auto">
 
@@ -614,7 +592,9 @@ text: 'Windows Exploitation'
                 </div>
 
               </div>
-            </div><!-- End Top Selling -->
+            </div>
+            {% endcomment %}
+            <!-- End Top Selling -->
 
           </div>
         </div><!-- End Left side columns -->
@@ -623,6 +603,7 @@ text: 'Windows Exploitation'
         <div class="col-lg-4">
 
           <!-- Recent Activity -->
+          {% comment %}
           <div class="card d-none">
             <div class="filter">
               <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
@@ -693,83 +674,17 @@ text: 'Windows Exploitation'
               </div>
 
             </div>
-          </div><!-- End Recent Activity -->
+          </div>
+          {% endcomment %}
+          <!-- End Recent Activity -->
 
-          <!-- Statistics -->
-          <div class="card ">
-            <div class="filter">
-              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <li class="dropdown-header text-start">
-                  <h6>Filter</h6>
-                </li>
-
-                <li><a class="dropdown-item" href="#">Today</a></li>
-                <li><a class="dropdown-item" href="#">This Month</a></li>
-                <li><a class="dropdown-item" href="#">This Year</a></li>
-              </ul>
-            </div>
-
-            <div class="card-body pb-0">
-              <h5 class="card-title">Statistics</h5>
-
-              <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
-
-              <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  echarts.init(document.querySelector("#trafficChart")).setOption({
-                    tooltip: {
-                      trigger: 'item'
-                    },
-                    legend: {
-                      top: '5%',
-                      left: 'center'
-                    },
-                    series: [{
-                      
-                      type: 'pie',
-                      radius: ['40%', '70%'],
-                      avoidLabelOverlap: false,
-                      label: {
-                        show: false,
-                        position: 'center'
-                      },
-                      emphasis: {
-                        label: {
-                          show: true,
-                          fontSize: '18',
-                          fontWeight: 'bold'
-                        }
-                      },
-                      labelLine: {
-                        show: true
-                      },
-                      data: [{
-                          value: 40,
-                          name: 'Courses'
-                        },
-                        {
-                          value: 73,
-                          name: 'Students'
-                        },
-                        {
-                          value: 58,
-                          name: 'Virtual Networks'
-                        },
-                        {
-                          value: 52,
-                          name: 'Instructors'
-                        }
-                      ]
-                    }]
-                  });
-                });
-              </script>
-
-            </div>
-          </div><!-- End Website Traffic -->
+          <!-- Info -->
+          {% include 'master_app/student/dashboard_statistics.html' %}
+          
+          <!-- Info -->
 
           <!-- News & Updates Traffic -->
+          {% comment %}
           <div class="card d-none">
             <div class="filter">
               <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
@@ -810,11 +725,14 @@ text: 'Windows Exploitation'
               </div><!-- End sidebar recent posts-->
 
             </div>
-          </div><!-- End News & Updates -->
+          </div>
+          {% endcomment %}
+          <!-- End News & Updates -->
 
           
 
           <!-- Budget Report -->
+          {% comment %}
           <div class="card d-none">
             <div class="filter">
               <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
@@ -886,8 +804,12 @@ text: 'Windows Exploitation'
               </script>
 
             </div>
-          </div><!-- End Budget Report -->
+          </div>
+          {% endcomment %}
+          <!-- End Budget Report -->
 
+
+          {% comment %}
           <div class="card d-none">
             <div class="card-body">
               <h5 class="card-title">Courses</h5>
@@ -945,32 +867,15 @@ text: 'Windows Exploitation'
 
             </div>
           </div>
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Operating System</h5>
+          {% endcomment %}
 
-              <!-- Pie Chart -->
-              <div id="pieChart3"></div>
 
-              <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  new ApexCharts(document.querySelector("#pieChart3"), {
-                    series: [44, 55, 13, 43],
-                    chart: {
-                      height: 350,
-                      type: 'pie',
-                      toolbar: {
-                        show: true
-                      }
-                    },
-                    labels: ['Windows', 'Ubuntu', 'Parrot Security', 'Kali Linux']
-                  }).render();
-                });
-              </script>
-              <!-- End Pie Chart -->
+          <!-- Operating System -->
+          {% include 'master_app/admin/dashboard_os.html' %}
+          <!-- End : Operating System -->
 
-            </div>
-          </div>
+
+          {% comment %}
           <div class="card d-none">
             <div class="card-body">
               <h5 class="card-title">Courses By Status</h5>
@@ -1021,6 +926,7 @@ text: 'Windows Exploitation'
 
             </div>
           </div>
+          {% endcomment %}
 
           
 
@@ -1035,8 +941,10 @@ text: 'Windows Exploitation'
 {% endblock %}
 
 {% block extra_js %}
+<script src="{% static 'assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
 <script>
   $(function(){
+    new PureCounter();
     window.dispatchEvent(new Event('resize'));
   });
 </script>

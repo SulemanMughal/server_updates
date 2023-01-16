@@ -1,3 +1,5 @@
+{% load attacker_flag %}
+
 <div class="card  p-0 ">
 <div class="card-body  px-0">
     <h3 class="p-3">Virtual Network</h3>
@@ -23,7 +25,14 @@
           <div class="ms-2 me-auto">
             <div class="fw-bold">IP Address</div>
           </div>
-          <p class="w-50 text-end">{{ course.get_virtual_network.ip_address }}</p></li>
+          <p class="w-50 text-end">
+            {% attacker_flag course.id request.user.id as result  %}
+              {% if result %}
+                {{ course.get_virtual_network.ip_address }}
+              {% else %}
+                {{ wazuh_server_ip }}
+              {% endif %}
+          </p></li>
         {% endif %}
       <li class="list-group-item text-center" aria-disabled="true"><a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">See Details<i class="fas fa-chevron-right fs-5 ms-3 pt-2"></i></a></li>
     </ul><!-- End Clean list group -->

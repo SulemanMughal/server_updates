@@ -1,5 +1,5 @@
 {%  extends 'base.html' %}
-{% load static %}
+{% load static attacker_flag %}
 {% block title %} {{ course.name }} {% endblock %}
 
 {% block extra_css %}
@@ -97,11 +97,15 @@ color: #47b2e4;
                   <!-- end : card header summary -->
                   
                   <!-- Flag Submission -->
-                  {% if course.course_status == 2 %}
-                    {% if course.get_network_flags %}
-                      {% include 'master_app/student/flag_submission.html' with flags=course.get_network_flags %}
+                  {% attacker_flag course.id request.user.id as result  %}
+                    {% if course.course_status == 2 %}
+                      {% if course.get_network_flags %}
+                        {% if result %}
+                          {% include 'master_app/student/flag_submission.html' with flags=course.get_network_flags %}
+                        {% endif %}
+                      {% endif %}
                     {% endif %}
-                  {% endif %}
+                  
                   <!-- End : Flag Submission -->
 
 
@@ -117,7 +121,9 @@ color: #47b2e4;
                   <!-- End : Challenges Details -->
 
                   <!-- Results -->
-                  {% include 'master_app/student/cd_results.html' %}
+                  {% comment %}
+                    {% include 'master_app/student/cd_results.html' %}
+                  {% endcomment %}
                   <!-- End : Results -->
                   
                   

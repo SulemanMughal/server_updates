@@ -1,0 +1,39 @@
+<div class="col-12 col-md-6 d-none">
+    <div class="card  mb-0 pb-0">
+      <div class="card-body pb-0">
+    
+    <div id="donutChart" ></div>
+    
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        new ApexCharts(document.querySelector("#donutChart"), {
+          series: [44, 55, 13, 43, 22],
+          
+          chart: {
+            
+            type: 'donut',
+            height: 300,
+            toolbar: {
+              show: true
+            },
+          },
+          
+          legend: {
+                position: 'top',
+              },
+              plotOptions: {
+          pie: {
+            donut: {
+              size: '50%'
+            }
+          },
+          
+        },
+          labels: ['Student A', 'Student B', 'Student C', 'Student D', 'Student E'],
+        }).render();
+      });
+    </script>
+    <!-- End Donut Chart -->
+      </div>
+    </div>
+  </div>
