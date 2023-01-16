@@ -53,23 +53,37 @@
             </div>
             <p class="w-50 text-end">{{ course.get_virtual_network.name }}</p>
           </li>
+          <li class="list-group-item d-flex justify-content-between align-items-start">
+            <div class="ms-2 me-auto">
+              <div class="fw-bold">Scenario</div>
+            </div><p class="w-50 text-end">{{ course.get_virtual_network.get_scenarios }}</p>
+          </li>
           {% if course.get_virtual_network.is_instance_created %}
             <li class="list-group-item d-flex justify-content-between align-items-start">
               <div class="ms-2 me-auto">
-                <div class="fw-bold">IP Address</div>
+                <div class="fw-bold">Client IP Address</div>
               </div>
-              <p class="w-50 text-end">{{ course.get_virtual_network.ip_address }}</p></li>
+              <p class="w-50 text-end">{{ course.get_virtual_network.ip_address }}</p>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+              <div class="ms-2 me-auto">
+                <div class="fw-bold">Wazuh IP Address</div>
+              </div>
+              <p class="w-50 text-end">{{ WAZUH_SERVER_PUBLIC_IP }}</p>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+              <div class="ms-2 me-auto">
+                <div class="fw-bold">Domain Controller IP Address</div>
+              </div>
+              <p class="w-50 text-end">{{ DC_IP_ADDRESS }}</p>
+            </li>
           {% endif %}
           <li class="list-group-item d-flex justify-content-between align-items-start">
             <div class="ms-2 me-auto">
               <div class="fw-bold">OS</div>
             </div>
             <p class="w-50 text-end">{{ course.get_virtual_network.get_operating_system }}</p></li>
-          <li class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="ms-2 me-auto">
-              <div class="fw-bold">Scenario</div>
-            </div><p class="w-50 text-end">{{ course.get_virtual_network.get_scenarios }}</p>
-          </li>
+          
           <li class="list-group-item d-flex justify-content-between align-items-start">
             <div class="ms-2 me-auto">
               <div class="fw-bold">Size</div>

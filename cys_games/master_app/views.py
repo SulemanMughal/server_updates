@@ -254,6 +254,8 @@ def AdminCourseDetails(request, course_id):
         "medium_challenges": medium_challenges,
         "hard_challenges": hard_challenges,
         "students": students,
+        "WAZUH_SERVER_PUBLIC_IP" : settings.WAZUH_SERVER_PUBLIC_IP,
+        "DC_IP_ADDRESS" : settings.DC_IP_ADDRESS
     }
     return render(request, template_name, context)
 
@@ -1427,6 +1429,8 @@ def InstructorCourseDetails(request, course_id):
         "students": students,
         "form":  NewVirtualNetworkForm(),
         "form_2":  AddNewStudent(),
+        "WAZUH_SERVER_PUBLIC_IP" : settings.WAZUH_SERVER_PUBLIC_IP,
+        "DC_IP_ADDRESS" : settings.DC_IP_ADDRESS
     }
     return render(request, template_name, context)
 
@@ -1942,11 +1946,19 @@ def StudentFlagSubmission(request):
                 course__id = request.POST['course_id'],
                 flag_id = request.POST['flag_id']
             )
-            customPrint(netFlag.original_answer)
             student = AssignedStudents.objects.get(
                 course__id = request.POST['course_id'],
                 student__id = request.user.id
             )
+            
+            # return JsonResponse(
+            #     json.loads(
+            #         json.dumps({
+            #             "text" : "Flag has been submitted successfully"
+            #         })
+            #     ),
+            #     status =200
+            # )
             subObj = NetworkFlagSubmission.objects.get_or_create(
                 student = student,
                 flag_id = netFlag.flag_id
@@ -1956,17 +1968,6 @@ def StudentFlagSubmission(request):
                 subObj[0].submittedAnswer = request.POST.get("flag", None)
                 subObj[0].save()
                 if netFlag.original_answer == request.POST.get("flag", None):
-                    # Retrieve student id
-                    # student = AssignedStudents.objects.get(
-                    #     course__id = request.POST['course_id'],
-                    #     student__id = request.user.id
-                    # )
-                    # customPrint(student)
-                    # subObj = NetworkFlagSubmission.objects.get_or_create(
-                    #     student = student,
-                    #     flag_id = netFlag.flag_id
-                    # )
-                    # customPrint(subObj[0].attemptUsed)
                     subObj[0].obtainedPoints = netFlag.points
                     subObj[0].status = "SUBMITTED"
                     subObj[0].save()
