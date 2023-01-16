@@ -1,0 +1,23 @@
+{% load static %}
+<div class="offcanvas offcanvas-end " tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header " style="background-color: #012970;">
+      <h5 class="offcanvas-title mx-auto text-white fw-bolder" id="offcanvasExampleLabel">Instructions</h5>
+    </div>
+    <div class="offcanvas-body bg-light">
+        <div class="d-flex align-items-center mt-3 mb-2 ">
+            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+              <img src="{% static 'assets/img/caac8772de14a769c0bfe95756bceebe.png' %}" width="60" alt="">
+            </div>
+            <div class="ps-3">
+              <h4 class="mb-0">{{ course.get_virtual_network }}</h4>
+              <span class=" small pt-1 fw-bold h5">{{ course.get_virtual_network.rating }} Rating</span>
+  
+            </div>
+          </div>
+      <div class="row justify-content-center my-3">
+        <div class="col-12">
+            <h6 class="">{{ course.get_virtual_network.description|safe }}</h6>
+        </div>
+      </div>
+    </div>
+  </div>
