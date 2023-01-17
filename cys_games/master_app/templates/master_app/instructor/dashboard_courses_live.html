@@ -1,0 +1,181 @@
+{% load student_course_points %}
+
+
+<script>
+    var points = [];
+    var categories = [];
+
+</script>
+
+<div class="col-12">
+    <div class="card pb-3">
+      <div class="card-body">
+        <h5 class="card-title">Live Courses</h5>
+
+        <div data-flickity='{"pageDots":true,"cellAlign": "left", "wrapAround": true, "imagesLoaded": true, "prevNextButtons": false, "adaptiveHeight" : true}' class="flickity-viewport-visible">
+            
+        {% for course in courses %}  
+        
+            {% if course.is_course_approved %}
+        
+                {% if course.course_status == 2 %}
+
+                    <div class="col-12 "  aria-hidden="true">
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                points = [];
+                            categories = [];
+                            });
+                            
+                        </script>
+
+                        {% for student in course.assignedstudents_set.all %}
+                        {% if student.user_type == "1" %}
+                            <script>
+                                document.addEventListener("DOMContentLoaded", () => {
+                                    points.push(Number("{% student_course_points student.id %}"));
+                                    categories.push("{{ student.student.username }}");
+                                });
+                            </script>
+                        {% endif %}
+                        {% endfor %}
+                        <div class="row">
+                        <div class="col-7">
+                            <div class="card shadow-none bg-transparent mb-0 pb-0">
+                            <div class="card-body pb-0">
+
+                                
+
+
+            <div id="coursesProgress_{{ forloop.counter }}"></div>
+
+            <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                // console.debug(points);
+            new ApexCharts(document.querySelector("#coursesProgress_{{ forloop.counter }}"), {
+            series: [{
+                    name: 'Net Profit',
+                    data: points
+                }],
+            chart: {
+                type: 'bar',
+                height: 200
+            },
+
+            plotOptions: {
+            bar: {
+                horizontal: true,
+                columnWidth: '55%',
+                endingShape: 'rounded'
+            },
+            },
+            title: {
+            text: `{{ course.name }}`
+            },
+            dataLabels: {
+            enabled: false
+            },
+            stroke: {
+            show: true,
+            width: 2,
+            colors: ['transparent']
+            },
+            xaxis: {
+            categories: categories,
+            },
+            yaxis: {
+            // title: {
+            //   text: '$ (thousands)'
+            // }
+            },
+            fill: {
+            opacity: 1
+            },
+            tooltip: {
+            y: {
+                formatter: function(val) {
+                // return "$ " + val + " thousands"
+                return val
+                }
+            }
+            }
+            }).render();
+
+
+
+            });
+            </script>
+            <!-- End Column Chart -->  
+            </div>
+                            </div>
+                        </div>
+                        <div class="col-5 ">
+                            <div class="card shadow-none bg-transparent mb-0 pb-0">
+                            <div class="card-body pb-0">
+                                
+                
+                                <!-- Pie Chart -->
+                                <div id="pieChart_{{ forloop.counter }}"></div>
+                
+                                <script>
+                                document.addEventListener("DOMContentLoaded", () => {
+                                    new ApexCharts(document.querySelector("#pieChart_{{ forloop.counter }}"), {
+                                    series: points,
+                                    chart: {
+                                        height: 350,
+                                        type: 'pie',
+                                        toolbar: {
+                                        show: true
+                                        },
+                                        
+                                        
+                                    },
+                                    legend: {
+            position: 'bottom',
+            },
+                                    labels: categories
+                                    }).render();
+                                });
+                                </script>
+                                <!-- End Pie Chart -->
+                
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        
+                    </div>
+
+                {% endif %}
+        
+            {% endif %}
+        
+        
+            {% endfor %}
+          
+
+
+          </div> 
+        
+          
+
+        
+
+      </div>
+    </div>
+  </div>
+
+  {% comment %}
+
+
+
+
+  
+
+
+<script>
+    
+    
+</script>
+
+  {% endcomment %}

@@ -1,3 +1,20 @@
+{% load student_course_points %}
+
+
+<script>
+  var donut_series_arr = [];
+  var donut_students_arr = [];
+</script>
+
+{% for assign_student in course.assignedstudents_set.all %}
+{% if assign_student.user_type == "1" %}
+<script>
+  donut_series_arr.push(Number("{% student_course_points  assign_student.id %}"))
+  donut_students_arr.push("{{ assign_student.student.username }}")
+</script>
+{% endif %}
+{% endfor %}
+
 <div class="card">
     <div class="card-body">
       <h5 class="card-title">Results</h5>
@@ -9,7 +26,7 @@
         document.addEventListener("DOMContentLoaded", () => {
           new ApexCharts(document.querySelector("#barChart"), {
             series: [{
-              data: [400, 430, 448, 470, 540]
+              data: donut_series_arr
             }],
             chart: {
               type: 'bar',
@@ -18,7 +35,7 @@
             plotOptions: {
               bar: {
                 borderRadius: 2,
-                horizontal: true,
+                horizontal: false,
                 width : 2
               }
             },
@@ -26,8 +43,7 @@
               enabled: false
             },
             xaxis: {
-              categories: ['A', 'B', 'C', 'D', 'E'
-              ],
+              categories: donut_students_arr,
             }
           }).render();
         });

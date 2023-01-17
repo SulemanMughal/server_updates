@@ -39,7 +39,7 @@
                 {% endif %}
               {% endfor %}
                 <div class="row">
-                <div class="col-12">
+                <div class="col-7">
                     <div class="card shadow-none bg-transparent mb-0 pb-0">
                     <div class="card-body pb-0">
 
@@ -54,22 +54,16 @@
     new ApexCharts(document.querySelector("#coursesProgress_{{ forloop.counter }}"), {
     series: [{
           name: 'Net Profit',
-          data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
-        }, {
-          name: 'Revenue',
-          data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
-        }, {
-          name: 'Free Cash Flow',
-          data: [35, 41, 36, 26, 45, 48, 52, 53, 41]
+          data: points
         }],
     chart: {
         type: 'bar',
-        height: 350
+        height: 200
     },
     
     plotOptions: {
     bar: {
-        horizontal: false,
+        horizontal: true,
         columnWidth: '55%',
         endingShape: 'rounded'
     },
@@ -114,7 +108,7 @@
     </div>
                     </div>
                 </div>
-                <div class="col-5 d-none">
+                <div class="col-5 ">
                     <div class="card shadow-none bg-transparent mb-0 pb-0">
                     <div class="card-body pb-0">
                         

@@ -2263,5 +2263,11 @@ def CreateVPN(request):
 # sudo systemctl restart gunicorn
 # sudo systemctl restart nginx
 # sudo journalctl -u gunicorn
-
+# sudo chmod -R 777 ./crfront/
 # cyber-range.rocks
+
+# /home/openstack/backups/22/cys_games/db.sqlite3
+# /home/openstack/crfront/cys_games/db.sqlite3
+
+# /home/openstack/backups/22/media
+# /home/openstack/crfront/media
