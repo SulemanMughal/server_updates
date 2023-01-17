@@ -1,0 +1,184 @@
+{% load student_course_points %}
+
+
+<script>
+    var points = [];
+    var categories = [];
+
+</script>
+
+<div class="col-12">
+    <div class="card pb-3">
+      <div class="card-body">
+        <h5 class="card-title">Live Courses</h5>
+
+        <div data-flickity='{"pageDots":true,"cellAlign": "left", "wrapAround": true, "imagesLoaded": true, "prevNextButtons": false, "adaptiveHeight" : true}' class="flickity-viewport-visible">
+            
+        {% for course in courses %}  
+        
+            
+        
+
+            <div class="col-12 "  aria-hidden="true">
+                <script>
+                    document.addEventListener("DOMContentLoaded", () => {
+                        points = [];
+                    categories = [];
+                    });
+                    
+                </script>
+
+                {% for student in course.course.assignedstudents_set.all %}
+                {% if student.user_type == "1" %}
+                    <script>
+                        document.addEventListener("DOMContentLoaded", () => {
+                            points.push(Number("{% student_course_points student.id %}"));
+                            categories.push("{{ student.student.username }}");
+                        });
+                    </script>
+                {% endif %}
+              {% endfor %}
+                <div class="row">
+                <div class="col-12">
+                    <div class="card shadow-none bg-transparent mb-0 pb-0">
+                    <div class="card-body pb-0">
+
+                        
+
+
+    <div id="coursesProgress_{{ forloop.counter }}"></div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // console.debug(points);
+    new ApexCharts(document.querySelector("#coursesProgress_{{ forloop.counter }}"), {
+    series: [{
+          name: 'Net Profit',
+          data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
+        }, {
+          name: 'Revenue',
+          data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
+        }, {
+          name: 'Free Cash Flow',
+          data: [35, 41, 36, 26, 45, 48, 52, 53, 41]
+        }],
+    chart: {
+        type: 'bar',
+        height: 350
+    },
+    
+    plotOptions: {
+    bar: {
+        horizontal: false,
+        columnWidth: '55%',
+        endingShape: 'rounded'
+    },
+    },
+    title: {
+    text: `{{ course.course.name }}`
+    },
+    dataLabels: {
+    enabled: false
+    },
+    stroke: {
+    show: true,
+    width: 2,
+    colors: ['transparent']
+    },
+    xaxis: {
+    categories: categories,
+    },
+    yaxis: {
+    // title: {
+    //   text: '$ (thousands)'
+    // }
+    },
+    fill: {
+    opacity: 1
+    },
+    tooltip: {
+    y: {
+        formatter: function(val) {
+        // return "$ " + val + " thousands"
+        return val
+        }
+    }
+    }
+    }).render();
+    
+    
+
+});
+    </script>
+    <!-- End Column Chart -->  
+    </div>
+                    </div>
+                </div>
+                <div class="col-5 d-none">
+                    <div class="card shadow-none bg-transparent mb-0 pb-0">
+                    <div class="card-body pb-0">
+                        
+        
+                        <!-- Pie Chart -->
+                        <div id="pieChart_{{ forloop.counter }}"></div>
+        
+                        <script>
+                        document.addEventListener("DOMContentLoaded", () => {
+                            new ApexCharts(document.querySelector("#pieChart_{{ forloop.counter }}"), {
+                            series: points,
+                            chart: {
+                                height: 350,
+                                type: 'pie',
+                                toolbar: {
+                                show: true
+                                },
+                                
+                                
+                            },
+                            legend: {
+    position: 'bottom',
+    },
+                            labels: categories
+                            }).render();
+                        });
+                        </script>
+                        <!-- End Pie Chart -->
+        
+                    </div>
+                    </div>
+                </div>
+                </div>
+                
+            </div>
+        
+        
+        
+        
+            {% endfor %}
+          
+
+
+          </div> 
+        
+          
+
+        
+
+      </div>
+    </div>
+  </div>
+
+  {% comment %}
+
+
+
+
+  
+
+
+<script>
+    
+    
+</script>
+
+  {% endcomment %}

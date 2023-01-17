@@ -91,7 +91,7 @@
                     <h3 class="card-title text-white py-0">Courses</h3>
                     <div class="d-inline-block">
                         <h2 class="text-white fw-bolder fs-1">
-                          <span data-purecounter-start="50" data-purecounter-end="{{ courses.count }}" data-purecounter-duration="0.5" class="purecounter"></span>
+                          <span data-purecounter-start="50" data-purecounter-end="{{ courses|length }}" data-purecounter-duration="0.5" class="purecounter"></span>
                         </h2>
                         <p class="text-white mb-0 fw-bold">{% now "M Y" %}</p>
                     </div>
@@ -257,283 +257,20 @@
             <!-- End : Donut Chart -->
 
 
-            <!-- Active Course Progress -->
+            <!-- Live Course Progress -->
             {% comment %}
-            <div class="col-12">
-              <div class="card pb-3">
-                <div class="card-body">
-                  <h5 class="card-title">Active Course Progress</h5>
-
-                  <div data-flickity='{"pageDots":true,"cellAlign": "left", "wrapAround": true, "imagesLoaded": true, "prevNextButtons": false, "adaptiveHeight" : true}' class="flickity-viewport-visible">
-                  
-                  
-                    <div class="col-12 "  aria-hidden="true">
-                      <div class="row">
-                        <div class="col-7">
-                          <div class="card shadow-none bg-transparent mb-0 pb-0">
-                            <div class="card-body pb-0">
-    <!-- Column Chart -->
-    <div id="coursesProgress"></div>
-        
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        new ApexCharts(document.querySelector("#coursesProgress"), {
-          series: [{
-            name: 'Points',
-            data: [44, 55, 57, 56, 61]
-          }],
-          chart: {
-            type: 'bar',
-            height: 250
-          },
-          plotOptions: {
-            bar: {
-              horizontal: true,
-              columnWidth: '40%',
-              endingShape: 'rounded'
-            },
-          },
-          title: {
-    text: 'Privilege Linux Exploitation'
-    },
-          dataLabels: {
-            enabled: false
-          },
-          stroke: {
-            show: true,
-            width: 2,
-            colors: ['transparent']
-          },
-          xaxis: {
-            categories: ['Andy', 'Beth', 'Cindy', 'Dev', 'Ester'],
-          },
-          yaxis: {
-            // title: {
-            //   text: '$ (thousands)'
-            // }
-          },
-          fill: {
-            opacity: 1
-          },
-          tooltip: {
-            y: {
-              formatter: function(val) {
-                // return "$ " + val + " thousands"
-                return val
-              }
-            }
-          }
-        }).render();
-      });
-    </script>
-    <!-- End Column Chart -->  
-    </div>
-                          </div>
-                        </div>
-                        <div class="col-5">
-                          <div class="card shadow-none bg-transparent mb-0 pb-0">
-                            <div class="card-body pb-0">
-                              
-                
-                              <!-- Pie Chart -->
-                              <div id="pieChart"></div>
-                
-                              <script>
-                                document.addEventListener("DOMContentLoaded", () => {
-                                  new ApexCharts(document.querySelector("#pieChart"), {
-                                    series: [44, 55, 13, 43, 22],
-                                    chart: {
-                                      height: 350,
-                                      type: 'pie',
-                                      toolbar: {
-                                        show: true
-                                      },
-                                      
-                                      
-                                    },
-                                    legend: {
-          position: 'bottom',
-        },
-                                    labels: ['Andy', 'Beth', 'Cindy', 'Dev', 'Ester']
-                                  }).render();
-                                });
-                              </script>
-                              <!-- End Pie Chart -->
-                
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      
-                    </div>
-                    <div class="col-12 "  aria-hidden="true">
-                      <div class="card shadow-none bg-transparent mb-0 pb-0">
-                        <div class="card-body pb-0">
-                          <div class="row">
-                            <div class="col-7">
-<!-- Column Chart -->
-<div id="coursesProgress2"></div>
-    
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    new ApexCharts(document.querySelector("#coursesProgress2"), {
-      series: [{
-        name: 'Points',
-        data: [52, 66, 78, 79, 88, 99]
-      },
-      ],
-      chart: {
-        type: 'bar',
-        height: 250
-      },
-      plotOptions: {
-        bar: {
-          horizontal: true,
-          columnWidth: '40%',
-          endingShape: 'rounded'
-        },
-      },
-      title: {
-text: 'Windows Exploitation'
-},
-      dataLabels: {
-        enabled: false
-      },
-      stroke: {
-        show: true,
-        width: 2,
-        colors: ['transparent']
-      },
-      xaxis: {
-        categories: ['James', 'Anthony', 'Johnson', 'Wise', 'Ruiz', 'Rodgers'],
-      },
-      yaxis: {
-        // title: {
-        //   text: '$ (thousands)'
-        // }
-      },
-      fill: {
-        opacity: 1,
-        // colors : ['#F44336', '#9C27B0'],
-      },
-      tooltip: {
-        y: {
-          formatter: function(val) {
-            // return "$ " + val + " thousands"
-            return val
-          }
-        }
-      }
-    }).render();
-  });
-</script>
-<!-- End Column Chart --> 
-                            </div>
-                            <div class="col-5">
-                              <div class="card shadow-none bg-transparent mb-0 pb-0">
-                                <div class="card-body pb-0">
-                                  
-                    
-                                  <!-- Pie Chart -->
-                                  <div id="pieChart2"></div>
-                    
-                                  <script>
-                                    document.addEventListener("DOMContentLoaded", () => {
-                                      new ApexCharts(document.querySelector("#pieChart2"), {
-                                        series: [44, 55, 13, 43, 22],
-                                        chart: {
-                                          height: 350,
-                                          type: 'pie',
-                                          toolbar: {
-                                            show: true
-                                          },
-                                          
-                                          
-                                        },
-                                        legend: {
-              position: 'bottom',
-            },
-                                        labels: ['James', 'Anthony', 'Johnson', 'Wise', 'Ruiz', 'Rodgers']
-                                      }).render();
-                                    });
-                                  </script>
-                                  <!-- End Pie Chart -->
-                    
-                                </div>
-                              </div>
-                            </div>
-                          </div>
- 
-</div>
-                        </div>
-                    </div>
-                    </div> 
-                  
-                    
-    
-                  
-    
-                </div>
-              </div>
-            </div>
+            {% include 'master_app/student/dashboard_courses_live.html' %}
             {% endcomment %}
-            <!-- End : Active Course Progress -->
+            
+            <!-- End : Live Course Progress -->
             
 
             
 
 
             <!-- Courses Table -->
-            <div class="col-12 ">
-              <div class="card  overflow-auto">
-          
-          
-                  <!-- filter -->  
-                  <div class="filter">
-                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                      <li class="dropdown-header text-start">
-                      </li>
-                
-                      <li><a class="dropdown-item" href="{% url 'student-courses-url' %}">All Courses</a></li>
-                    </ul>
-                  </div>
-                  <!-- end: filter -->
-          
-                <div class="card-body">
-                  <h5 class="card-title">Courses</h5>
-          
-                  <table class="table table-borderless datatable">
-                    <thead>
-                      <tr>
-                        <th scope="col">Course</th>
-                        <th scope="col">Instructor</th>
-                        <th scope="col">Flags</th>
-                        <th scope="col">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {% for course in courses|slice:":10" %}
-                          <tr>
-                              <td><a href="{{ course.course.get_student_url }}" class="card-link">{{ course.course.name|truncatechars:37 }}</a></td>
-                              <td>{{ course.course.instructor }}</td>
-                              <td>{{ course.course.networkflag_set.all.count }}</td>
-                              <td>{{ course.course.is_approved_display }}</td>
-                          </tr>
-                      {% empty %}
-                          <tr>
-                              <td colspan="5">
-                                  <p>There is no course available</p>
-                              </td>
-                          </tr>
-                      {% endfor %}
-                    </tbody>
-                  </table>
-          
-                </div>
-          
-              </div>
-            </div>
+            {% include 'master_app/student/dashboard_courses.html' %}
+            <!-- End :Courses Table -->
 
             <!-- Top Selling -->
             {% comment %}
@@ -1542,3 +1279,5 @@ text: 'Windows Exploitation'
 </main><!-- End #main -->
     
 {% endcomment %}
+
+

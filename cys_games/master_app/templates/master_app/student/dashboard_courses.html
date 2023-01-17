@@ -1,0 +1,58 @@
+{% load student_course_flag_resolved student_course_points %}
+
+<div class="col-12 ">
+    <div class="card  overflow-auto">
+
+
+        <!-- filter -->  
+        <div class="filter">
+          <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+            <li class="dropdown-header text-start">
+            </li>
+      
+            <li><a class="dropdown-item" href="{% url 'student-courses-url' %}">All Courses</a></li>
+          </ul>
+        </div>
+        <!-- end: filter -->
+
+      <div class="card-body">
+        <h5 class="card-title">Courses</h5>
+
+        <table class="table table-borderless datatable">
+          <thead>
+            <tr>
+              <th scope="col">Course</th>
+              <th scope="col">Instructor</th>
+              <th scope="col">Flags</th>
+              <th scope="col">Resolved Flags</th>
+              <th scope="col">Obtained Points</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for course in courses|slice:":10" %}
+                <tr>
+                    <td><a href="{{ course.course.get_student_url }}" class="card-link">{{ course.course.name|truncatechars:37 }}</a></td>
+                    <td>{{ course.course.instructor }}</td>
+                    <td>{{ course.course.networkflag_set.all.count }}</td>
+                    <td>{% student_course_flag_resolved course.id  %}</td>
+                    <td>{% student_course_points course.id  %}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">
+                        <p>There is no course available</p>
+                    </td>
+                </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+      </div>
+
+    </div>
+  </div>
+
+
+  {% comment %}
+  {% endcomment %}

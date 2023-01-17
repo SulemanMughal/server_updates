@@ -29,6 +29,12 @@ class Course(models.Model):
     def __str__(self):
         return self.name
 
+
+    def is_course_approved(self):
+        if self.is_approved == "3":
+            return True
+        return False
+
     def is_approved_display(self):
         if self.is_approved == "1":
             return format_html(
@@ -340,6 +346,10 @@ class NetworkFlagSubmission(models.Model):
     submittedAnswer = models.CharField(max_length=100, blank=True, default="")
     attemptUsed = models.IntegerField(default=0 , blank=True)
     status = models.CharField(max_length=12, choices=FLAG_SUBMISSION_CHOICES, default="PENDING", blank=True)
+
+
+    def __str__(self):
+        return f"{self.student}-{self.flag_id}"
 
 
     def submit_status(self):

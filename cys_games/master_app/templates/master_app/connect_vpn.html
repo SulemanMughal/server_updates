@@ -1,0 +1,57 @@
+{%  extends 'base.html' %}
+{% load static %}
+{% block title %} How to connect VPN {% endblock %}
+{% block extra_css %}
+{% endblock extra_css %}
+
+{% block content %}
+
+<main id="main" class="main">
+    <section class="section dashboard">
+        <div class="container">
+            <div class="pagetitle">
+                <h1>How to connect VPN</h1>
+                <nav>
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'master_index' %}">Home</a></li>
+                    <li class="breadcrumb-item active">How to connect VPN</li>
+                  </ol>
+                </nav>
+              </div>
+              <div class="row justify-content-center">
+                <div class="col-12">
+                    <p class="fs-5 mb-0">
+                        Log in to Cyber Range and on top right side, you'll see the <span class="fw-bolder">"Create VPN"</span> Link.
+                    </p>
+                    <img src="{% static 'assets/img/creat_vpn.png' %}" alt="Create VPN" class="img-fluid my-4 border border-dark ">
+                    <p class="fs-5 mb-0 ">
+                        Create your own individual <span class="fw-bolder">.ovpn </span>file. Once you're able to create .ovpn file, it will be available to download.
+                    </p>
+                    <img src="{% static 'assets/img/download_vpn.png' %}" alt="Create VPN" class="img-fluid my-4 border border-dark ">
+                    <p class="fs-5 mb-0">
+                        Download the <span class="fw-bolder">.ovpn </span>file
+                    </p>
+                    <p class="fs-5 mb-0">
+                        For accessing the vpn, go to the machine and install openvpn.
+                    </p>
+                    <img src="{% static 'assets/img/install_vpn.webp' %}" alt="Create VPN" class="img-fluid my-4 border border-dark ">
+                    <p class="fs-5 ">
+                        Now type <span class="fw-bolder">openvpn filename.ovpn</span>
+                    </p>
+                    <p class="fs-5 ">
+                        You'll get the status <span class="fw-bolder">"initialization sequnce completed"</span>
+                    </p>
+                    <p class="fs-5">
+                        Now you're connected and can access whatever machine you want
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+    </section>
+</main>
+
+{% endblock %}
+
+{% block extra_js %}
+{% endblock %}

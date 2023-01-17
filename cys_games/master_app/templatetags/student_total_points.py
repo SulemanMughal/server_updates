@@ -14,12 +14,17 @@ def student_total_points(student_id, *args, **kwargs):
 
         # TODO  :   Total Points
         points = 0
+        temp = None
 
         # TODO : Retrieve Total Obtained points by Student
         for course in courses:        
-            points = NetworkFlagSubmission.objects.filter(
+            temp = NetworkFlagSubmission.objects.filter(
                 Q(student__id = course.id) & Q(status = "SUBMITTED")
             ).aggregate(Sum("obtainedPoints"))['obtainedPoints__sum']
+            if temp:
+                points = points +   temp
+        
+        # print(points)
         if points:
             return points
         return 0

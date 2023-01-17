@@ -158,6 +158,15 @@ def UserLogoutView(request):
     return redirect('master_index')
 
 
+# TODO  :   How to Connect VPN
+def ConnectVPN(request):
+    template_name="master_app/connect_vpn.html"
+    context = {
+
+    }
+    return render(request, template_name, context)
+
+
 # TODO  :   Admin Dashboard
 @login_required
 @admin_required
@@ -605,7 +614,7 @@ def AdminStartNetworkInstance(request, vn_id):
                                 return JsonResponse(
                                     json.loads(
                                         json.dumps({
-                                            "data" : "Instance has been started successfully"
+                                            "data" : "Instance has been activated successfully"
                                         })
                                     ),
                                     status =200
@@ -677,7 +686,7 @@ def AdminStartNetworkInstance(request, vn_id):
                             return JsonResponse(
                                 json.loads(
                                     json.dumps({
-                                        "data" : "Instance has been started successfully"
+                                        "data" : "Instance has been activated successfully"
                                     })
                                 ),
                                 status =200
@@ -1654,42 +1663,23 @@ def AddNewStudents(request):
 
 
 # TODO  :   Student Dashboard
-# @method_decorator([login_required, student_required], name='dispatch')
 @login_required
 @student_required
 def StudentDashboard(request):
     template_name = 'master_app/student/dashboard.html'
     
-    # TODO  :   Retrieve All Courses
-    courses = AssignedStudents.objects.filter(student__id = request.user.id).order_by("-created_timestamp")
-    # courses = Course.objects.filter(instructor__id = request.user.id).order_by("-created_timestamp")
-    # print(courses)
+    # TODO  :   Retrieve All Courses Active 
+    courses = [x for x in AssignedStudents.objects.filter(student__id = request.user.id).order_by("-created_timestamp") if x.course.is_course_approved()]
 
-    # # TODO  :   Retrieve All Students to that instructor
-    # students=[]
-    # for course in courses:
-    #     for student in course.assignedstudents_set.all():
-    #         students.append(student.student)
-
-
-    # # TODO  :   Retrieve All Local Virutal Networks to that student
+    # TODO  :   Retrieve All Local Virutal Networks to that student
     networks=[]
     for course in courses:
         for network in course.course.virtualnetwork_set.all():
             networks.append(network)
-
-    # print(networks)
-
-    # TODO  :   Recent Acitivty 
-    # entries = LogEntry.objects.all()
     
     context = {
         "courses" : courses,
         "networks" : networks,
-        # "instructors"  : instructors,
-        # "students" : students,
-        # "courses" : courses,
-        # "entries" : entries
     }
     return render(request, template_name, context)
 
@@ -2274,3 +2264,4 @@ def CreateVPN(request):
 # sudo systemctl restart nginx
 # sudo journalctl -u gunicorn
 
+# cyber-range.rocks

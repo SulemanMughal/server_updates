@@ -16,6 +16,9 @@ urlpatterns = [
     # ? User Logout Route
     path('logout/', views.UserLogoutView, name="user-logout"),
 
+    # ? How to Connect VPN
+    path("how-to-connect-vpn/", views.ConnectVPN, name="how-to-connect-vpn"),
+
 
     # ==========================================================
     # ? Admin Dashbaord

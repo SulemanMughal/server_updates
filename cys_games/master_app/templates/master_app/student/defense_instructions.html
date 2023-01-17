@@ -16,7 +16,14 @@
           </div>
       <div class="row justify-content-center my-3">
         <div class="col-12">
-            <h6 class="">{{ course.get_virtual_network.description|safe }}</h6>
+          <p>
+            Follow instructions on the link below to get access to machine 
+          </p>
+          <a href="{% url 'how-to-connect-vpn' %}">How to get access through VPN</a>
+        <p>
+          
+            {{ course.get_virtual_network.description|safe }}
+        </p>
             <p>Access Wazuh Server</p>
             
             <p>Download OpenVPN File from top right corner</p>

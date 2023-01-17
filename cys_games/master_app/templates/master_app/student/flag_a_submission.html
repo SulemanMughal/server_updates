@@ -4,16 +4,12 @@
       
       event.preventDefault();
       event.stopPropagation();
-    //   console.debug(event.target);
       var fd = new FormData($(event.target)[0]);
       var sibmit_form = $(event.target)[0];
-      // console.debug($(this));
       if($(sibmit_form).get(0).checkValidity()){
         $(".loader-double").addClass("is-active");
         fd.append("course_id" , "{{ course.id }}");
-        // fd.append("flag_id" , "Flag " +  $(sibmit_form).attr("data-flag-id") + "");
         fd.append("flag_id" , $(sibmit_form).attr("data-flag-id"));
-        // fd.append("Flag 1" , $("#id_flag_1").val());
       $.ajaxSetup({
         beforeSend: function(xhr, settings){
           xhr.setRequestHeader(
@@ -119,7 +115,9 @@
           }
       }).show(); 
   
-  
+        setInterval(function(){
+            window.location.reload();
+        }, 2500);
   
         },
         error : function(response){

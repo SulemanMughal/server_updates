@@ -35,10 +35,28 @@ class VirtualNetworkAdmin(admin.ModelAdmin):
         "scenarios"
     ]
 
-admin.site.register(Course, CourseAdmin)
+class NetworkFlagSubmissionAdmin(admin.ModelAdmin):
+    list_display=[
+        'student',
+        'flag_id',
+        'attemptUsed',
+        'status',
+        'obtainedPoints',
+    ]
 
+
+class NetworkFlagAdmin(admin.ModelAdmin):
+    list_display=[
+        "course",
+        "flag_id",
+        "points",
+        "original_answer",
+        "imageRef"
+    ]
+
+admin.site.register(Course, CourseAdmin)
 admin.site.register(VirtualNetwork, VirtualNetworkAdmin)
 admin.site.register(CourseChallenge)
 admin.site.register(ChallengeSubmission)
-admin.site.register(NetworkFlag)
-admin.site.register(NetworkFlagSubmission)
+admin.site.register(NetworkFlag, NetworkFlagAdmin)
+admin.site.register(NetworkFlagSubmission, NetworkFlagSubmissionAdmin)
