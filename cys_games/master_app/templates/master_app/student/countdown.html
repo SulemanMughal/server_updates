@@ -1,0 +1,66 @@
+{% load static %}
+<style type="text/css">
+    ul.countdown {
+    list-style: none;
+    color: #012970;
+    margin: 5px 0;
+    padding: 0;
+    display: block;
+    text-align: center;
+    }
+    ul.countdown li {
+    display: inline-block;
+    }
+    ul.countdown li span {
+    font-size: 30px;
+    font-weight: bolder;
+    line-height: 80px;
+    }
+    ul.countdown li.seperator {
+    font-size: 30px;
+    font-weight: bolder;
+    line-height: 75px;
+    vertical-align: top;
+    }
+    ul.countdown li p {
+    color: #012970;
+    font-size: 14px;
+    font-weight: bolder;
+    }
+    </style>
+
+<div class="card  bg-light ">
+    <div class="card-body  ">
+        <ul class="countdown">
+            <li> <span class="days">00</span>
+            <p class="days_ref">days</p>
+            </li>
+            <li class="seperator">.</li>
+            <li> <span class="hours">00</span>
+            <p class="hours_ref">hours</p>
+            </li>
+            <li class="seperator">:</li>
+            <li> <span class="minutes">00</span>
+            <p class="minutes_ref">minutes</p>
+            </li>
+            <li class="seperator">:</li>
+            <li> <span class="seconds">00</span>
+            <p class="seconds_ref">seconds</p>
+            </li>
+            </ul>
+    </div>
+</div>
+
+{% block extra_js %}
+
+<script type="text/javascript" src="{% static 'assets/js/jquery.downCount.js' %}"></script>
+
+<script class="source" type="text/javascript">
+     $('.countdown').downCount({
+            date: '{{ course.end_time|date:"m/d/Y h:i:s" }}',
+            
+        }, function () {
+            window.location.reload();
+        });
+    </script>
+{%  endblock %}

@@ -103,6 +103,16 @@ color: #47b2e4;
                 </div>
                 <div class="col-12 col-md-4">
 
+                    
+                  {% attacker_flag course.id request.user.id as result  %}
+                  {% if course.course_status == 2 %}
+                  
+                  <!-- Countdown end time -->
+                  {% include 'master_app/student/countdown.html' %}
+                  <!-- End : Countdown end time -->
+                  
+                  {% endif %}
+
                   <!-- Virtual Network Details -->
                   {% include 'master_app/student/cd_network.html' %}
                   <!-- End : Virtual Network Details -->
@@ -214,15 +224,20 @@ freeScroll: true
 
 
 <script>
-  var myOffcanvas = document.getElementById('offcanvasflag_2')
-myOffcanvas.addEventListener('shown.bs.offcanvas', function () {
-  $("#id_flag_1").val("");
-})
+//   var myOffcanvas = document.getElementById('offcanvasflag_2')
 
-var myOffcanvas = document.getElementById('offcanvasflag_1')
-myOffcanvas.addEventListener('shown.bs.offcanvas', function () {
-  $("#id_flag_2").val("");
-})
+//   if(myOffcanvas.length != 0){
+//     myOffcanvas.addEventListener('shown.bs.offcanvas', function () {
+//   $("#id_flag_1").val("");
+// })
+//   }
+
+
+
+// var myOffcanvas = document.getElementById('offcanvasflag_1')
+// myOffcanvas.addEventListener('shown.bs.offcanvas', function () {
+//   $("#id_flag_2").val("");
+// })
 
 </script>
 
