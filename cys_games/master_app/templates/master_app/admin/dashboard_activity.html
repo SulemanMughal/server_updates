@@ -23,7 +23,7 @@
           </div>
           <i class='bi bi-circle-fill  activity-badge {% if entry.action_flag == 3 %} text-danger {% elif entry.action_flag == 2 %} text-success {% elif entry.action_flag == 1 %} text-info {% else %} text-warning {% endif %} align-self-start'></i>
           <div class="activity-content">
-            {{ entry }} 
+            {{ entry.change_message }} 
           </div>
         </div>
         {% endfor %}

@@ -22,7 +22,7 @@
                                 <!-- Email Name -->
                     <div class="col-md-12 mb-3">
                         <div class="form-floating">
-                          <input type="email" name="email" class="form-control" id="id_email" placeholder="Email Address" autofocus autocapitalize="none" autocomplete="off" maxlength="255" required autofocus="on" >
+                          <input type="email" name="email" class="form-control" id="id_email" placeholder="Email Address" autofocus autocapitalize="none" autocomplete="off" maxlength="255" required autofocus="on" value="{% if form.email.value %}{{ form.email.value }}{% endif %}">
                           <label for="id_email">Email Address</label>
                           <div class="invalid-feedback">
                             Please choose a valid email.
@@ -33,7 +33,7 @@
                       <!-- username -->
                       <div class="col-md-12 mb-3">
                         <div class="form-floating">
-                          <input type="text" name="username" class="form-control" id="id_username" placeholder="Username"  autocapitalize="none" autocomplete="off" maxlength="255" required  >
+                          <input type="text" name="username" class="form-control" id="id_username" placeholder="Username"  autocapitalize="none" autocomplete="off" maxlength="255" required  value="{% if form.username.value %}{{ form.username.value }}{% endif %}">
                           <label for="id_username">Username</label>
                           <div class="invalid-feedback">
                             Please choose a valid username.
@@ -44,7 +44,7 @@
                       <!-- password -->
                       <div class="col-md-12 mb-3">
                         <div class="form-floating">
-                          <input type="password" name="password" class="form-control" id="id_password" placeholder="Password"  autocapitalize="none" autocomplete="off" maxlength="255" required >
+                          <input type="password" name="password" class="form-control" id="id_password" placeholder="Password"  autocapitalize="none" autocomplete="off" maxlength="255" required  value="{% if form.password.value %}{{ form.password.value }}{% endif %}">
                           <label for="id_password">Password</label>
                           <div class="invalid-feedback">
                             Please choose a valid password.
@@ -68,7 +68,7 @@
                         <!-- Repeat Password -->
                         <div class="col-md-12 mb-3">
                             <div class="form-floating">
-                            <input type="password" name="password2" class="form-control" id="id_password2" placeholder="Repeat Password"  autocapitalize="none" autocomplete="off" maxlength="255" required >
+                            <input type="password" name="password2" class="form-control" id="id_password2" placeholder="Repeat Password"  autocapitalize="none" autocomplete="off" maxlength="255" required  value="{% if form.password2.value %}{{ form.password2.value }}{% endif %}">
                             <label for="id_password">Repeat Passowrd</label>
                             <div class="invalid-feedback">
                                 Please choose a valid password.

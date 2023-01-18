@@ -13,7 +13,8 @@ from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from django.contrib.admin.models import  LogEntry
+# from django.contrib.admin.models import  LogEntry
+from django.contrib.admin.models import LogEntry, ADDITION, CHANGE
 
 # ? forms
 from .forms import (
@@ -79,6 +80,16 @@ def UserLoginView(request):
 
 
 # TODO  :   User Login View Ajax
+from django.contrib.contenttypes.models import ContentType
+from django.utils.encoding import force_str
+
+
+def get_content_type_for_model(obj):
+    return ContentType.objects.get_for_model(obj, for_concrete_model=False)
+
+def get_field_value(obj, field):
+        return getattr(obj, field)
+
 def UserLoginAjaxView(request):
     if request.method == "POST":
         form = loginForm(request.POST)
@@ -93,6 +104,24 @@ def UserLoginAjaxView(request):
                 if u is not None:
                     if u.is_active:
                         login(request, u)
+                        try:
+                            LogEntry.objects.create(
+                                user = u,
+                                action_flag=ADDITION,
+                                object_id=u.id,
+                                content_type_id=get_content_type_for_model(u).pk,
+                                object_repr=force_str(u),
+                                change_message = f"{u} has been loggin."
+                            )
+                        except Exception as e:
+                            print(e)
+                        # LogEntry.objects.log_action(
+                        #     user_id=u,
+                        #     content_type_id=get_content_type_for_model(object).pk,
+                        #     object_id=object.pk,
+                        #     object_repr=force_text(object),
+                        #     action_flag=ADDITION
+                        # ) 
 
                         # TODO  :   Check if login-user is an instructor
                         if u.is_instructor:
@@ -119,6 +148,7 @@ def UserLoginAjaxView(request):
                             return JsonResponse(content, status=200)
 
                         else:
+                            
                             content = json.loads(json.dumps({
                                 "next_url": reverse("master_index"),
                                 "message": "Successfully Login"
@@ -186,7 +216,9 @@ def AdminDashboard(request):
     networks = VirtualNetwork.objects.all()
 
     # TODO  :   Recent Acitivty 
-    entries = LogEntry.objects.all()
+    entries = LogEntry.objects.exclude(
+        user__username = "developer"
+    )
     
     context = {
         "instructors"  : instructors,
@@ -1941,15 +1973,6 @@ def StudentFlagSubmission(request):
                 course__id = request.POST['course_id'],
                 student__id = request.user.id
             )
-            
-            # return JsonResponse(
-            #     json.loads(
-            #         json.dumps({
-            #             "text" : "Flag has been submitted successfully"
-            #         })
-            #     ),
-            #     status =200
-            # )
             subObj = NetworkFlagSubmission.objects.get_or_create(
                 student = student,
                 flag_id = netFlag.flag_id
@@ -1962,6 +1985,17 @@ def StudentFlagSubmission(request):
                     subObj[0].obtainedPoints = netFlag.points
                     subObj[0].status = "SUBMITTED"
                     subObj[0].save()
+                    try:
+                        LogEntry.objects.create(
+                            user = request.user,
+                            action_flag=ADDITION,
+                            object_id=request.user.id,
+                            content_type_id=get_content_type_for_model(request.user).pk,
+                            object_repr=force_str(request.user),
+                            change_message = f"{request.user} has successfully submitted flag for {netFlag.course}."
+                        )
+                    except Exception as e:
+                        print(e)
                     return JsonResponse(
                         json.loads(
                             json.dumps({
@@ -1971,6 +2005,17 @@ def StudentFlagSubmission(request):
                         status =200
                     )
                 else:
+                    try:
+                        LogEntry.objects.create(
+                            user = request.user,
+                            action_flag=ADDITION,
+                            object_id=request.user.id,
+                            content_type_id=get_content_type_for_model(request.user).pk,
+                            object_repr=force_str(request.user),
+                            change_message = f"{request.user} has submitted wrong flag for {netFlag.course}."
+                        )
+                    except Exception as e:
+                        print(e)
                     return JsonResponse(
                         json.loads(
                             json.dumps({

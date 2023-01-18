@@ -3,6 +3,8 @@ from django.contrib import admin
 from .models import Course, AssignedStudents, VirtualNetwork, CourseChallenge, ChallengeSubmission, NetworkFlag, NetworkFlagSubmission
 
 # Register your models here.
+import datetime
+from django.contrib.admin.models import LogEntry, ADDITION, CHANGE
 
 
 # admin.site.register(Course)
@@ -60,3 +62,10 @@ admin.site.register(CourseChallenge)
 admin.site.register(ChallengeSubmission)
 admin.site.register(NetworkFlag, NetworkFlagAdmin)
 admin.site.register(NetworkFlagSubmission, NetworkFlagSubmissionAdmin)
+
+class MoniterLog(admin.ModelAdmin):
+    list_display = ('action_time','user','content_type','object_repr','change_message','action_flag')
+    list_filter = ['action_time','user','content_type']
+    ordering = ('-action_time',)
+
+admin.site.register(LogEntry,MoniterLog)
