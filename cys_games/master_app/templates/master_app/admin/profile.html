@@ -215,77 +215,54 @@
 
                 </div>
 
-                <div class="tab-pane fade pt-3" id="profile-settings">
+                {% comment %}
+                  <div class="tab-pane fade pt-3" id="profile-settings">
 
-                  <!-- Settings Form -->
-                  <form>
+                    <!-- Settings Form -->
+                    <form>
 
-                    <div class="row mb-3">
-                      <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Email Notifications</label>
-                      <div class="col-md-8 col-lg-9">
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="changesMade" checked>
-                          <label class="form-check-label" for="changesMade">
-                            Changes made to your account
-                          </label>
-                        </div>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="newProducts" checked>
-                          <label class="form-check-label" for="newProducts">
-                            Information on new products and services
-                          </label>
-                        </div>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="proOffers">
-                          <label class="form-check-label" for="proOffers">
-                            Marketing and promo offers
-                          </label>
-                        </div>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="securityNotify" checked disabled>
-                          <label class="form-check-label" for="securityNotify">
-                            Security alerts
-                          </label>
+                      <div class="row mb-3">
+                        <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Email Notifications</label>
+                        <div class="col-md-8 col-lg-9">
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="changesMade" checked>
+                            <label class="form-check-label" for="changesMade">
+                              Changes made to your account
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="newProducts" checked>
+                            <label class="form-check-label" for="newProducts">
+                              Information on new products and services
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="proOffers">
+                            <label class="form-check-label" for="proOffers">
+                              Marketing and promo offers
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="securityNotify" checked disabled>
+                            <label class="form-check-label" for="securityNotify">
+                              Security alerts
+                            </label>
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    <div class="text-center">
-                      <button type="submit" class="btn btn-primary">Save Changes</button>
-                    </div>
-                  </form><!-- End settings Form -->
+                      <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                      </div>
+                    </form><!-- End settings Form -->
 
-                </div>
+                  </div>
+                {% endcomment %}
 
                 <div class="tab-pane fade pt-3" id="profile-change-password">
                   <!-- Change Password Form -->
-                  <form>
-
-                    <div class="row mb-3">
-                      <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="password" type="password" class="form-control" id="currentPassword">
-                      </div>
-                    </div>
-
-                    <div class="row mb-3">
-                      <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="newpassword" type="password" class="form-control" id="newPassword">
-                      </div>
-                    </div>
-
-                    <div class="row mb-3">
-                      <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="renewpassword" type="password" class="form-control" id="renewPassword">
-                      </div>
-                    </div>
-
-                    <div class="text-center">
-                      <button type="submit" class="btn btn-primary">Change Password</button>
-                    </div>
-                  </form><!-- End Change Password Form -->
+                  {% include 'master_app/change_password_form.html' %}
+                  <!-- End Change Password Form -->
 
                 </div>
 
@@ -303,3 +280,232 @@
 
     
 {% endblock %}
+
+
+
+{% block extra_js %}
+<script>
+  $(function(){
+    $("button#change_password_btn").on("click", function(event){
+      event.preventDefault();
+      event.stopPropagation();
+      var submit_form = $("form#change_password_form").get(0);
+      if(submit_form.checkValidity()){
+
+        $(submit_form).removeClass('was-validated');
+        var fd = new FormData($("form#change_password_form")[0]);
+
+        $.ajaxSetup({
+          beforeSend: function(xhr, settings){
+            xhr.setRequestHeader(
+              'X-CSRFToken', '{{ csrf_token }}'
+            )
+          }
+        });
+        $.ajax({
+          url : $(submit_form).attr("action"),
+          type  : "POST",
+          data: fd,
+          processData: false,
+          contentType: false,
+          success : function(response){
+
+            new Noty({
+        //  alert, success, error, warning, info
+        timeout: 4000 ,
+        type : "success",
+        theme: 'sunset',
+        // container : ".noty_layout",
+        force : false,
+        // layout: 'bottomLeft',
+        text: '<i class="fas fa-check-circle"></i>&nbsp; Password has been changed successfully.',
+        animation: {
+        open: function (promise) {
+            var n = this;
+            var Timeline = new mojs.Timeline();
+            var body = new mojs.Html({
+                el        : n.barDom,
+                x         : {500: 0, delay: 0, duration: 500, easing: 'elastic.out'},
+                isForce3d : true,
+                onComplete: function () {
+                    promise(function(resolve) {
+                        resolve();
+                    })
+                }
+            });
+
+            var parent = new mojs.Shape({
+                parent: n.barDom,
+                width      : 200,
+                height     : n.barDom.getBoundingClientRect().height,
+                radius     : 0,
+                x          : {[150]: -150},
+                duration   : 1.2 * 500,
+                isShowStart: true
+            });
+
+            n.barDom.style['overflow'] = 'visible';
+            parent.el.style['overflow'] = 'hidden';
+
+            var burst = new mojs.Burst({
+                parent  : parent.el,
+                count   : 10,
+                top     : n.barDom.getBoundingClientRect().height + 75,
+                degree  : 90,
+                radius  : 75,
+                angle   : {[-90]: 40},
+                children: {
+                    fill     : '#EBD761',
+                    delay    : 'stagger(500, -50)',
+                    radius   : 'rand(8, 25)',
+                    direction: -1,
+                    isSwirl  : true
+                }
+            });
+
+            var fadeBurst = new mojs.Burst({
+                parent  : parent.el,
+                count   : 2,
+                degree  : 0,
+                angle   : 75,
+                radius  : {0: 100},
+                top     : '90%',
+                children: {
+                    fill     : '#EBD761',
+                    pathScale: [.65, 1],
+                    radius   : 'rand(12, 15)',
+                    direction: [-1, 1],
+                    delay    : .8 * 500,
+                    isSwirl  : true
+                }
+            });
+
+            Timeline.add(body, burst, fadeBurst, parent);
+            Timeline.play();
+        },
+        close: function (promise) {
+            var n = this;
+            new mojs.Html({
+                el        : n.barDom,
+                x         : {0: 500, delay: 10, duration: 500, easing: 'cubic.out'},
+                skewY     : {0: 10, delay: 10, duration: 500, easing: 'cubic.out'},
+                isForce3d : true,
+                onComplete: function () {
+                    promise(function(resolve) {
+                        resolve();
+                    })
+                }
+            }).play();
+        }
+        }
+    }).show();    
+          
+            setInterval(function(){
+                window.location.href="{% url 'user-logout' %}";
+            }, 2000)
+
+          },
+          error : function(response){
+            // alert(response["responseJSON"]["error"]);
+            new Noty({
+        //  alert, success, error, warning, info
+        timeout: 4000 ,
+        type : "error",
+        theme: 'sunset',
+        // container : ".noty_layout",
+        force : false,
+        // layout: 'bottomLeft',
+        text: '<i class="fas fa-exclamation-circle"></i>&nbsp; ' + response["responseJSON"]["error"],
+        animation: {
+        open: function (promise) {
+            var n = this;
+            var Timeline = new mojs.Timeline();
+            var body = new mojs.Html({
+                el        : n.barDom,
+                x         : {500: 0, delay: 0, duration: 500, easing: 'elastic.out'},
+                isForce3d : true,
+                onComplete: function () {
+                    promise(function(resolve) {
+                        resolve();
+                    })
+                }
+            });
+
+            var parent = new mojs.Shape({
+                parent: n.barDom,
+                width      : 200,
+                height     : n.barDom.getBoundingClientRect().height,
+                radius     : 0,
+                x          : {[150]: -150},
+                duration   : 1.2 * 500,
+                isShowStart: true
+            });
+
+            n.barDom.style['overflow'] = 'visible';
+            parent.el.style['overflow'] = 'hidden';
+
+            var burst = new mojs.Burst({
+                parent  : parent.el,
+                count   : 10,
+                top     : n.barDom.getBoundingClientRect().height + 75,
+                degree  : 90,
+                radius  : 75,
+                angle   : {[-90]: 40},
+                children: {
+                    fill     : '#EBD761',
+                    delay    : 'stagger(500, -50)',
+                    radius   : 'rand(8, 25)',
+                    direction: -1,
+                    isSwirl  : true
+                }
+            });
+
+            var fadeBurst = new mojs.Burst({
+                parent  : parent.el,
+                count   : 2,
+                degree  : 0,
+                angle   : 75,
+                radius  : {0: 100},
+                top     : '90%',
+                children: {
+                    fill     : '#EBD761',
+                    pathScale: [.65, 1],
+                    radius   : 'rand(12, 15)',
+                    direction: [-1, 1],
+                    delay    : .8 * 500,
+                    isSwirl  : true
+                }
+            });
+
+            Timeline.add(body, burst, fadeBurst, parent);
+            Timeline.play();
+        },
+        close: function (promise) {
+            var n = this;
+            new mojs.Html({
+                el        : n.barDom,
+                x         : {0: 500, delay: 10, duration: 500, easing: 'cubic.out'},
+                skewY     : {0: 10, delay: 10, duration: 500, easing: 'cubic.out'},
+                isForce3d : true,
+                onComplete: function () {
+                    promise(function(resolve) {
+                        resolve();
+                    })
+                }
+            }).play();
+        }
+        }
+    }).show();    
+          
+          }
+        });
+      }
+      else{
+        $(submit_form).addClass('was-validated');
+      }
+      
+      
+    });
+  });
+</script>
+{% endblock extra_js %}

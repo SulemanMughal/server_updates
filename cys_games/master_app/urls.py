@@ -19,6 +19,9 @@ urlpatterns = [
     # ? How to Connect VPN
     path("how-to-connect-vpn/", views.ConnectVPN, name="how-to-connect-vpn"),
 
+    # ? Password change 
+    path('change_password/', views.change_password, name = "change_password"),
+
 
     # ==========================================================
     # ? Admin Dashbaord

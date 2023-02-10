@@ -13,6 +13,7 @@ from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 # from django.contrib.admin.models import  LogEntry
 from django.contrib.admin.models import LogEntry, ADDITION, CHANGE
 
@@ -64,6 +65,72 @@ def index(request):
     context = {
     }
     return render(request, template_name, context)
+
+
+
+# TODO  :   Update User Password
+@login_required()
+def change_password(request):
+    if request.method == "POST" :
+
+        try:
+            # asd
+            form = PasswordChangeForm(data = request.POST, user = request.user)
+            if form.is_valid():
+                form.save()
+                update_session_auth_hash(request, form.user)
+                return JsonResponse(
+                    json.loads(
+                        json.dumps({
+                            "text" : "Valid method"
+                        })
+                    ),
+                    status =200
+                )
+            else:
+                return JsonResponse(
+                    json.loads(
+                        json.dumps({
+                            "error" : str(form.errors)
+                        })
+                    ),
+                    status =400
+                )    
+        except Exception as e:
+            traceback.print_exc()
+            return JsonResponse(
+                json.loads(
+                    json.dumps({
+                        "error" : str(e)
+                    })
+                ),
+                status =400
+            )
+
+        
+    else:
+        return JsonResponse(
+            json.loads(
+                json.dumps({
+                    "error" : "Invalid request"
+                })
+            ),
+            status =400
+        )
+    # template_name = "user_management/change_password.html"
+    # if request.method!='POST':
+    #     form = PasswordChangeForm(user = request.user)
+    # else:
+    #     form = PasswordChangeForm(data = request.POST, user = request.user)
+    #     if form.is_valid():
+    #         form.save()
+    #         update_session_auth_hash(request, form.user)
+    #         messages.success(request, "Password has been updated successfully.")
+    #         return redirect(reverse('master_index'))
+    # context={
+    #     'form': form
+    # }
+    # return render(request, template_name , context)
 
 
 # TODO  :   User Login View
@@ -250,6 +317,11 @@ def AdminCourseList(request):
         "courses": courses
     }
     return render(request, template_name, context)
+
+
+
+
+
 
 
 @login_required
@@ -500,68 +572,104 @@ def AdminCourseStudentCreate(request):
 
 # TODO  :   Admin Fetch Network Images from OpenStack
 def AdminFetchNetworkImages(request):
-    headers = {
-        'Content-Type': 'application/json',
-    }
-    json_data = {
-    'auth': {
-        'identity': {
-            'methods': [
-                'password',
-            ],
-            'password': {
-                'user': {
-                    'name': settings.OPENSTACK_USER,
-                    'domain': {
-                        'id': 'default',
+    try:
+        headers = {
+            'Content-Type': 'application/json',
+        }
+        json_data = {
+        'auth': {
+            'identity': {
+                'methods': [
+                    'password',
+                ],
+                'password': {
+                    'user': {
+                        'name': settings.OPENSTACK_USER,
+                        'domain': {
+                            'id': 'default',
+                        },
+                        'password': settings.OPENSTACK_PASSWORD,
                     },
-                    'password': settings.OPENSTACK_PASSWORD,
                 },
             },
-        },
-        "scope": {
-        "project": {
-            "name": "admin",
-            "domain": { 
-                "id": "default" 
+            "scope": {
+            "project": {
+                "name": "admin",
+                "domain": { 
+                    "id": "default" 
+                }
             }
         }
-    }
-        
-    },
-    }
-    s = requests.Session()
-    response = s.post(settings.OPENSTACK_AUTHORIZED_URL, headers=headers, json=json_data)
-    if response.status_code in [200, 201, 202]:
-        headers = {
-            'X-Auth-Token': f'{response.headers["x-subject-token"]}',   
+            
+        },
         }
-        response = s.get(settings.OPENSTACK_IMAGE_URL, headers=headers )
+        print("--> OPENSTACK SESSION STARTED")
+        s = requests.Session()
+        print("--> OPENSTACK AUTHENTICATION STARTED")
+        response = s.post(settings.OPENSTACK_AUTHORIZED_URL, headers=headers, json=json_data, timeout=settings.CONNECTION_TIMEOUT)
         if response.status_code in [200, 201, 202]:
+            headers = {
+                'X-Auth-Token': f'{response.headers["x-subject-token"]}',   
+            }
+            print("--> OPENSTACK FETCH IMAGES STARTED")
+            response = s.get(settings.OPENSTACK_IMAGE_URL, headers=headers )
+            if response.status_code in [200, 201, 202]:
+                return JsonResponse(
+                    json.loads(
+                        json.dumps({
+                            "data" : response.json()
+                        })
+                    ),
+                    status =200
+                )
+            else:
+                print("--> OPENSTACK FETCH IMAGES ERROR")
+                print(response.json())
+                return JsonResponse(
+                json.loads(
+                    json.dumps({
+                        "error" : str(response.json()["error"]["message"]) 
+                    })
+                ),
+                status = 400
+            )
+        else:
+            print("--> OPENSTACK AUTHENTICATION ERROR")
+            print(response.json())
             return JsonResponse(
                 json.loads(
                     json.dumps({
-                        "data" : response.json()
+                        "error" : str( response.json()["error"]["message"] )
                     })
                 ),
-                status =200
+                status =400
             )
-        else:
-            print("="*30, "OPENSTACK IMAGES URL", "-"*30, response.json(), "="*30, sep="\n")
-            return JsonResponse(
-            json.loads(
-                json.dumps({
-                    "error" : str(response.json()["error"]["message"]) 
-                })
-            ),
-            status = 400
-        )
-    else:
-        print("="*30, "OPENSTACK AUTHENTICATION ERROR", "-"*30, response.json(), "="*30, sep="\n")
+    except requests.exceptions.Timeout:
+        traceback.print_exc()
         return JsonResponse(
             json.loads(
                 json.dumps({
-                    "error" : str( response.json()["error"]["message"] )
+                    "error" : 'Connection timed out'
+                })
+            ),
+            status =400
+        )
+    except requests.exceptions.ConnectionError:
+        traceback.print_exc()
+        return JsonResponse(
+            json.loads(
+                json.dumps({
+                    "error" : 'Connection timed out'
+                })
+            ),
+            status =400
+        )
+    except Exception as e:
+        traceback.print_exc()
+        return JsonResponse(
+            json.loads(
+                json.dumps({
+                    "error" : str( e )
                 })
             ),
             status =400
@@ -1635,63 +1743,49 @@ def InstructorMachineDetail(request, vn_id):
 @login_required
 @teacher_required
 def AddNewStudents(request):
-    if request.method == "POST" :
-        # print(request.POST)
-        form = AddNewStudent(request.POST)
-        if form.is_valid():
-            form.save()
-            return JsonResponse(
+    try:
+        if request.method == "POST" :
+            # print(request.POST)
+            form = AddNewStudent(request.POST)
+            if form.is_valid():
+                form.save()
+                return JsonResponse(
+                    json.loads(
+                        json.dumps({
+                            "text" : "New Student has been added",
+                            "next" : request.POST.get("next", None)
+                        })
+                    ),
+                    status = 200
+                )
+            else:
+                return JsonResponse(
                 json.loads(
                     json.dumps({
-                        "text" : "New Student has been added",
-                        "next" : request.POST.get("next", None)
+                        "error" : json.dumps(form.errors)
                     })
                 ),
-                status =200
+                status = 400
             )
         else:
             return JsonResponse(
-            json.loads(
-                json.dumps({
-                    "error" : json.dumps(form.errors)
-                })
-            ),
-            status =400
-        )
-        
-    else:
+                json.loads(
+                    json.dumps({
+                        "error" : "Invalid request"
+                    })
+                ),
+                status = 400
+            )
+    except :
+        traceback.print_exc()
         return JsonResponse(
             json.loads(
                 json.dumps({
                     "error" : "Invalid request"
                 })
             ),
-            status =400
+            status = 500
         )
-# =====================
-    # Original Code
-    # template_name = 'master_app/instructor/add_new_student.html'
-    # if request.method == "POST":
-    #     form = AddNewStudent(request.POST)
-    #     # print(request.POST)
-    #     if form.is_valid():
-    #         form.save()
-    #         messages.success(request, "New Student has been added")
-    #         if request.POST.get("next", None):
-    #             return redirect(request.POST.get("next", None))
-    #         return redirect(reverse("students-all-url"))
-    #     # else:
-    #     #     print(form.errors)
-    #     #     messages.error(request, str())
-
-    # else:
-    #     form = AddNewStudent()
-    # context = {
-    #     "form": form
-    # }
-    # return render(request, template_name, context)
-# ===================
-
 
 
 # TODO  :   Student Dashboard

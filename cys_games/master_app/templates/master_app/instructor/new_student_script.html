@@ -1,29 +1,621 @@
-<!-- add a student -->
+{% load static %}
+<link href="{% static 'assets/vendor/select2/select2.min.css' %}" rel="stylesheet" />
+<script src="{% static 'assets/vendor/select2/select2.min.js' %}"></script>
+
+
+
 <script>
 
 
-  $(document).on("click", 'button[data-bs-target="#create_student_modal"]', function(event){
-    // console.debug($(this).attr("data-user-type"));
-    $("input[name='user_type']").val($(this).attr("data-user-type"));
-  })
+    // $(document).on("click", 'button[data-bs-target="#create_student_modal"]', function(event){
+    //   $("input[name='user_type']").val($(this).attr("data-user-type"));
+    // });
 
-    var myModalEl = document.getElementById('create_student_modal');
-    var myModal = new bootstrap.Modal(document.getElementById('create_student_modal'), {
-      keyboard: false
-    })
+    $("button.new_student_entry").on("click", function(event){
+      var student_form = `
+        <form class="row g-3 needs-validation new_student_entry_form mb-3" novalidate action="{% url 'course-students-new-url' %}" method="POST" id="student_add_form">
+          <div class="row">
+            <div class="col-11">
+              <select class="form-select " id="id_student" required="" name="student">
+                {% for student in form_2.student  %}
+                    {{ student }}
+                {% endfor %}
+              </select>
+              <div class="invalid-feedback">
+                    Please select a student.
+              </div>
+            </div>
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <input type="hidden" name="user_type" value="1">
+            <div class="col-1 ps-0">
+              <button type="submit" class="btn btn-primary  bg-transparent border-0 text-dark" ><i class="fa-solid fa-check "></i></button>
+              </div>
+          </div>
+        </form>`;
+      if($(this).attr("data-user-type") == "1"){
+        $("ul.list-2 form.new_student_entry_form").remove();
+        if($("form.new_student_entry_form").length > 0){
+          $("form.new_student_entry_form").remove();
+        }
+        else{
+          $("ul.list-1").prepend(student_form);
+          $("input[name='user_type']").val($(this).attr("data-user-type"));
+          $('#id_student').select2({
+            theme: "classic"
+          });
+        }
+      }
+      else if($(this).attr("data-user-type") == "2"){
+        $("ul.list-1 form.new_student_entry_form").remove();
+        if($("form.new_student_entry_form").length > 0){
+          $("form.new_student_entry_form").remove();
+        }
+        else{
+          $("ul.list-2").prepend(student_form);
+          $("input[name='user_type']").val($(this).attr("data-user-type"));
+          $('#id_student').select2({
+            theme: "classic"
+          });
+        }
+      }
+    });
+      
+
+    $(document).on("submit" , "form#student_add_form" ,   function(event){
+      event.preventDefault();
+      event.stopPropagation();
+      var submit_form = $("form#student_add_form").get(0);
+      if(submit_form.checkValidity()){
+        $(submit_form).removeClass("was-validated");
+        var fd = new FormData($("form#student_add_form")[0]);
+        fd.append("course" , "{{ course.id }}");
+        $.ajaxSetup({
+          beforeSend: function(xhr, settings){
+            xhr.setRequestHeader(
+              'X-CSRFToken', '{{ csrf_token }}'
+            )
+          }
+        });
+        $.ajax({
+            url : $(submit_form).attr("action"),
+            type  : "POST",
+            data: fd,
+            processData: false,
+            contentType: false,
+            timeout: 5000,
+            success : function(response){
+
+              
+
+              
+              new Noty({
+            //  alert, success, error, warning, info
+            timeout: 2000 ,
+            type : "success",
+            theme: 'sunset',
+            // container : ".noty_layout",
+            force : false,
+            // layout: 'bottomLeft',
+            text: '<i class="fas fa-check-circle"></i>&nbsp; New student has been added successfully.',
+            animation: {
+            open: function (promise) {
+                var n = this;
+                var Timeline = new mojs.Timeline();
+                var body = new mojs.Html({
+                    el        : n.barDom,
+                    x         : {500: 0, delay: 0, duration: 500, easing: 'elastic.out'},
+                    isForce3d : true,
+                    onComplete: function () {
+                        promise(function(resolve) {
+                            resolve();
+                        })
+                    }
+                });
     
-    myModalEl.addEventListener('hidden.bs.modal', function (event) {
-      document.getElementById("student_add_form").reset();
-      $("#student_add_form").removeClass("was-validated");
-    })
+                var parent = new mojs.Shape({
+                    parent: n.barDom,
+                    width      : 200,
+                    height     : n.barDom.getBoundingClientRect().height,
+                    radius     : 0,
+                    x          : {[150]: -150},
+                    duration   : 1.2 * 500,
+                    isShowStart: true
+                });
     
+                n.barDom.style['overflow'] = 'visible';
+                parent.el.style['overflow'] = 'hidden';
     
-      $("form#student_add_form").on("submit", function(event){
+                var burst = new mojs.Burst({
+                    parent  : parent.el,
+                    count   : 10,
+                    top     : n.barDom.getBoundingClientRect().height + 75,
+                    degree  : 90,
+                    radius  : 75,
+                    angle   : {[-90]: 40},
+                    children: {
+                        fill     : '#EBD761',
+                        delay    : 'stagger(500, -50)',
+                        radius   : 'rand(8, 25)',
+                        direction: -1,
+                        isSwirl  : true
+                    }
+                });
+    
+                var fadeBurst = new mojs.Burst({
+                    parent  : parent.el,
+                    count   : 2,
+                    degree  : 0,
+                    angle   : 75,
+                    radius  : {0: 100},
+                    top     : '90%',
+                    children: {
+                        fill     : '#EBD761',
+                        pathScale: [.65, 1],
+                        radius   : 'rand(12, 15)',
+                        direction: [-1, 1],
+                        delay    : .8 * 500,
+                        isSwirl  : true
+                    }
+                });
+    
+                Timeline.add(body, burst, fadeBurst, parent);
+                Timeline.play();
+            },
+            close: function (promise) {
+                var n = this;
+                new mojs.Html({
+                    el        : n.barDom,
+                    x         : {0: 500, delay: 10, duration: 500, easing: 'cubic.out'},
+                    skewY     : {0: 10, delay: 10, duration: 500, easing: 'cubic.out'},
+                    isForce3d : true,
+                    onComplete: function () {
+                        promise(function(resolve) {
+                            resolve();
+                        })
+                    }
+                }).play();
+            }
+            }
+        }).show();    
+    
+                const selected_student = $("select#id_student option:selected").text();
+                
+                $("form.new_student_entry_form").hide();
+                if($("input[name='user_type']").val() == "1"){
+                  $("ul.list-1").prepend(`<li class="list-group-item">${selected_student}</li>`); 
+                }
+                else if($("input[name='user_type']").val() == "2"){
+                  $("ul.list-2").prepend(`<li class="list-group-item">${selected_student}</li>`); 
+                }
+                $("form.new_student_entry_form").remove();
+                
+    
+            },
+            error : function(xmlhttprequest, textstatus, response){
+              
+              var response = xmlhttprequest.responseJSON;
+              // console.debug(xmlhttprequest);
+              // console.debug(xmlhttprequest);
+              // console.debug(xmlhttprequest.response);
+
+              // in case of error from server
+              if(xmlhttprequest.status == 500){
+                new Noty({
+                  timeout: 4000 ,
+                  type : "error",
+                  theme: 'sunset',
+                  force : false,
+                  text: '<i class="fas fa-exclamation-circle"></i>&nbsp; Oops, something went wrong. Please try again later.',
+                  animation: {
+                  open: function (promise) {
+                      var n = this;
+                      var Timeline = new mojs.Timeline();
+                      var body = new mojs.Html({
+                          el        : n.barDom,
+                          x         : {500: 0, delay: 0, duration: 500, easing: 'elastic.out'},
+                          isForce3d : true,
+                          onComplete: function () {
+                              promise(function(resolve) {
+                                  resolve();
+                              })
+                          }
+                      });
+          
+                      var parent = new mojs.Shape({
+                          parent: n.barDom,
+                          width      : 200,
+                          height     : n.barDom.getBoundingClientRect().height,
+                          radius     : 0,
+                          x          : {[150]: -150},
+                          duration   : 1.2 * 500,
+                          isShowStart: true
+                      });
+          
+                      n.barDom.style['overflow'] = 'visible';
+                      parent.el.style['overflow'] = 'hidden';
+          
+                      var burst = new mojs.Burst({
+                          parent  : parent.el,
+                          count   : 10,
+                          top     : n.barDom.getBoundingClientRect().height + 75,
+                          degree  : 90,
+                          radius  : 75,
+                          angle   : {[-90]: 40},
+                          children: {
+                              fill     : '#EBD761',
+                              delay    : 'stagger(500, -50)',
+                              radius   : 'rand(8, 25)',
+                              direction: -1,
+                              isSwirl  : true
+                          }
+                      });
+          
+                      var fadeBurst = new mojs.Burst({
+                          parent  : parent.el,
+                          count   : 2,
+                          degree  : 0,
+                          angle   : 75,
+                          radius  : {0: 100},
+                          top     : '90%',
+                          children: {
+                              fill     : '#EBD761',
+                              pathScale: [.65, 1],
+                              radius   : 'rand(12, 15)',
+                              direction: [-1, 1],
+                              delay    : .8 * 500,
+                              isSwirl  : true
+                          }
+                      });
+          
+                      Timeline.add(body, burst, fadeBurst, parent);
+                      Timeline.play();
+                  },
+                  close: function (promise) {
+                      var n = this;
+                      new mojs.Html({
+                          el        : n.barDom,
+                          x         : {0: 500, delay: 10, duration: 500, easing: 'cubic.out'},
+                          skewY     : {0: 10, delay: 10, duration: 500, easing: 'cubic.out'},
+                          isForce3d : true,
+                          onComplete: function () {
+                              promise(function(resolve) {
+                                  resolve();
+                              })
+                          }
+                      }).play();
+                  }
+                  }
+              }).show();    
+              }
+
+              // Incase of request taking too much time to response
+              if(textstatus === "timeout") {
+                new Noty({
+                  timeout: 4000 ,
+                  type : "error",
+                  theme: 'sunset',
+                  force : false,
+                  text: '<i class="fas fa-exclamation-circle"></i>&nbsp; Request taking too much time to response. Please try again.',
+                  animation: {
+                  open: function (promise) {
+                      var n = this;
+                      var Timeline = new mojs.Timeline();
+                      var body = new mojs.Html({
+                          el        : n.barDom,
+                          x         : {500: 0, delay: 0, duration: 500, easing: 'elastic.out'},
+                          isForce3d : true,
+                          onComplete: function () {
+                              promise(function(resolve) {
+                                  resolve();
+                              })
+                          }
+                      });
+          
+                      var parent = new mojs.Shape({
+                          parent: n.barDom,
+                          width      : 200,
+                          height     : n.barDom.getBoundingClientRect().height,
+                          radius     : 0,
+                          x          : {[150]: -150},
+                          duration   : 1.2 * 500,
+                          isShowStart: true
+                      });
+          
+                      n.barDom.style['overflow'] = 'visible';
+                      parent.el.style['overflow'] = 'hidden';
+          
+                      var burst = new mojs.Burst({
+                          parent  : parent.el,
+                          count   : 10,
+                          top     : n.barDom.getBoundingClientRect().height + 75,
+                          degree  : 90,
+                          radius  : 75,
+                          angle   : {[-90]: 40},
+                          children: {
+                              fill     : '#EBD761',
+                              delay    : 'stagger(500, -50)',
+                              radius   : 'rand(8, 25)',
+                              direction: -1,
+                              isSwirl  : true
+                          }
+                      });
+          
+                      var fadeBurst = new mojs.Burst({
+                          parent  : parent.el,
+                          count   : 2,
+                          degree  : 0,
+                          angle   : 75,
+                          radius  : {0: 100},
+                          top     : '90%',
+                          children: {
+                              fill     : '#EBD761',
+                              pathScale: [.65, 1],
+                              radius   : 'rand(12, 15)',
+                              direction: [-1, 1],
+                              delay    : .8 * 500,
+                              isSwirl  : true
+                          }
+                      });
+          
+                      Timeline.add(body, burst, fadeBurst, parent);
+                      Timeline.play();
+                  },
+                  close: function (promise) {
+                      var n = this;
+                      new mojs.Html({
+                          el        : n.barDom,
+                          x         : {0: 500, delay: 10, duration: 500, easing: 'cubic.out'},
+                          skewY     : {0: 10, delay: 10, duration: 500, easing: 'cubic.out'},
+                          isForce3d : true,
+                          onComplete: function () {
+                              promise(function(resolve) {
+                                  resolve();
+                              })
+                          }
+                      }).play();
+                  }
+                  }
+              }).show();    
+              }
+              
+              // console.debug(xmlhttprequest);
+              
+              if(response){
+                var text = "";
+                // console.debug(response["responseJSON"]);
+              for (const [key, value] of Object.entries(JSON.parse(response["error"]))) {
+                // console.log(key, value);
+                if(key == "__all__"){
+                  text  = text + '<i class="fas fa-exclamation-circle"></i>&nbsp;' + "Student already registered with this course";
+                }
+                else{
+                  if(key == "course"){
+                    text  =    '<i class="fas fa-exclamation-circle"></i>&nbsp; Course name is required' ;  
+                  }
+                  else{
+                    text  =    text + '<i class="fas fa-exclamation-circle"></i>&nbsp;' + value;
+                  }
+                }
+              }
+              new Noty({
+                  //  alert, success, error, warning, info
+                  timeout: 4000 ,
+                  type : "error",
+                  theme: 'sunset',
+                  // container : ".noty_layout",
+                  force : false,
+                  // layout: 'bottomLeft',
+                  text: text,
+                  animation: {
+                  open: function (promise) {
+                      var n = this;
+                      var Timeline = new mojs.Timeline();
+                      var body = new mojs.Html({
+                          el        : n.barDom,
+                          x         : {500: 0, delay: 0, duration: 500, easing: 'elastic.out'},
+                          isForce3d : true,
+                          onComplete: function () {
+                              promise(function(resolve) {
+                                  resolve();
+                              })
+                          }
+                      });
+          
+                      var parent = new mojs.Shape({
+                          parent: n.barDom,
+                          width      : 200,
+                          height     : n.barDom.getBoundingClientRect().height,
+                          radius     : 0,
+                          x          : {[150]: -150},
+                          duration   : 1.2 * 500,
+                          isShowStart: true
+                      });
+          
+                      n.barDom.style['overflow'] = 'visible';
+                      parent.el.style['overflow'] = 'hidden';
+          
+                      var burst = new mojs.Burst({
+                          parent  : parent.el,
+                          count   : 10,
+                          top     : n.barDom.getBoundingClientRect().height + 75,
+                          degree  : 90,
+                          radius  : 75,
+                          angle   : {[-90]: 40},
+                          children: {
+                              fill     : '#EBD761',
+                              delay    : 'stagger(500, -50)',
+                              radius   : 'rand(8, 25)',
+                              direction: -1,
+                              isSwirl  : true
+                          }
+                      });
+          
+                      var fadeBurst = new mojs.Burst({
+                          parent  : parent.el,
+                          count   : 2,
+                          degree  : 0,
+                          angle   : 75,
+                          radius  : {0: 100},
+                          top     : '90%',
+                          children: {
+                              fill     : '#EBD761',
+                              pathScale: [.65, 1],
+                              radius   : 'rand(12, 15)',
+                              direction: [-1, 1],
+                              delay    : .8 * 500,
+                              isSwirl  : true
+                          }
+                      });
+          
+                      Timeline.add(body, burst, fadeBurst, parent);
+                      Timeline.play();
+                  },
+                  close: function (promise) {
+                      var n = this;
+                      new mojs.Html({
+                          el        : n.barDom,
+                          x         : {0: 500, delay: 10, duration: 500, easing: 'cubic.out'},
+                          skewY     : {0: 10, delay: 10, duration: 500, easing: 'cubic.out'},
+                          isForce3d : true,
+                          onComplete: function () {
+                              promise(function(resolve) {
+                                  resolve();
+                              })
+                          }
+                      }).play();
+                  }
+                  }
+              }).show();    
+                    
+                    
+              }
+              else{
+                // Incase server is not running up
+                new Noty({
+                  timeout: 4000 ,
+                  type : "error",
+                  theme: 'sunset',
+                  force : false,
+                  text: '<i class="fas fa-exclamation-circle"></i>&nbsp; Oops, something went wrong. Please try again later.',
+                  animation: {
+                  open: function (promise) {
+                      var n = this;
+                      var Timeline = new mojs.Timeline();
+                      var body = new mojs.Html({
+                          el        : n.barDom,
+                          x         : {500: 0, delay: 0, duration: 500, easing: 'elastic.out'},
+                          isForce3d : true,
+                          onComplete: function () {
+                              promise(function(resolve) {
+                                  resolve();
+                              })
+                          }
+                      });
+          
+                      var parent = new mojs.Shape({
+                          parent: n.barDom,
+                          width      : 200,
+                          height     : n.barDom.getBoundingClientRect().height,
+                          radius     : 0,
+                          x          : {[150]: -150},
+                          duration   : 1.2 * 500,
+                          isShowStart: true
+                      });
+          
+                      n.barDom.style['overflow'] = 'visible';
+                      parent.el.style['overflow'] = 'hidden';
+          
+                      var burst = new mojs.Burst({
+                          parent  : parent.el,
+                          count   : 10,
+                          top     : n.barDom.getBoundingClientRect().height + 75,
+                          degree  : 90,
+                          radius  : 75,
+                          angle   : {[-90]: 40},
+                          children: {
+                              fill     : '#EBD761',
+                              delay    : 'stagger(500, -50)',
+                              radius   : 'rand(8, 25)',
+                              direction: -1,
+                              isSwirl  : true
+                          }
+                      });
+          
+                      var fadeBurst = new mojs.Burst({
+                          parent  : parent.el,
+                          count   : 2,
+                          degree  : 0,
+                          angle   : 75,
+                          radius  : {0: 100},
+                          top     : '90%',
+                          children: {
+                              fill     : '#EBD761',
+                              pathScale: [.65, 1],
+                              radius   : 'rand(12, 15)',
+                              direction: [-1, 1],
+                              delay    : .8 * 500,
+                              isSwirl  : true
+                          }
+                      });
+          
+                      Timeline.add(body, burst, fadeBurst, parent);
+                      Timeline.play();
+                  },
+                  close: function (promise) {
+                      var n = this;
+                      new mojs.Html({
+                          el        : n.barDom,
+                          x         : {0: 500, delay: 10, duration: 500, easing: 'cubic.out'},
+                          skewY     : {0: 10, delay: 10, duration: 500, easing: 'cubic.out'},
+                          isForce3d : true,
+                          onComplete: function () {
+                              promise(function(resolve) {
+                                  resolve();
+                              })
+                          }
+                      }).play();
+                  }
+                  }
+              }).show();    
+              
+              }
+              
+            },
+            complete : function(response){
+    
+            }
+          });
+        
+      }
+      else{
+        $(submit_form).addClass("was-validated");
+      }
+    });
+
+  
+
+</script>
+
+
+
+
+
+
+
+
+{% comment %}
+<script>
+
+$(document).on( "submit" , "form#student_add_form" ,   function(event){
+        // alert("fomr is being submitted");
         event.preventDefault();
         event.stopPropagation();
+        // console.debug("form is clicked");
         var submit_form = $("form#student_add_form").get(0);
+        // alert("fomr is being submitted");
         if(submit_form.checkValidity()){
           var fd = new FormData($("form#student_add_form")[0]);
+          // fd.append("name" , "{{ course.name }}");
           $.ajaxSetup({
             beforeSend: function(xhr, settings){
               xhr.setRequestHeader(
@@ -243,7 +835,10 @@
           });
         }
         else{
-          // console.debug("Form is invalid");
         }
       });
-    </script>
+    
+</script>
+{% endcomment %}
+
+

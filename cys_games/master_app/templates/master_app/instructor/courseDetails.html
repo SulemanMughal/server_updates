@@ -16,6 +16,13 @@
   .dashboard .activity .activity-item .activite-label{
     min-width: 0px;
   }
+  .cross{
+    display: none;
+  }
+  .list-group-item:hover  .cross {
+  display: block;
+  color: red;
+}
 </style>
 {% endblock %}
 
@@ -29,10 +36,6 @@
 {%  endif %}
 <!-- End : Request Virtual Network Modal -->
 
-
-<!-- Student Modal -->
-{% include 'master_app/instructor/create_student_modal.html' %}
-<!-- End : Student Modal -->
 
 
 <div class="loader loader-double "></div>
@@ -209,7 +212,7 @@ var imgref_dict={
                   $("#id_imageRef").val("" + imgref_dict[$('#id_scenarios').val()]);
                 },
                 error : function(response){
-                  // alert(response["responseJSON"]["error"]);
+                  
                   new Noty({
         //  alert, success, error, warning, info
         timeout: 4000 ,
@@ -299,7 +302,8 @@ var imgref_dict={
         }
         }
     }).show();    
-          
+
+
                 },
                 complete : function(response){
                   $(".loader-double").removeClass("is-active");
@@ -321,6 +325,8 @@ var imgref_dict={
   });
 </script>
 <!-- end : senario fetching -->
+
+
 
 <!-- Add a new student script -->
   {% include 'master_app/instructor/new_student_script.html' %}
@@ -648,6 +654,19 @@ var imgref_dict={
   });
 </script>
 <!-- End : Submit request for virtual network by instructor-->
+
+
+<!-- Delete a student by an instructor -->
+<script>
+  $(function(){
+    $(document).on("click", "button.cross", function(event){
+      event.preventDefault();
+      event.stopPropagation();
+      alert("Delete a user");
+    })
+  })
+</script>
+<!-- End : Delete a student by an instructor -->
 
 
 {% endblock %}

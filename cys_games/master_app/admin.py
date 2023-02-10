@@ -56,16 +56,21 @@ class NetworkFlagAdmin(admin.ModelAdmin):
         "imageRef"
     ]
 
-admin.site.register(Course, CourseAdmin)
-admin.site.register(VirtualNetwork, VirtualNetworkAdmin)
-admin.site.register(CourseChallenge)
-admin.site.register(ChallengeSubmission)
-admin.site.register(NetworkFlag, NetworkFlagAdmin)
-admin.site.register(NetworkFlagSubmission, NetworkFlagSubmissionAdmin)
+
+
+
 
 class MoniterLog(admin.ModelAdmin):
     list_display = ('action_time','user','content_type','object_repr','change_message','action_flag')
     list_filter = ['action_time','user','content_type']
     ordering = ('-action_time',)
 
+
+admin.site.register(Course, CourseAdmin)
+admin.site.register(VirtualNetwork, VirtualNetworkAdmin)
+admin.site.register(CourseChallenge)
+admin.site.register(ChallengeSubmission)
+admin.site.register(NetworkFlag, NetworkFlagAdmin)
+admin.site.register(NetworkFlagSubmission, NetworkFlagSubmissionAdmin)
 admin.site.register(LogEntry,MoniterLog)
+admin.site.register(AssignedStudents)

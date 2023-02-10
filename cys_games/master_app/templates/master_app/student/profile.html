@@ -4,54 +4,14 @@
 
 
 {% block extra_css %}
-<!-- CSS -->
-<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+
 
 
 
 <style>
-  .carousel-cell .card {
-
-transition: all ease-in-out 0.4s;
-
-}
-.services .icon-box .icon {
-margin-bottom: 10px;
-}
-.carousel-cell .card:hover {
-transform: translateY(-10px);
-}
-.services .icon-box .icon i {
-color: #47b2e4;
-font-size: 36px;
-transition: 0.3s;
-}
-.services .icon-box h4 {
-font-weight: 500;
-margin-bottom: 15px;
-font-size: 24px;
-}
-.services .icon-box h4 a {
-color: #37517e;
-transition: ease-in-out 0.3s;
-}
-.services .icon-box:hover h4 a {
-color: #47b2e4;
-}
-
-.flickity-slider {
-  width: 20%;
-}
-
-.carousel-cell{
-  margin-right: 10px;
-  min-width: 250px;
-}
-
 .nav-tabs-bordered .nav-link.active{
   background-color: transparent;
 }
-
 </style>
 
 
@@ -80,9 +40,9 @@ color: #47b2e4;
           <div class="card">
             <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
-              <img src="{% static 'assets/img/profile-img.jpg' %}" alt="Profile" class="rounded-circle">
-              <h2>Kevin Anderson</h2>
-              <h3>Noob</h3>
+              <i class=" 	fas fa-user-circle fa-7x "></i>
+              <h2 class="my-2">{{ request.user.username }}</h2>
+              <h3 class="d-none">Noob</h3>
               <div class="social-links mt-2">
                 <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
                 <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
@@ -108,7 +68,7 @@ color: #47b2e4;
                   <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
                 </li>
 
-                <li class="nav-item">
+                <li class="nav-item d-none">
                   <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-settings">Settings</button>
                 </li>
 
@@ -151,6 +111,8 @@ color: #47b2e4;
 
 
 <!-- ---------------------- -->
+
+{% comment %}
 <div class="main-carousel" id="main-carousel-last">
   <div class="carousel-cell ">
     <div class="card  my-3 py-3 rounded-4 shadow-none bg-light">
@@ -304,9 +266,9 @@ color: #47b2e4;
   
   
 </div>
+{% endcomment %}
 
-
-                  <!-- -------------------------------------- -->
+<!-- -------------------------------------- -->
                   
 
                 </div>
@@ -318,7 +280,7 @@ color: #47b2e4;
                     <div class="row mb-3">
                       <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
                       <div class="col-md-8 col-lg-9">
-                        <img src="assets/img/profile-img.jpg" alt="Profile">
+                        <img src="{% static 'assets/img/profile-img.jpg' %}" alt="Profile">
                         <div class="pt-2">
                           <a href="#" class="btn btn-primary btn-sm" title="Upload new profile image"><i class="bi bi-upload"></i></a>
                           <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
@@ -417,6 +379,7 @@ color: #47b2e4;
 
                 </div>
 
+                {% comment %}
                 <div class="tab-pane fade pt-3" id="profile-settings">
 
                   <!-- Settings Form -->
@@ -458,36 +421,12 @@ color: #47b2e4;
                   </form><!-- End settings Form -->
 
                 </div>
+                {% endcomment %}
 
                 <div class="tab-pane fade pt-3" id="profile-change-password">
                   <!-- Change Password Form -->
-                  <form>
-
-                    <div class="row mb-3">
-                      <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="password" type="password" class="form-control" id="currentPassword">
-                      </div>
-                    </div>
-
-                    <div class="row mb-3">
-                      <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="newpassword" type="password" class="form-control" id="newPassword">
-                      </div>
-                    </div>
-
-                    <div class="row mb-3">
-                      <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="renewpassword" type="password" class="form-control" id="renewPassword">
-                      </div>
-                    </div>
-
-                    <div class="text-center">
-                      <button type="submit" class="btn btn-primary">Change Password</button>
-                    </div>
-                  </form><!-- End Change Password Form -->
+                  {% include 'master_app/change_password_form.html' %}
+                  <!-- End Change Password Form -->
 
                 </div>
 
@@ -501,7 +440,8 @@ color: #47b2e4;
     </div>
     </section>
 
-  </main><!-- End #main -->
+</main>
+  <!-- End #main -->
 
     
 {% endblock %}
@@ -509,56 +449,229 @@ color: #47b2e4;
 
 
 {% block extra_js %}
-<!-- JavaScript -->
-<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
 <script>
-//   $('.main-carousel').flickity({
-// // options
-// cellAlign: 'left',
-// adaptiveHeight: true,
-// pageDots: false,
-// prevNextButtons: false,
+  $(function(){
+    $("button#change_password_btn").on("click", function(event){
+      event.preventDefault();
+      event.stopPropagation();
+      var submit_form = $("form#change_password_form").get(0);
+      if(submit_form.checkValidity()){
 
-// freeScroll: true
+        $(submit_form).removeClass('was-validated');
+        var fd = new FormData($("form#change_password_form")[0]);
 
-// });
+        $.ajaxSetup({
+          beforeSend: function(xhr, settings){
+            xhr.setRequestHeader(
+              'X-CSRFToken', '{{ csrf_token }}'
+            )
+          }
+        });
+        $.ajax({
+          url : $(submit_form).attr("action"),
+          type  : "POST",
+          data: fd,
+          processData: false,
+          contentType: false,
+          success : function(response){
 
+            new Noty({
+        //  alert, success, error, warning, info
+        timeout: 4000 ,
+        type : "success",
+        theme: 'sunset',
+        // container : ".noty_layout",
+        force : false,
+        // layout: 'bottomLeft',
+        text: '<i class="fas fa-check-circle"></i>&nbsp; Password has been changed successfully.',
+        animation: {
+        open: function (promise) {
+            var n = this;
+            var Timeline = new mojs.Timeline();
+            var body = new mojs.Html({
+                el        : n.barDom,
+                x         : {500: 0, delay: 0, duration: 500, easing: 'elastic.out'},
+                isForce3d : true,
+                onComplete: function () {
+                    promise(function(resolve) {
+                        resolve();
+                    })
+                }
+            });
 
+            var parent = new mojs.Shape({
+                parent: n.barDom,
+                width      : 200,
+                height     : n.barDom.getBoundingClientRect().height,
+                radius     : 0,
+                x          : {[150]: -150},
+                duration   : 1.2 * 500,
+                isShowStart: true
+            });
 
-// $('#main-carousel-2').flickity({
-// // options
-// cellAlign: 'left',
-// adaptiveHeight: true,
-// pageDots: false,
-// prevNextButtons: false,
+            n.barDom.style['overflow'] = 'visible';
+            parent.el.style['overflow'] = 'hidden';
 
-// freeScroll: true
+            var burst = new mojs.Burst({
+                parent  : parent.el,
+                count   : 10,
+                top     : n.barDom.getBoundingClientRect().height + 75,
+                degree  : 90,
+                radius  : 75,
+                angle   : {[-90]: 40},
+                children: {
+                    fill     : '#EBD761',
+                    delay    : 'stagger(500, -50)',
+                    radius   : 'rand(8, 25)',
+                    direction: -1,
+                    isSwirl  : true
+                }
+            });
 
-// });
+            var fadeBurst = new mojs.Burst({
+                parent  : parent.el,
+                count   : 2,
+                degree  : 0,
+                angle   : 75,
+                radius  : {0: 100},
+                top     : '90%',
+                children: {
+                    fill     : '#EBD761',
+                    pathScale: [.65, 1],
+                    radius   : 'rand(12, 15)',
+                    direction: [-1, 1],
+                    delay    : .8 * 500,
+                    isSwirl  : true
+                }
+            });
 
-$('#main-carousel-last').flickity({
-// options
-cellAlign: 'left',
-adaptiveHeight: true,
-pageDots: false,
-prevNextButtons: false,
+            Timeline.add(body, burst, fadeBurst, parent);
+            Timeline.play();
+        },
+        close: function (promise) {
+            var n = this;
+            new mojs.Html({
+                el        : n.barDom,
+                x         : {0: 500, delay: 10, duration: 500, easing: 'cubic.out'},
+                skewY     : {0: 10, delay: 10, duration: 500, easing: 'cubic.out'},
+                isForce3d : true,
+                onComplete: function () {
+                    promise(function(resolve) {
+                        resolve();
+                    })
+                }
+            }).play();
+        }
+        }
+    }).show();    
+          
+            setInterval(function(){
+                window.location.href="{% url 'user-logout' %}";
+            }, 2000)
 
-freeScroll: true
+          },
+          error : function(response){
+            // alert(response["responseJSON"]["error"]);
+            new Noty({
+        //  alert, success, error, warning, info
+        timeout: 4000 ,
+        type : "error",
+        theme: 'sunset',
+        // container : ".noty_layout",
+        force : false,
+        // layout: 'bottomLeft',
+        text: '<i class="fas fa-exclamation-circle"></i>&nbsp; ' + response["responseJSON"]["error"],
+        animation: {
+        open: function (promise) {
+            var n = this;
+            var Timeline = new mojs.Timeline();
+            var body = new mojs.Html({
+                el        : n.barDom,
+                x         : {500: 0, delay: 0, duration: 500, easing: 'elastic.out'},
+                isForce3d : true,
+                onComplete: function () {
+                    promise(function(resolve) {
+                        resolve();
+                    })
+                }
+            });
 
-});
+            var parent = new mojs.Shape({
+                parent: n.barDom,
+                width      : 200,
+                height     : n.barDom.getBoundingClientRect().height,
+                radius     : 0,
+                x          : {[150]: -150},
+                duration   : 1.2 * 500,
+                isShowStart: true
+            });
 
+            n.barDom.style['overflow'] = 'visible';
+            parent.el.style['overflow'] = 'hidden';
 
+            var burst = new mojs.Burst({
+                parent  : parent.el,
+                count   : 10,
+                top     : n.barDom.getBoundingClientRect().height + 75,
+                degree  : 90,
+                radius  : 75,
+                angle   : {[-90]: 40},
+                children: {
+                    fill     : '#EBD761',
+                    delay    : 'stagger(500, -50)',
+                    radius   : 'rand(8, 25)',
+                    direction: -1,
+                    isSwirl  : true
+                }
+            });
 
+            var fadeBurst = new mojs.Burst({
+                parent  : parent.el,
+                count   : 2,
+                degree  : 0,
+                angle   : 75,
+                radius  : {0: 100},
+                top     : '90%',
+                children: {
+                    fill     : '#EBD761',
+                    pathScale: [.65, 1],
+                    radius   : 'rand(12, 15)',
+                    direction: [-1, 1],
+                    delay    : .8 * 500,
+                    isSwirl  : true
+                }
+            });
 
-// $('#profile-tab, #home-tab, #contact-tab').on('click', function() {
-  
-//   window.dispatchEvent(new Event('resize'));  
-// });
-// $("#last-tab").on("click", function(){
-//   window.dispatchEvent(new Event('resize'));
-// })
-
-
+            Timeline.add(body, burst, fadeBurst, parent);
+            Timeline.play();
+        },
+        close: function (promise) {
+            var n = this;
+            new mojs.Html({
+                el        : n.barDom,
+                x         : {0: 500, delay: 10, duration: 500, easing: 'cubic.out'},
+                skewY     : {0: 10, delay: 10, duration: 500, easing: 'cubic.out'},
+                isForce3d : true,
+                onComplete: function () {
+                    promise(function(resolve) {
+                        resolve();
+                    })
+                }
+            }).play();
+        }
+        }
+    }).show();    
+          
+          }
+        });
+      }
+      else{
+        $(submit_form).addClass('was-validated');
+      }
+      
+      
+    });
+  });
 </script>
 {% endblock extra_js %}
 
