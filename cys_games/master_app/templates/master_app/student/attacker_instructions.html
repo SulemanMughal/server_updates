@@ -16,10 +16,12 @@
           </div>
       <div class="row justify-content-center my-3">
         <div class="col-12">
+          {% comment %}
           <p>
             Follow instructions on the link below to get access to machine 
           </p>
           <a href="{% url 'how-to-connect-vpn' %}">How to get access through VPN</a>
+          {% endcomment %}
         <p>
           
             {{ course.get_virtual_network.description|safe }}

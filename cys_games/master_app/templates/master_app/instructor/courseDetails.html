@@ -3,14 +3,16 @@
 {% block title %} {{ course.name }} {% endblock %}
 
 {% block extra_css %}
-<link href="{% static 'assets/vendor/quill/quill.snow.css' %}" rel="stylesheet">
-<link href="{% static 'assets/vendor/quill/quill.bubble.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'assets/vendor/quill/quill.snow.css' %}" >
+<link rel="stylesheet" href="{% static 'assets/vendor/quill/quill.bubble.css' %}" >
 <script src="{% static 'assets/vendor/quill/quill.min.js' %}"></script>
 <link rel="stylesheet" href="{% static 'assets/vendor/loader/loader-double.css' %}"  />
 <script src="{% static 'assets/vendor/filesize/filesize.min.js' %}"></script>
 <link rel="stylesheet" href="{% static 'assets/vendor/flickity/flickity.min.css' %}">
 <script src="{% static 'assets/vendor/flickity/flickity.pkgd.min.js' %}"></script>
-
+<link rel="stylesheet" href="{% static 'assets/vendor/remodal/remodal.min.css' %}"  />
+<link rel="stylesheet" href="{% static 'assets/vendor/remodal/remodal-default-theme.min.css' %}"  />
+<script src="{% static 'assets/vendor/remodal/remodal.min.js' %}" ></script>
 
 <style>
   .dashboard .activity .activity-item .activite-label{
@@ -78,9 +80,11 @@
                     {% include 'master_app/instructor/cd_students.html' %}
                   <!-- End : Attack Group Students List -->
 
-                  <!-- Defense Group Students List -->
-                  {% include 'master_app/instructor/cd_students_2.html' %}
-                  <!-- End : Defense Group Students List -->
+                  {% if course.course_type == "2" %}
+                    <!-- Defense Group Students List -->
+                    {% include 'master_app/instructor/cd_students_2.html' %}
+                    <!-- End : Defense Group Students List -->
+                  {% endif %}
 
 
                   <!-- Results -->
@@ -102,9 +106,20 @@
     </section>
 </main>
 
+<!-- Remove Student Confirmation Model -->
+<div class="remodal" data-remodal-id="modal">
+  <button data-remodal-action="close" class="remodal-close"></button>
+  <h1>Remove Student</h1>
+  <p>
+    Are you sure you want to remove <span class="modal-student fw-bolder"></span> from <span class="fw-bolder">{{ course.name }}</span> course?
+  </p>
+  <br>
+  <button data-remodal-action="cancel" class="remodal-cancel">Cancel</button>
+  <button data-remodal-action="confirm" class="remodal-confirm" data-url="" >OK</button>
+</div>
 
 
-<!-- offcanvas: virutal network details -->
+<!-- offcanvas: virutal network details instructions  -->
 {% if course.get_virtual_network %}
   {% include 'master_app/instructor/offcanvas_network.html' with network=course.get_virtual_network  %}
 {% endif %}
@@ -183,9 +198,10 @@ var imgref_dict={
                 processData: false,
                 contentType: false,
                 success : function(response){
+                  // Filter Specific Image Types
                   var images = response.data.images.filter(
                   function(value) {
-                    return value.image_type == "active"; 
+                    return value.image_type == "snapshot"; 
                   });
                   function onlyUnique(value, index, self) {
                     return self.indexOf(value) === index;
@@ -204,11 +220,29 @@ var imgref_dict={
                   // console.debug(os_type_dict);
                   $("#id_operating_system").val("" +  os_type_dict[$('#id_scenarios').val()]);
                   $("#modalEditor .ql-editor").html("" + description[$('#id_scenarios').val()]);
-                  $("#id_size").val(filesize(  size[$('#id_scenarios').val()], {base: 2, standard: "jedec"}) );
+                  // console.debug(size[$('#id_scenarios').val()] , String(size[$('#id_scenarios').val()]) == "undefined");
+                  if(String(size[$('#id_scenarios').val()]) == "undefined"){
+                    $("#id_size").val(filesize(  0, {base: 2, standard: "jedec"}) );
+                  }
+                  else{
+                    $("#id_size").val(filesize(  size[$('#id_scenarios').val()], {base: 2, standard: "jedec"}) );
+                  }
+                  if(String(ram_dict[$('#id_scenarios').val()]) == "undefined"){
+                    $("#id_min_ram").val(filesize( 0, {base : 2, standard : "jedec"}) );
+                  }
+                  else{
+                    $("#id_min_ram").val(filesize( ram_dict[$('#id_scenarios').val()] *1024*1024, {base : 2, standard : "jedec"}) );
+                  }
+                  if(String(disk_dict[$('#id_scenarios').val()]) == "undefined"){
+                    $("#id_min_disk").val(filesize( 0, {base : 2, standard : "jedec"})  );
+                  }
+                  else{
+                    $("#id_min_disk").val(filesize( disk_dict[$('#id_scenarios').val()] *1024*1024*1024, {base : 2, standard : "jedec"})  );
+                  }
                   $("#id_status").val("" + status_dict[$('#id_scenarios').val()]);
                   $("#id_state").val("" + state_dict[$('#id_scenarios').val()]);
-                  $("#id_min_ram").val(filesize( ram_dict[$('#id_scenarios').val()] *1024*1024, {base : 2, standard : "jedec"}) );
-                  $("#id_min_disk").val(filesize( disk_dict[$('#id_scenarios').val()] *1024*1024*1024, {base : 2, standard : "jedec"})  );
+                  
+                  
                   $("#id_imageRef").val("" + imgref_dict[$('#id_scenarios').val()]);
                 },
                 error : function(response){
@@ -356,7 +390,7 @@ var imgref_dict={
         processData: false,
         contentType: false,
         success : function(response){
-              myModal.hide();
+          bootstrap.Modal.getInstance(document.getElementById('virutal_network_modal')).hide();
               new Noty({
             //  alert, success, error, warning, info
             timeout: 2000 ,
@@ -657,14 +691,213 @@ var imgref_dict={
 
 
 <!-- Delete a student by an instructor -->
+
 <script>
   $(function(){
-    $(document).on("click", "button.cross", function(event){
-      event.preventDefault();
-      event.stopPropagation();
-      alert("Delete a user");
+
+    $(document).on("click", "button.cross" ,  function(event){
+      $("button.remodal-confirm").attr("data-url" , $(this).attr("data-url"));
+      $("span.modal-student").html($(this).attr("data-student") );
     })
   })
+</script>
+  
+<script>
+  $(function(){
+    $("button.remodal-confirm").on("click",  function(event){
+      var submit_btn = $(event.currentTarget);
+      $.ajax({
+        url : $(submit_btn).attr("data-url"),
+        type  : "GET",
+        processData: false,
+        contentType: false,
+        success : function(response){
+          $("button.cross[data-url='" + $(submit_btn).attr("data-url") + "']").parent().remove();
+          
+          new Noty({
+        timeout: 4000 ,
+        type : "success",
+        theme: 'sunset',
+        force : false,
+        text: '<i class="fas fa-check-circle"></i>&nbsp; Student has been removed successfully.',
+        animation: {
+        open: function (promise) {
+            var n = this;
+            var Timeline = new mojs.Timeline();
+            var body = new mojs.Html({
+                el        : n.barDom,
+                x         : {500: 0, delay: 0, duration: 500, easing: 'elastic.out'},
+                isForce3d : true,
+                onComplete: function () {
+                    promise(function(resolve) {
+                        resolve();
+                    })
+                }
+            });
+
+            var parent = new mojs.Shape({
+                parent: n.barDom,
+                width      : 200,
+                height     : n.barDom.getBoundingClientRect().height,
+                radius     : 0,
+                x          : {[150]: -150},
+                duration   : 1.2 * 500,
+                isShowStart: true
+            });
+
+            n.barDom.style['overflow'] = 'visible';
+            parent.el.style['overflow'] = 'hidden';
+
+            var burst = new mojs.Burst({
+                parent  : parent.el,
+                count   : 10,
+                top     : n.barDom.getBoundingClientRect().height + 75,
+                degree  : 90,
+                radius  : 75,
+                angle   : {[-90]: 40},
+                children: {
+                    fill     : '#EBD761',
+                    delay    : 'stagger(500, -50)',
+                    radius   : 'rand(8, 25)',
+                    direction: -1,
+                    isSwirl  : true
+                }
+            });
+
+            var fadeBurst = new mojs.Burst({
+                parent  : parent.el,
+                count   : 2,
+                degree  : 0,
+                angle   : 75,
+                radius  : {0: 100},
+                top     : '90%',
+                children: {
+                    fill     : '#EBD761',
+                    pathScale: [.65, 1],
+                    radius   : 'rand(12, 15)',
+                    direction: [-1, 1],
+                    delay    : .8 * 500,
+                    isSwirl  : true
+                }
+            });
+
+            Timeline.add(body, burst, fadeBurst, parent);
+            Timeline.play();
+        },
+        close: function (promise) {
+            var n = this;
+            new mojs.Html({
+                el        : n.barDom,
+                x         : {0: 500, delay: 10, duration: 500, easing: 'cubic.out'},
+                skewY     : {0: 10, delay: 10, duration: 500, easing: 'cubic.out'},
+                isForce3d : true,
+                onComplete: function () {
+                    promise(function(resolve) {
+                        resolve();
+                    })
+                }
+            }).play();
+        }
+        }
+    }).show();    
+          
+        },
+        error : function(response){
+          // alert(response["responseJSON"]["error"]);
+          new Noty({
+        //  alert, success, error, warning, info
+        timeout: 4000 ,
+        type : "error",
+        theme: 'sunset',
+        // container : ".noty_layout",
+        force : false,
+        // layout: 'bottomLeft',
+        text: `<i class="fas fa-check-circle"></i>&nbsp; ${response["responseJSON"]["error"]}.`,
+        animation: {
+        open: function (promise) {
+            var n = this;
+            var Timeline = new mojs.Timeline();
+            var body = new mojs.Html({
+                el        : n.barDom,
+                x         : {500: 0, delay: 0, duration: 500, easing: 'elastic.out'},
+                isForce3d : true,
+                onComplete: function () {
+                    promise(function(resolve) {
+                        resolve();
+                    })
+                }
+            });
+
+            var parent = new mojs.Shape({
+                parent: n.barDom,
+                width      : 200,
+                height     : n.barDom.getBoundingClientRect().height,
+                radius     : 0,
+                x          : {[150]: -150},
+                duration   : 1.2 * 500,
+                isShowStart: true
+            });
+
+            n.barDom.style['overflow'] = 'visible';
+            parent.el.style['overflow'] = 'hidden';
+
+            var burst = new mojs.Burst({
+                parent  : parent.el,
+                count   : 10,
+                top     : n.barDom.getBoundingClientRect().height + 75,
+                degree  : 90,
+                radius  : 75,
+                angle   : {[-90]: 40},
+                children: {
+                    fill     : '#EBD761',
+                    delay    : 'stagger(500, -50)',
+                    radius   : 'rand(8, 25)',
+                    direction: -1,
+                    isSwirl  : true
+                }
+            });
+
+            var fadeBurst = new mojs.Burst({
+                parent  : parent.el,
+                count   : 2,
+                degree  : 0,
+                angle   : 75,
+                radius  : {0: 100},
+                top     : '90%',
+                children: {
+                    fill     : '#EBD761',
+                    pathScale: [.65, 1],
+                    radius   : 'rand(12, 15)',
+                    direction: [-1, 1],
+                    delay    : .8 * 500,
+                    isSwirl  : true
+                }
+            });
+
+            Timeline.add(body, burst, fadeBurst, parent);
+            Timeline.play();
+        },
+        close: function (promise) {
+            var n = this;
+            new mojs.Html({
+                el        : n.barDom,
+                x         : {0: 500, delay: 10, duration: 500, easing: 'cubic.out'},
+                skewY     : {0: 10, delay: 10, duration: 500, easing: 'cubic.out'},
+                isForce3d : true,
+                onComplete: function () {
+                    promise(function(resolve) {
+                        resolve();
+                    })
+                }
+            }).play();
+        }
+        }
+    }).show();    
+          
+        }
+      });
+    });
+  });
 </script>
 <!-- End : Delete a student by an instructor -->
 

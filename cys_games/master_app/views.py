@@ -1,5 +1,8 @@
+from .access_machine import generate_flag
+from django.utils.encoding import force_str
+from django.contrib.contenttypes.models import ContentType
 import os
-import uuid 
+import uuid
 import json
 import time
 import requests
@@ -20,17 +23,17 @@ from django.contrib.admin.models import LogEntry, ADDITION, CHANGE
 # ? forms
 from .forms import (
     loginForm,
-    CreateCourseForm, 
-    AddNewStudent, 
-    NewVirtualNetworkForm, 
-    CourseChallengeForm, 
-    CourseApprovalForm, 
+    CreateCourseForm,
+    AddNewStudent,
+    NewVirtualNetworkForm,
+    CourseChallengeForm,
+    CourseApprovalForm,
     registerForm
 )
 
 
 # ? Models
-from .models import Course, AssignedStudents, CourseChallenge, VirtualNetwork, ChallengeSubmission,NetworkFlag, NetworkFlagSubmission
+from .models import Course, AssignedStudents, CourseChallenge, VirtualNetwork, ChallengeSubmission, NetworkFlag, NetworkFlagSubmission
 
 # ? Decorators
 from .decorators import (
@@ -49,7 +52,16 @@ User = get_user_model()
 # Create your views here.
 
 
+def get_content_type_for_model(obj):
+    return ContentType.objects.get_for_model(obj, for_concrete_model=False)
+
+
+def get_field_value(obj, field):
+    return getattr(obj, field)
+
 # ? Development Print Functions
+
+
 def customPrint(message):
     if settings.DEBUG:
         print("="*70)
@@ -57,6 +69,8 @@ def customPrint(message):
         print("="*70)
 
 # ? Home View
+
+
 def index(request):
     if request.user.is_authenticated:
         if request.user.is_superuser:
@@ -67,55 +81,53 @@ def index(request):
     return render(request, template_name, context)
 
 
-
 # TODO  :   Update User Password
 @login_required()
 def change_password(request):
-    if request.method == "POST" :
+    if request.method == "POST":
 
         try:
             # asd
-            form = PasswordChangeForm(data = request.POST, user = request.user)
+            form = PasswordChangeForm(data=request.POST, user=request.user)
             if form.is_valid():
                 form.save()
                 update_session_auth_hash(request, form.user)
                 return JsonResponse(
                     json.loads(
                         json.dumps({
-                            "text" : "Valid method"
+                            "text": "Valid method"
                         })
                     ),
-                    status =200
+                    status=200
                 )
             else:
                 return JsonResponse(
                     json.loads(
                         json.dumps({
-                            "error" : str(form.errors)
+                            "error": str(form.errors)
                         })
                     ),
-                    status =400
-                )    
+                    status=400
+                )
         except Exception as e:
             traceback.print_exc()
             return JsonResponse(
                 json.loads(
                     json.dumps({
-                        "error" : str(e)
+                        "error": str(e)
                     })
                 ),
-                status =400
+                status=400
             )
 
-        
     else:
         return JsonResponse(
             json.loads(
                 json.dumps({
-                    "error" : "Invalid request"
+                    "error": "Invalid request"
                 })
             ),
-            status =400
+            status=400
         )
     # template_name = "user_management/change_password.html"
     # if request.method!='POST':
@@ -147,15 +159,7 @@ def UserLoginView(request):
 
 
 # TODO  :   User Login View Ajax
-from django.contrib.contenttypes.models import ContentType
-from django.utils.encoding import force_str
 
-
-def get_content_type_for_model(obj):
-    return ContentType.objects.get_for_model(obj, for_concrete_model=False)
-
-def get_field_value(obj, field):
-        return getattr(obj, field)
 
 def UserLoginAjaxView(request):
     if request.method == "POST":
@@ -173,12 +177,13 @@ def UserLoginAjaxView(request):
                         login(request, u)
                         try:
                             LogEntry.objects.create(
-                                user = u,
+                                user=u,
                                 action_flag=ADDITION,
                                 object_id=u.id,
-                                content_type_id=get_content_type_for_model(u).pk,
+                                content_type_id=get_content_type_for_model(
+                                    u).pk,
                                 object_repr=force_str(u),
-                                change_message = f"{u} has been loggin."
+                                change_message=f"{u} has been loggin."
                             )
                         except Exception as e:
                             print(e)
@@ -188,7 +193,7 @@ def UserLoginAjaxView(request):
                         #     object_id=object.pk,
                         #     object_repr=force_text(object),
                         #     action_flag=ADDITION
-                        # ) 
+                        # )
 
                         # TODO  :   Check if login-user is an instructor
                         if u.is_instructor:
@@ -215,7 +220,7 @@ def UserLoginAjaxView(request):
                             return JsonResponse(content, status=200)
 
                         else:
-                            
+
                             content = json.loads(json.dumps({
                                 "next_url": reverse("master_index"),
                                 "message": "Successfully Login"
@@ -255,11 +260,10 @@ def UserLogoutView(request):
     return redirect('master_index')
 
 
-# TODO  :   How to Connect VPN
+# TODO  :   How to Connect VPN Page
 def ConnectVPN(request):
-    template_name="master_app/connect_vpn.html"
+    template_name = "master_app/connect_vpn.html"
     context = {
-
     }
     return render(request, template_name, context)
 
@@ -269,12 +273,12 @@ def ConnectVPN(request):
 @admin_required
 def AdminDashboard(request):
     template_name = 'master_app/admin/dashboard.html'
-    
+
     # TODO  :   Retrieve All Instructors
-    instructors = User.objects.filter(is_instructor = True)
-    
+    instructors = User.objects.filter(is_instructor=True)
+
     # TODO  :   Retrieve All Instructors
-    students = User.objects.filter(is_student = True)
+    students = User.objects.filter(is_student=True)
 
     # TODO  :   Retrieve All Courses
     courses = Course.objects.all().order_by("-created_timestamp")
@@ -282,17 +286,17 @@ def AdminDashboard(request):
     # TODO  :   Retrieve All Local Virutal Networks
     networks = VirtualNetwork.objects.all()
 
-    # TODO  :   Recent Acitivty 
+    # TODO  :   Recent Acitivty
     entries = LogEntry.objects.exclude(
-        user__username = "developer"
+        user__username="developer"
     )
-    
+
     context = {
-        "instructors"  : instructors,
-        "students" : students,
-        "courses" : courses,
-        "networks" : networks,
-        "entries" : entries
+        "instructors": instructors,
+        "students": students,
+        "courses": courses,
+        "networks": networks,
+        "entries": entries
     }
     return render(request, template_name, context)
 
@@ -317,11 +321,6 @@ def AdminCourseList(request):
         "courses": courses
     }
     return render(request, template_name, context)
-
-
-
-
-
 
 
 @login_required
@@ -367,12 +366,14 @@ def AdminCourseDetails(request, course_id):
         "medium_challenges": medium_challenges,
         "hard_challenges": hard_challenges,
         "students": students,
-        "WAZUH_SERVER_PUBLIC_IP" : settings.WAZUH_SERVER_PUBLIC_IP,
-        "DC_IP_ADDRESS" : settings.DC_IP_ADDRESS
+        "WAZUH_SERVER_PUBLIC_IP": settings.WAZUH_SERVER_PUBLIC_IP,
+        "DC_IP_ADDRESS": settings.DC_IP_ADDRESS
     }
     return render(request, template_name, context)
 
 # TODO  :   Admin Course Approval
+
+
 @login_required
 @admin_required
 def AdminCourseApproval(request, vn_id):
@@ -384,22 +385,24 @@ def AdminCourseApproval(request, vn_id):
         return JsonResponse(
             json.loads(
                 json.dumps({
-                    "text" : "Course has been approved."
+                    "text": "Course has been approved."
                 })
             ),
-            status =200
+            status=200
         )
     else:
         return JsonResponse(
             json.loads(
                 json.dumps({
-                    "error" : "Invalid request method"
+                    "error": "Invalid request method"
                 })
             ),
-            status =400
+            status=400
         )
 
 # TODO  :   Admin Course Reject
+
+
 @login_required
 @admin_required
 def AdminCourseReject(request, course_id):
@@ -484,12 +487,12 @@ def AdminStudentList(request):
 @login_required
 @admin_required
 def AdminStudentCreate(request):
-    template_name="master_app/admin/student_create.html"
-    if request.method!='POST':
-            form = registerForm()
+    template_name = "master_app/admin/student_create.html"
+    if request.method != 'POST':
+        form = registerForm()
     else:
         form = registerForm(request.POST)
-        if form.is_valid() :
+        if form.is_valid():
             user = form.save(commit=False)
             user.is_active = True
             user.is_student = True
@@ -499,21 +502,23 @@ def AdminStudentCreate(request):
             user.save()
             messages.success(request, "New Student has been created")
             return redirect(reverse("admin-student-list-url"))
-    context={
-        'form' : form
+    context = {
+        'form': form
     }
     return render(request, template_name, context)
 
 # TODO  :   Admin Create New Instructor
+
+
 @login_required
 @admin_required
 def AdminInstructorCreate(request):
-    template_name="master_app/admin/instructor_create.html"
-    if request.method!='POST':
-            form = registerForm()
+    template_name = "master_app/admin/instructor_create.html"
+    if request.method != 'POST':
+        form = registerForm()
     else:
         form = registerForm(request.POST)
-        if form.is_valid() :
+        if form.is_valid():
             user = form.save(commit=False)
             user.is_active = True
             user.is_instructor = True
@@ -523,14 +528,14 @@ def AdminInstructorCreate(request):
             user.save()
             messages.success(request, "New Instructor has been created")
             return redirect(reverse("admin-instructors-list-url"))
-    context={
-        'form' : form
+    context = {
+        'form': form
     }
     return render(request, template_name, context)
 
 
 # TODO  :   Admin - Add a new challenge to an existing course
-@login_required  
+@login_required
 @admin_required
 def AdminChallengeCreate(request):
     template_name = 'master_app/admin/create_new_challenge.html'
@@ -570,115 +575,9 @@ def AdminCourseStudentCreate(request):
     return render(request, template_name, context)
 
 
-# TODO  :   Admin Fetch Network Images from OpenStack
-def AdminFetchNetworkImages(request):
+# TODO  :    Fetch Network Images from OpenStack
+def FetchNetworkImages(request):
     try:
-        headers = {
-            'Content-Type': 'application/json',
-        }
-        json_data = {
-        'auth': {
-            'identity': {
-                'methods': [
-                    'password',
-                ],
-                'password': {
-                    'user': {
-                        'name': settings.OPENSTACK_USER,
-                        'domain': {
-                            'id': 'default',
-                        },
-                        'password': settings.OPENSTACK_PASSWORD,
-                    },
-                },
-            },
-            "scope": {
-            "project": {
-                "name": "admin",
-                "domain": { 
-                    "id": "default" 
-                }
-            }
-        }
-            
-        },
-        }
-        print("--> OPENSTACK SESSION STARTED")
-        s = requests.Session()
-        print("--> OPENSTACK AUTHENTICATION STARTED")
-        response = s.post(settings.OPENSTACK_AUTHORIZED_URL, headers=headers, json=json_data, timeout=settings.CONNECTION_TIMEOUT)
-        if response.status_code in [200, 201, 202]:
-            headers = {
-                'X-Auth-Token': f'{response.headers["x-subject-token"]}',   
-            }
-            print("--> OPENSTACK FETCH IMAGES STARTED")
-            response = s.get(settings.OPENSTACK_IMAGE_URL, headers=headers )
-            if response.status_code in [200, 201, 202]:
-                return JsonResponse(
-                    json.loads(
-                        json.dumps({
-                            "data" : response.json()
-                        })
-                    ),
-                    status =200
-                )
-            else:
-                print("--> OPENSTACK FETCH IMAGES ERROR")
-                print(response.json())
-                return JsonResponse(
-                json.loads(
-                    json.dumps({
-                        "error" : str(response.json()["error"]["message"]) 
-                    })
-                ),
-                status = 400
-            )
-        else:
-            print("--> OPENSTACK AUTHENTICATION ERROR")
-            print(response.json())
-            return JsonResponse(
-                json.loads(
-                    json.dumps({
-                        "error" : str( response.json()["error"]["message"] )
-                    })
-                ),
-                status =400
-            )
-    except requests.exceptions.Timeout:
-        traceback.print_exc()
-        return JsonResponse(
-            json.loads(
-                json.dumps({
-                    "error" : 'Connection timed out'
-                })
-            ),
-            status =400
-        )
-    except requests.exceptions.ConnectionError:
-        traceback.print_exc()
-        return JsonResponse(
-            json.loads(
-                json.dumps({
-                    "error" : 'Connection timed out'
-                })
-            ),
-            status =400
-        )
-    except Exception as e:
-        traceback.print_exc()
-        return JsonResponse(
-            json.loads(
-                json.dumps({
-                    "error" : str( e )
-                })
-            ),
-            status =400
-        )
-
-# TODO  :  # ? Start an instance in openstack
-def AdminStartNetworkInstance(request, vn_id):
-    try:
-        netObj = VirtualNetwork.objects.get(id = vn_id)
         headers = {
             'Content-Type': 'application/json',
         }
@@ -699,89 +598,210 @@ def AdminStartNetworkInstance(request, vn_id):
                     },
                 },
                 "scope": {
-                "project": {
-                "name": "admin",
-                "domain": { "id": "default" }
+                    "project": {
+                        "name": "admin",
+                        "domain": {
+                            "id": "default"
+                        }
+                    }
                 }
+
+            },
+        }
+        print("--> OPENSTACK SESSION STARTED")
+        s = requests.Session()
+        print("--> OPENSTACK AUTHENTICATION STARTED")
+        response = s.post(settings.OPENSTACK_AUTHORIZED_URL, headers=headers,
+                          json=json_data, timeout=settings.CONNECTION_TIMEOUT)
+        if response.status_code in [200, 201, 202]:
+            headers = {
+                'X-Auth-Token': f'{response.headers["x-subject-token"]}',
             }
-                
+            print("--> OPENSTACK FETCH IMAGES STARTED")
+            response = s.get(settings.OPENSTACK_IMAGE_URL, headers=headers)
+            if response.status_code in [200, 201, 202]:
+                return JsonResponse(
+                    json.loads(
+                        json.dumps({
+                            "data": response.json()
+                        })
+                    ),
+                    status=200
+                )
+            else:
+                print("--> OPENSTACK FETCH IMAGES ERROR")
+                print(response.json())
+                return JsonResponse(
+                    json.loads(
+                        json.dumps({
+                            "error": str(response.json()["error"]["message"])
+                        })
+                    ),
+                    status=400
+                )
+        else:
+            print("--> OPENSTACK AUTHENTICATION ERROR")
+            print(response.json())
+            return JsonResponse(
+                json.loads(
+                    json.dumps({
+                        "error": str(response.json()["error"]["message"])
+                    })
+                ),
+                status=400
+            )
+    except requests.exceptions.Timeout:
+        traceback.print_exc()
+        return JsonResponse(
+            json.loads(
+                json.dumps({
+                    "error": 'Connection timed out'
+                })
+            ),
+            status=400
+        )
+    except requests.exceptions.ConnectionError:
+        traceback.print_exc()
+        return JsonResponse(
+            json.loads(
+                json.dumps({
+                    "error": 'Connection timed out'
+                })
+            ),
+            status=400
+        )
+    except Exception as e:
+        traceback.print_exc()
+        return JsonResponse(
+            json.loads(
+                json.dumps({
+                    "error": str(e)
+                })
+            ),
+            status=400
+        )
+
+# TODO  :  # ? Start an instance in openstack (Active Directory Scenario)
+
+
+def AdminStartNetworkInstance(request, vn_id):
+    try:
+        netObj = VirtualNetwork.objects.get(id=vn_id)
+        headers = {
+            'Content-Type': 'application/json',
+        }
+        json_data = {
+            'auth': {
+                'identity': {
+                    'methods': [
+                        'password',
+                    ],
+                    'password': {
+                        'user': {
+                            'name': settings.OPENSTACK_USER,
+                            'domain': {
+                                'id': 'default',
+                            },
+                            'password': settings.OPENSTACK_PASSWORD,
+                        },
+                    },
+                },
+                "scope": {
+                    "project": {
+                        "name": "admin",
+                        "domain": {"id": "default"}
+                    }
+                }
+
             },
         }
         s = requests.Session()
         print("--> OPENSTACK SESSION STARTED")
-        response = s.post(settings.OPENSTACK_AUTHORIZED_URL, headers=headers, json=json_data)
+        response = s.post(settings.OPENSTACK_AUTHORIZED_URL,
+                          headers=headers, json=json_data)
         print("--> OPENSTACK AUTHORIZATION STARTED")
         if response.status_code in [200, 201, 202]:
             headers = {
-                'X-Auth-Token': f'{response.headers["x-subject-token"]}',   
+                'X-Auth-Token': f'{response.headers["x-subject-token"]}',
             }
             print("--> OPENSTACK DETAILS DOMAIN CLIENT REQUEST STARTED")
-            response = s.get(f"{settings.OPENSTACK_SERVER_URL}/{settings.DC_CLIENT_SERVER}", headers=headers )
-            if response.status_code in [200, 201, 202]:                
-                if(response.json()["server"]["status"] != "ACTIVE" ):
-                    json_data={
-                        "os-start" : None
+            response = s.get(
+                f"{settings.OPENSTACK_SERVER_URL}/{settings.DC_CLIENT_SERVER}", headers=headers)
+            if response.status_code in [200, 201, 202]:
+                if (response.json()["server"]["status"] != "ACTIVE"):
+                    json_data = {
+                        "os-start": None
                     }
                     print("--> OPENSTACK ACTIVE DOMAIN CLIENT REQUEST STARTED")
-                    response = s.post(f"{settings.OPENSTACK_SERVER_URL}/{settings.DC_CLIENT_SERVER}/action", headers=headers , json=json_data)
+                    response = s.post(
+                        f"{settings.OPENSTACK_SERVER_URL}/{settings.DC_CLIENT_SERVER}/action", headers=headers, json=json_data)
                     if response.status_code in [200, 201, 202]:
-                        print("--> OPENSTACK GET DOMAIN CLIENT PUBLIC IP REQUEST STARTED")
-                        response = s.get(f"{settings.OPENSTACK_SERVER_URL}/{settings.DC_CLIENT_SERVER}/ips/{settings.OPENSTACK_NETWORK_LABEL}", headers=headers )
+                        print(
+                            "--> OPENSTACK GET DOMAIN CLIENT PUBLIC IP REQUEST STARTED")
+                        response = s.get(
+                            f"{settings.OPENSTACK_SERVER_URL}/{settings.DC_CLIENT_SERVER}/ips/{settings.OPENSTACK_NETWORK_LABEL}", headers=headers)
                         if response.status_code in [200, 201, 202]:
                             netObj.server_id = settings.DC_CLIENT_SERVER
-                            netObj.ip_address = response.json()["demo-net"][1]["addr"]
+                            netObj.ip_address = response.json()[
+                                "demo-net"][1]["addr"]
                             netObj.is_instance_created = True
                             netObj.save()
-                            print("--> OPENSTACK GET DOMAIN CLIENT FLAGS REQUEST STARTED")
-                            response = s.get(f"{settings.OPENSTACK_SERVER_URL}/{settings.DC_CLIENT_SERVER}/metadata", headers=headers )
+                            print(
+                                "--> OPENSTACK GET DOMAIN CLIENT FLAGS REQUEST STARTED")
+                            response = s.get(
+                                f"{settings.OPENSTACK_SERVER_URL}/{settings.DC_CLIENT_SERVER}/metadata", headers=headers)
                             if response.status_code in [200, 201, 202]:
-                                print("--> OPENSTACK SAVE DOMAIN CLIENT FLAGS TO LOCAL DB REQUEST STARTED")
+                                print(
+                                    "--> OPENSTACK SAVE DOMAIN CLIENT FLAGS TO LOCAL DB REQUEST STARTED")
                                 for i in response.json()["metadata"]:
                                     if i[:4].lower() == "flag":
                                         try:
                                             netFlag = NetworkFlag.objects.get_or_create(
-                                                course = netObj.course,
-                                                flag_id = i
+                                                course=netObj.course,
+                                                flag_id=i
                                             )
-                                            netFlag[0].original_answer = response.json()["metadata"][i]
+                                            netFlag[0].original_answer = response.json()[
+                                                "metadata"][i]
                                             netFlag[0].points = 50
                                             netFlag[0].imageRef = netObj.imageRef
                                             netFlag[0].save()
                                         except Exception as e:
                                             print("--> EXCEPTION OCCURED")
-                                            traceback.print_exc() 
+                                            traceback.print_exc()
                                 print(NetworkFlag.objects.all())
                                 return JsonResponse(
                                     json.loads(
                                         json.dumps({
-                                            "data" : "Instance has been activated successfully"
+                                            "data": "Instance has been activated successfully"
                                         })
                                     ),
-                                    status =200
+                                    status=200
                                 )
                             else:
-                                print("--> PENSTACK SAVE DOMAIN CLIENT FLAGS TO LOCAL DB REQUEST STARTED")
+                                print(
+                                    "--> PENSTACK SAVE DOMAIN CLIENT FLAGS TO LOCAL DB REQUEST STARTED")
                                 print(response.content)
                                 return JsonResponse(
                                     json.loads(
                                         json.dumps({
 
-                                            "error" : str( response.json()["error"]["message"] )
+                                            "error": str(response.json()["error"]["message"])
                                         })
                                     ),
-                                    status =400
+                                    status=400
                                 )
                         else:
-                            print("--> OPENSTACK GET DOMAIN CLIENT PUBLIC IP REQUEST ERROR")
+                            print(
+                                "--> OPENSTACK GET DOMAIN CLIENT PUBLIC IP REQUEST ERROR")
                             print(response.content)
                             return JsonResponse(
                                 json.loads(
                                     json.dumps({
 
-                                        "error" : str( response.json()["error"]["message"] )
+                                        "error": str(response.json()["error"]["message"])
                                     })
                                 ),
-                                status =400
+                                status=400
                             )
                     else:
                         print("--> OPENSTACK ACTIVE DOMAIN CLIENT REQUEST ERROR")
@@ -790,70 +810,77 @@ def AdminStartNetworkInstance(request, vn_id):
                             json.loads(
                                 json.dumps({
 
-                                    "error" : str( response.json()["error"]["message"] )
+                                    "error": str(response.json()["error"]["message"])
                                 })
                             ),
-                            status =400
+                            status=400
                         )
                 else:
                     print("--> OPENSTACK RESUME DOMAIN CLIENT REQUEST STARTED")
                     print("--> OPENSTACK GET DOMAIN CLIENT PUBLIC IP REQUEST STARTED")
-                    response = s.get(f"{settings.OPENSTACK_SERVER_URL}/{settings.DC_CLIENT_SERVER}/ips/{settings.OPENSTACK_NETWORK_LABEL}", headers=headers )
+                    response = s.get(
+                        f"{settings.OPENSTACK_SERVER_URL}/{settings.DC_CLIENT_SERVER}/ips/{settings.OPENSTACK_NETWORK_LABEL}", headers=headers)
                     if response.status_code in [200, 201, 202]:
                         netObj.server_id = settings.DC_CLIENT_SERVER
-                        netObj.ip_address = response.json()["demo-net"][1]["addr"]
+                        netObj.ip_address = response.json()[
+                            "demo-net"][1]["addr"]
                         netObj.is_instance_created = True
                         netObj.save()
                         print("--> OPENSTACK GET DOMAIN CLIENT FLAGS REQUEST STARTED")
-                        response = s.get(f"{settings.OPENSTACK_SERVER_URL}/{settings.DC_CLIENT_SERVER}/metadata", headers=headers )
+                        response = s.get(
+                            f"{settings.OPENSTACK_SERVER_URL}/{settings.DC_CLIENT_SERVER}/metadata", headers=headers)
                         if response.status_code in [200, 201, 202]:
-                            print("--> OPENSTACK SAVE DOMAIN CLIENT FLAGS TO LOCAL DB REQUEST STARTED")
+                            print(
+                                "--> OPENSTACK SAVE DOMAIN CLIENT FLAGS TO LOCAL DB REQUEST STARTED")
                             for i in response.json()["metadata"]:
                                 if i[:4].lower() == "flag":
                                     try:
                                         netFlag = NetworkFlag.objects.get_or_create(
-                                            course = netObj.course,
-                                            flag_id = i
+                                            course=netObj.course,
+                                            flag_id=i
                                         )
-                                        netFlag[0].original_answer = response.json()["metadata"][i]
+                                        netFlag[0].original_answer = response.json()[
+                                            "metadata"][i]
                                         netFlag[0].points = 50
                                         netFlag[0].imageRef = netObj.imageRef
                                         netFlag[0].save()
                                     except Exception as e:
                                         print("--> EXCEPTION OCCURED")
-                                        traceback.print_exc() 
+                                        traceback.print_exc()
                             print(NetworkFlag.objects.all())
                             return JsonResponse(
                                 json.loads(
                                     json.dumps({
-                                        "data" : "Instance has been activated successfully"
+                                        "data": "Instance has been activated successfully"
                                     })
                                 ),
-                                status =200
+                                status=200
                             )
                         else:
-                            print("--> PENSTACK SAVE DOMAIN CLIENT FLAGS TO LOCAL DB REQUEST STARTED")
+                            print(
+                                "--> PENSTACK SAVE DOMAIN CLIENT FLAGS TO LOCAL DB REQUEST STARTED")
                             print(response.content)
                             return JsonResponse(
                                 json.loads(
                                     json.dumps({
 
-                                        "error" : str( response.json()["error"]["message"] )
+                                        "error": str(response.json()["error"]["message"])
                                     })
                                 ),
-                                status =400
+                                status=400
                             )
                     else:
-                        print("--> OPENSTACK GET DOMAIN CLIENT PUBLIC IP REQUEST ERROR")
+                        print(
+                            "--> OPENSTACK GET DOMAIN CLIENT PUBLIC IP REQUEST ERROR")
                         print(response.content)
                         return JsonResponse(
                             json.loads(
                                 json.dumps({
 
-                                    "error" : str( response.json()["error"]["message"] )
+                                    "error": str(response.json()["error"]["message"])
                                 })
                             ),
-                            status =400
+                            status=400
                         )
                     # return JsonResponse(
                     #     json.loads(
@@ -870,10 +897,10 @@ def AdminStartNetworkInstance(request, vn_id):
                     json.loads(
                         json.dumps({
 
-                            "error" : str( response.json()["error"]["message"] )
+                            "error": str(response.json()["error"]["message"])
                         })
                     ),
-                    status =400
+                    status=400
                 )
         else:
             print("--> OPENSTACK AUTHENTICATION ERROR")
@@ -882,451 +909,607 @@ def AdminStartNetworkInstance(request, vn_id):
                 json.loads(
                     json.dumps({
 
-                        "error" : str( response.json()["error"]["message"] )
+                        "error": str(response.json()["error"]["message"])
                     })
                 ),
-                status =400
+                status=400
             )
 
     except Exception as e:
         print("--> EXCEPTION OCCURED")
-        traceback.print_exc() 
+        traceback.print_exc()
         return JsonResponse(
             json.loads(
                 json.dumps({
-                    "error" : str(e)
+                    "error": str(e)
                 })
             ),
-            status =400
+            status=400
         )
 
 
 # TODO  :   # ? Create an instance in openstack for requested virtual image
+
 def AdminCreateNetworkInstance(request, vn_id):
     try:
-        netObj = VirtualNetwork.objects.get(id = vn_id)
+        netObj = VirtualNetwork.objects.get(id=vn_id)
         headers = {
             'Content-Type': 'application/json',
         }
         json_data = {
-        'auth': {
-            'identity': {
-                'methods': [
-                    'password',
-                ],
-                'password': {
-                    'user': {
-                        'name': settings.OPENSTACK_USER,
-                        'domain': {
-                            'id': 'default',
+            'auth': {
+                'identity': {
+                    'methods': [
+                        'password',
+                    ],
+                    'password': {
+                        'user': {
+                            'name': settings.OPENSTACK_USER,
+                            'domain': {
+                                'id': 'default',
+                            },
+                            'password': settings.OPENSTACK_PASSWORD,
                         },
-                        'password': settings.OPENSTACK_PASSWORD,
                     },
                 },
+                "scope": {
+                    "project": {
+                        "name": "admin",
+                        "domain": {"id": "default"}
+                    }
+                }
+
             },
-            "scope": {
-            "project": {
-            "name": "admin",
-            "domain": { "id": "default" }
-            }
-        }
-            
-        },
         }
 
         s = requests.Session()
         print("--> OPENSTACK SESSION STARTED")
-        response = s.post(settings.OPENSTACK_AUTHORIZED_URL, headers=headers, json=json_data)
+        response = s.post(settings.OPENSTACK_AUTHORIZED_URL,
+                          headers=headers, json=json_data)
         print("--> OPENSTACK AUTHORIZATION STARTED")
         if response.status_code in [200, 201, 202]:
-            # print("--> OPENSTACK AUTHORIZATION SUCCESSFUL")
             headers = {
-                'X-Auth-Token': f'{response.headers["x-subject-token"]}',   
+                'X-Auth-Token': f'{response.headers["x-subject-token"]}',
             }
-            json_data={
+            json_data = {
                 "server": {
                     "name": f"{netObj.name}",
                     "imageRef": f"{netObj.imageRef}",
                     "flavorRef": settings.OPENSTACK_FLAVOR_URL,
                     "networks": [{
-                        "uuid" : settings.OPENSTACK_NETWORK_UUID
+                        "uuid": settings.OPENSTACK_NETWORK_UUID
                     }]
                 }
             }
             print("--> OPENSTACK CREATE SERVER INSTANCE REQUEST STARTED")
-            response = s.post(settings.OPENSTACK_SERVER_URL, headers=headers , json=json_data)
+            response = s.post(settings.OPENSTACK_SERVER_URL,
+                              headers=headers, json=json_data)
             if response.status_code in [200, 201, 202]:
-                # print("--> OPENSTACK CREATE SERVER INSTANCE REQUEST SUCCESSFUL")
                 netObj.server_id = response.json()["server"]["id"]
                 netObj.save()
                 print("--> OPENSTACK FLOATING IP REQUEST STARTED")
-                response = s.get(settings.OPENSTACK_FLOATING_IP_URL, headers=headers)
+                response = s.get(
+                    settings.OPENSTACK_FLOATING_IP_URL, headers=headers)
                 if response.status_code in [200, 201, 202]:
                     floating_ip = None
                     for i in response.json()['floating_ips']:
-                        if i["instance_id"] == None and i["pool"] == settings.OPENSTACK_NETWORK_POOL:  
+                        if i["instance_id"] == None and i["pool"] == settings.OPENSTACK_NETWORK_POOL:
                             floating_ip = i["ip"]
                             break
                     if floating_ip:
                         print("--> OPENSTACK FLOATING IP EXISTS TO ASSOCIATE")
                         print("--> OPENSTACK ASSIGNED FLOATING IP REQUEST STARTED")
                         json_data = {
-                            "addFloatingIp" : {
+                            "addFloatingIp": {
                                 "address": floating_ip
                             }
                         }
                         # TODO :    extra time to request
                         time.sleep(10)
-                        response = s.post(f'{settings.OPENSTACK_SERVER_URL}/{netObj.server_id}/action', headers=headers , json=json_data)
+                        response = s.post(
+                            f'{settings.OPENSTACK_SERVER_URL}/{netObj.server_id}/action', headers=headers, json=json_data)
                         if (response.status_code in [200, 201, 202]):
                             netObj.ip_address = floating_ip
                             netObj.save()
-                            # print("--> OPENSTACK ASSIGNED FLOATING IP REQUEST SUCCESSFUL")
                             netObj.is_instance_created = True
                             netObj.save()
 
                             # TODO :    extra time to request
                             # time.sleep(15)
 
-                            # TODO : Spawn DC
-                            if settings.IS_SPAWN_DC is True:
-                                print("--> DC : OPENSTACK SPAWN DC")
-                                json_data={
-                                    "server": {
-                                        "name": f"{netObj.name} DC",
-                                        "imageRef": settings.OPENSTACK_DC_UUID,
-                                        "flavorRef": settings.OPENSTACK_FLAVOR_URL,
-                                        "networks": [{
-                                            "uuid" : settings.OPENSTACK_NETWORK_UUID
-                                        }]
-                                    }
-                                }
-                                print("--> DC : OPENSTACK SPAWN REQUEST STARTED")
-                                response = s.post(settings.OPENSTACK_SERVER_URL, headers=headers , json=json_data)
-                                if response.status_code in [200, 201, 202]:
-                                    print("--> DC : OPENSTACK DC REQUEST SUCCESSFUL")
-                                    dc_server_id = response.json()["server"]["id"]
+                            # # TODO : Spawn DC
+                            # if settings.IS_SPAWN_DC is True:
+                            #     print("--> DC : OPENSTACK SPAWN DC")
+                            #     json_data = {
+                            #         "server": {
+                            #             "name": f"{netObj.name} DC",
+                            #             "imageRef": settings.OPENSTACK_DC_UUID,
+                            #             "flavorRef": settings.OPENSTACK_FLAVOR_URL,
+                            #             "networks": [{
+                            #                 "uuid": settings.OPENSTACK_NETWORK_UUID
+                            #             }]
+                            #         }
+                            #     }
+                            #     print("--> DC : OPENSTACK SPAWN REQUEST STARTED")
+                            #     response = s.post(
+                            #         settings.OPENSTACK_SERVER_URL, headers=headers, json=json_data)
+                            #     if response.status_code in [200, 201, 202]:
+                            #         print(
+                            #             "--> DC : OPENSTACK DC REQUEST SUCCESSFUL")
+                            #         dc_server_id = response.json()[
+                            #             "server"]["id"]
 
-                                    print("--> DC : OPENSTACK FLOATING IP  REQUEST STARTED")
-                                    response = s.get(settings.OPENSTACK_FLOATING_IP_URL, headers=headers)
-                                    if response.status_code in [200, 201, 202]:
-                                        floating_ip = None
-                                        for i in response.json()['floating_ips']:
-                                            if i["instance_id"] == None and i["pool"] == settings.OPENSTACK_NETWORK_POOL:  
-                                                floating_ip = i["ip"]
-                                                break
-                                        if floating_ip:
-                                            print("--> DC : OPENSTACK FLOATING IP ALREADY EXISTS TO ASSOCIATE")
-                                            print("--> DC : OPENSTACK ASSIGNED FLOATING IP REQUEST STARTED")
-                                            time.sleep(10)
-                                            json_data = {
-                                                "addFloatingIp" : {
-                                                    "address": floating_ip
-                                                }
-                                            }
-                                            response = s.post(f'{settings.OPENSTACK_SERVER_URL}/{dc_server_id}/action', headers=headers , json=json_data)
-                                            if (response.status_code in [200, 201, 202]):
-                                                print("--> DC : OPENSTACK ASSIGNED FLOATING IP  REQUEST SUCCESSFUL")
-                                            else:
-                                                print("--> DC : OPENSTACK ASSIGNED FLOATING IP  REQUEST ERROR")
-                                                print(response.content)
-                                        else:
-                                            print("--> DC : OPENSTACK FLOATING IP REQUEST STARTED")
-                                            json_data={
-                                                "pool": settings.OPENSTACK_NETWORK_POOL
-                                            }
-                                            response  =s.post(settings.OPENSTACK_FLOATING_IP_URL, headers=headers , json=json_data)
+                            #         print(
+                            #             "--> DC : OPENSTACK FLOATING IP  REQUEST STARTED")
+                            #         response = s.get(
+                            #             settings.OPENSTACK_FLOATING_IP_URL, headers=headers)
+                            #         if response.status_code in [200, 201, 202]:
+                            #             floating_ip = None
+                            #             for i in response.json()['floating_ips']:
+                            #                 if i["instance_id"] == None and i["pool"] == settings.OPENSTACK_NETWORK_POOL:
+                            #                     floating_ip = i["ip"]
+                            #                     break
+                            #             if floating_ip:
+                            #                 print(
+                            #                     "--> DC : OPENSTACK FLOATING IP ALREADY EXISTS TO ASSOCIATE")
+                            #                 print(
+                            #                     "--> DC : OPENSTACK ASSIGNED FLOATING IP REQUEST STARTED")
+                            #                 time.sleep(10)
+                            #                 json_data = {
+                            #                     "addFloatingIp": {
+                            #                         "address": floating_ip
+                            #                     }
+                            #                 }
+                            #                 response = s.post(
+                            #                     f'{settings.OPENSTACK_SERVER_URL}/{dc_server_id}/action', headers=headers, json=json_data)
+                            #                 if (response.status_code in [200, 201, 202]):
+                            #                     print(
+                            #                         "--> DC : OPENSTACK ASSIGNED FLOATING IP  REQUEST SUCCESSFUL")
+                            #                 else:
+                            #                     print(
+                            #                         "--> DC : OPENSTACK ASSIGNED FLOATING IP  REQUEST ERROR")
+                            #                     print(response.content)
+                            #             else:
+                            #                 print(
+                            #                     "--> DC : OPENSTACK FLOATING IP REQUEST STARTED")
+                            #                 json_data = {
+                            #                     "pool": settings.OPENSTACK_NETWORK_POOL
+                            #                 }
+                            #                 response = s.post(
+                            #                     settings.OPENSTACK_FLOATING_IP_URL, headers=headers, json=json_data)
 
-                                            # TODO :    extra time to request
-                                            # time.sleep(10)
+                            #                 # TODO :    extra time to request
+                            #                 # time.sleep(10)
 
-                                            if response.status_code in [200, 201, 202]:
-                                                print("--> DC : OPENSTACK FLOATING IP REQUEST SUCCESSFUL")
-                                                json_data = {
-                                                    "addFloatingIp" : {
-                                                        "address": response.json()["floating_ip"]["ip"]
-                                                    }
-                                                }
+                            #                 if response.status_code in [200, 201, 202]:
+                            #                     print(
+                            #                         "--> DC : OPENSTACK FLOATING IP REQUEST SUCCESSFUL")
+                            #                     json_data = {
+                            #                         "addFloatingIp": {
+                            #                             "address": response.json()["floating_ip"]["ip"]
+                            #                         }
+                            #                     }
 
-                                                # TODO :    extra time to request
-                                                time.sleep(10)
+                            #                     # TODO :    extra time to request
+                            #                     time.sleep(10)
 
-                                                print("--> DC : OPENSTACK ASSIGNED FLOATING IP REQUEST STARTED")
-                                                response = s.post(f'{settings.OPENSTACK_SERVER_URL}/{dc_server_id}/action', headers=headers , json=json_data)
-                                                if (response.status_code in [200, 201, 202]):
-                                                    print("--> DC : OPENSTACK ASSIGNED FLOATING IP REQUEST SUCCESSFUL")
-                                                else:
-                                                    print("--> DC : OPENSTACK ASSIGNED FLOATING IP REQUEST ERROR")
-                                                    print(response.content)
-                                            else:
-                                                print("--> DC : OPENSTACK FLOATING IP REQUEST ERROR")
-                                                print(response.content)
-                                    else:
-                                        print("--> DC : OPENSTACK FLOATING IP REQUEST ERROR")
-                                        print(response.content)
-                                else:
-                                    print("--> DC : OPENSTACK SPAWN REQUEST ERROR")
-                                    print(response.content)
+                            #                     print(
+                            #                         "--> DC : OPENSTACK ASSIGNED FLOATING IP REQUEST STARTED")
+                            #                     response = s.post(
+                            #                         f'{settings.OPENSTACK_SERVER_URL}/{dc_server_id}/action', headers=headers, json=json_data)
+                            #                     if (response.status_code in [200, 201, 202]):
+                            #                         print(
+                            #                             "--> DC : OPENSTACK ASSIGNED FLOATING IP REQUEST SUCCESSFUL")
+                            #                     else:
+                            #                         print(
+                            #                             "--> DC : OPENSTACK ASSIGNED FLOATING IP REQUEST ERROR")
+                            #                         print(response.content)
+                            #                 else:
+                            #                     print(
+                            #                         "--> DC : OPENSTACK FLOATING IP REQUEST ERROR")
+                            #                     print(response.content)
+                            #         else:
+                            #             print(
+                            #                 "--> DC : OPENSTACK FLOATING IP REQUEST ERROR")
+                            #             print(response.content)
+                            #     else:
+                            #         print(
+                            #             "--> DC : OPENSTACK SPAWN REQUEST ERROR")
+                            #         print(response.content)
 
                             # TODO :    save flags to local database
                             try:
                                 time.sleep(3)
-                                print("--> SAVE FLAGS FOR CURRENT INSTANCE TO LOAD DB")
-                                response = s.get(f'{settings.OPENSTACK_IMAGE_URL}/{netObj.imageRef}', headers=headers )
+                                print(
+                                    "--> SAVE FLAGS FOR CURRENT INSTANCE TO LOAD DB")
+                                # # New Code
+                                # # generate_flag(netObj.ip_address, )
+                                # response = s.get(
+                                #     f"{settings.OPENSTACK_IMAGE_URL}/{netObj.imageRef}", headers=headers)
+                                # # print(response.json())
+                                # if response.status_code in [200, 201, 202]:
+                                #     for i in response.json():
+                                #         if i[:4].lower() == "user":
+                                #             username, password = tuple(
+                                #                 str(response.json()[i]).split(","))
+                                #             # print(username, password)
+                                #             print(
+                                #                 "--> SAVE FLAGS INTO INSTANCE META-DATA")
+                                #             try:
+                                #                 flag = generate_flag(floating_ip=netObj.server_id, username=username.strip(
+                                #                 ), password=password.strip())
+                                #                 print(flag)
+                                #             except Exception as e:
+                                #                 print(e)
+                                #             # if response.status_code in [200, 201, 202]:
+                                #             #     try:
+                                #             #         flag = generate_flag(floating_ip=netObj.server_id, username=username.strip(
+                                #             #         ), password=password.strip())
+                                #             #         print(flag)
+                                #             #     except Exception as e:
+                                #             #         print(e)
+                                #             #     # try:
+                                #             #     #     netFlag = NetworkFlag.objects.get_or_create(
+                                #             #     #         course=netObj.course,
+                                #             #     #         flag_id=i
+                                #             #     #     )
+                                #             #     #     netFlag[0].original_answer = response.json()[
+                                #             #     #         i]
+                                #             #     #     netFlag[0].points = 50
+                                #             #     #     netFlag[0].imageRef = netObj.imageRef
+                                #             #     #     netFlag[0].save()
+                                #             #     # except Exception as e:
+                                #             #     #     print("--> EXCEPTION OCCURED")
+                                #             #     #     traceback.print_exc()
+                                #             # else:
+                                #             #     print(
+                                #             #         "--> ERROR : SAVE FLAGS FOR CURRENT INSTANCE ")
+                                #             #     print(response.content)
+                                # else:
+                                #     print(
+                                #         "--> SAVE FLAGS FOR CURRENT INSTANCE TO LOAD DB ERROR")
+                                #     print(response.content)
+                                response = s.get(
+                                    f'{settings.OPENSTACK_IMAGE_URL}/{netObj.imageRef}', headers=headers)
                                 if response.status_code in [200, 201, 202]:
                                     for i in response.json():
                                         if i[:4].lower() == "flag":
                                             try:
                                                 netFlag = NetworkFlag.objects.get_or_create(
-                                                    course = netObj.course,
-                                                    flag_id = i
+                                                    course=netObj.course,
+                                                    flag_id=i
                                                 )
-                                                netFlag[0].original_answer = response.json()[i]
+                                                netFlag[0].original_answer = response.json()[
+                                                    i]
                                                 netFlag[0].points = 50
                                                 netFlag[0].imageRef = netObj.imageRef
                                                 netFlag[0].save()
                                             except Exception as e:
                                                 print("--> EXCEPTION OCCURED")
-                                                traceback.print_exc() 
-                                    print("--> SAVE FLAGS FOR CURRENT INSTANCE TO LOAD DB SUCCESSFUL")
+                                                traceback.print_exc()
+                                    print(
+                                        "--> SAVE FLAGS FOR CURRENT INSTANCE TO LOAD DB SUCCESSFUL")
                                 else:
-                                    print("--> SAVE FLAGS FOR CURRENT INSTANCE TO LOAD DB ERROR")
+                                    print(
+                                        "--> SAVE FLAGS FOR CURRENT INSTANCE TO LOAD DB ERROR")
                                     print(response.content)
                             except Exception as e:
                                 print("--> EXCEPTION OCCURED")
-                                traceback.print_exc() 
+                                traceback.print_exc()
                             return JsonResponse(
                                 json.loads(
                                     json.dumps({
-                                        "data" : "Instance has been created successfully"
+                                        "data": "Instance has been created successfully"
                                     })
                                 ),
-                                status =200
+                                status=200
                             )
                         else:
                             print("--> OPENSTACK ASSIGNED FLOATING IP REQUEST ERROR")
                             print(response.content)
-                            if(response.status_code == 400):
+                            if (response.status_code == 400):
                                 return JsonResponse(
                                     json.loads(
                                         json.dumps({
-                                            "error" : str( response.json()["badRequest"]["message"] )
+                                            "error": str(response.json()["badRequest"]["message"])
                                         })
                                     ),
-                                    status =400
-                                )        
+                                    status=400
+                                )
                             else:
                                 return JsonResponse(
                                     json.loads(
                                         json.dumps({
-                                            "error" : str( response.json()["error"]["message"] )
+                                            "error": str(response.json()["error"]["message"])
                                         })
                                     ),
-                                    status =400
+                                    status=400
                                 )
                     else:
                         print("--> OPENSTACK CREATE NEW FLOATING IP REQUEST START")
-                        json_data={
+                        json_data = {
                             "pool": settings.OPENSTACK_NETWORK_POOL
                         }
-                        response  =s.post(settings.OPENSTACK_FLOATING_IP_URL, headers=headers , json=json_data)
+                        response = s.post(
+                            settings.OPENSTACK_FLOATING_IP_URL, headers=headers, json=json_data)
                         if response.status_code in [200, 201, 202]:
                             # print("--> OPENSTACK CREATE NEW FLOATING IP REQUEST SUCCESSFUL")
-                            netObj.ip_address = response.json()["floating_ip"]["ip"]
+                            netObj.ip_address = response.json()[
+                                "floating_ip"]["ip"]
                             netObj.save()
                             json_data = {
-                                "addFloatingIp" : {
+                                "addFloatingIp": {
                                     "address": response.json()["floating_ip"]["ip"]
                                 }
                             }
                             # TODO :    extra time to request
                             time.sleep(10)
 
-                            print("--> OPENSTACK ASSIGNED FLOATING IP REQUEST STARTED")
-                            response = s.post(f'{settings.OPENSTACK_SERVER_URL}/{netObj.server_id}/action', headers=headers , json=json_data)
+                            print(
+                                "--> OPENSTACK ASSIGNED FLOATING IP REQUEST STARTED")
+                            response = s.post(
+                                f'{settings.OPENSTACK_SERVER_URL}/{netObj.server_id}/action', headers=headers, json=json_data)
                             if (response.status_code in [200, 201, 202]):
-                                print("--> OPENSTACK ASSIGNED FLOATING IP REQUEST SUCCESSFUL")
+                                print(
+                                    "--> OPENSTACK ASSIGNED FLOATING IP REQUEST SUCCESSFUL")
                                 netObj.is_instance_created = True
                                 netObj.save()
 
                                 # TODO :    extra time to request
                                 # time.sleep(15)
 
-                                # TODO : Spawn DC
-                                if settings.IS_SPAWN_DC is True:
-                                    json_data={
-                                        "server": {
-                                            "name": f"{netObj.name} DC",
-                                            "imageRef": settings.OPENSTACK_DC_UUID,
-                                            "flavorRef": settings.OPENSTACK_FLAVOR_URL,
-                                            "networks": [{
-                                                "uuid" : settings.OPENSTACK_NETWORK_UUID
-                                            }]
-                                        }
-                                    }
-                                    print("--> DC : OPENSTACK SPAWN REQUEST STARTED")
-                                    response = s.post(settings.OPENSTACK_SERVER_URL, headers=headers , json=json_data)
-                                    if response.status_code in [200, 201, 202]:
-                                        print("--> DC : OPENSTACK SPAWN REQUEST SUCCESSFUL")
-                                        dc_server_id = response.json()["server"]["id"]
+                                # # TODO : Spawn DC
+                                # if settings.IS_SPAWN_DC is True:
+                                #     json_data = {
+                                #         "server": {
+                                #             "name": f"{netObj.name} DC",
+                                #             "imageRef": settings.OPENSTACK_DC_UUID,
+                                #             "flavorRef": settings.OPENSTACK_FLAVOR_URL,
+                                #             "networks": [{
+                                #                 "uuid": settings.OPENSTACK_NETWORK_UUID
+                                #             }]
+                                #         }
+                                #     }
+                                #     print(
+                                #         "--> DC : OPENSTACK SPAWN REQUEST STARTED")
+                                #     response = s.post(
+                                #         settings.OPENSTACK_SERVER_URL, headers=headers, json=json_data)
+                                #     if response.status_code in [200, 201, 202]:
+                                #         print(
+                                #             "--> DC : OPENSTACK SPAWN REQUEST SUCCESSFUL")
+                                #         dc_server_id = response.json()[
+                                #             "server"]["id"]
 
-                                        print("--> DC : OPENSTACK FLOATING IP REQUEST STARTED")
-                                        response = s.get(settings.OPENSTACK_FLOATING_IP_URL, headers=headers)
-                                        if response.status_code in [200, 201, 202]:
-                                            floating_ip = None
-                                            for i in response.json()['floating_ips']:
-                                                if i["instance_id"] == None and i["pool"] == settings.OPENSTACK_NETWORK_POOL:  
-                                                    floating_ip = i["ip"]
-                                                    break
-                                            if floating_ip:
-                                                print("--> DC : OPENSTACK FLOATING IP ALREADY EXISTS")
-                                                # TODO :    extra time to request
-                                                # time.sleep(10)
-                                                print("--> DC : OPENSTACK ASSIGNED FLOATING IP  STARTED")
-                                                json_data = {
-                                                    "addFloatingIp" : {
-                                                        "address": floating_ip
-                                                    }
-                                                }
-                                                response = s.post(f'{settings.OPENSTACK_SERVER_URL}/{dc_server_id}/action', headers=headers , json=json_data)
-                                                if (response.status_code in [200, 201, 202]):
-                                                    print("--> DC : OPENSTACK ASSIGNED FLOATING IP REQUEST SUCCESSFUL")
-                                                else:
-                                                    print("--> DC : OPENSTACK ASSIGNED FLOATING IP REQUEST ERROR")
-                                                    print(response.content)
-                                            else:
-                                                print("--> DC : OPENSTACK CREATE NEW FLOATING IP REQUEST STARTED")
-                                                json_data={
-                                                    "pool": settings.OPENSTACK_NETWORK_POOL
-                                                }
-                                                response  =s.post(settings.OPENSTACK_FLOATING_IP_URL, headers=headers , json=json_data)
+                                #         print(
+                                #             "--> DC : OPENSTACK FLOATING IP REQUEST STARTED")
+                                #         response = s.get(
+                                #             settings.OPENSTACK_FLOATING_IP_URL, headers=headers)
+                                #         if response.status_code in [200, 201, 202]:
+                                #             floating_ip = None
+                                #             for i in response.json()['floating_ips']:
+                                #                 if i["instance_id"] == None and i["pool"] == settings.OPENSTACK_NETWORK_POOL:
+                                #                     floating_ip = i["ip"]
+                                #                     break
+                                #             if floating_ip:
+                                #                 print(
+                                #                     "--> DC : OPENSTACK FLOATING IP ALREADY EXISTS")
+                                #                 # TODO :    extra time to request
+                                #                 # time.sleep(10)
+                                #                 print(
+                                #                     "--> DC : OPENSTACK ASSIGNED FLOATING IP  STARTED")
+                                #                 json_data = {
+                                #                     "addFloatingIp": {
+                                #                         "address": floating_ip
+                                #                     }
+                                #                 }
+                                #                 response = s.post(
+                                #                     f'{settings.OPENSTACK_SERVER_URL}/{dc_server_id}/action', headers=headers, json=json_data)
+                                #                 if (response.status_code in [200, 201, 202]):
+                                #                     print(
+                                #                         "--> DC : OPENSTACK ASSIGNED FLOATING IP REQUEST SUCCESSFUL")
+                                #                 else:
+                                #                     print(
+                                #                         "--> DC : OPENSTACK ASSIGNED FLOATING IP REQUEST ERROR")
+                                #                     print(response.content)
+                                #             else:
+                                #                 print(
+                                #                     "--> DC : OPENSTACK CREATE NEW FLOATING IP REQUEST STARTED")
+                                #                 json_data = {
+                                #                     "pool": settings.OPENSTACK_NETWORK_POOL
+                                #                 }
+                                #                 response = s.post(
+                                #                     settings.OPENSTACK_FLOATING_IP_URL, headers=headers, json=json_data)
 
-                                                # TODO :    extra time to request
-                                                # time.sleep(15)
+                                #                 # TODO :    extra time to request
+                                #                 # time.sleep(15)
 
-                                                if response.status_code in [200, 201, 202]:
-                                                    print("--> DC : OPENSTACK CREATE NEW FLOATING IP REQUEST SUCCESSFUL")
-                                                    json_data = {
-                                                        "addFloatingIp" : {
-                                                            "address": response.json()["floating_ip"]["ip"]
-                                                        }
-                                                    }
+                                #                 if response.status_code in [200, 201, 202]:
+                                #                     print(
+                                #                         "--> DC : OPENSTACK CREATE NEW FLOATING IP REQUEST SUCCESSFUL")
+                                #                     json_data = {
+                                #                         "addFloatingIp": {
+                                #                             "address": response.json()["floating_ip"]["ip"]
+                                #                         }
+                                #                     }
 
-                                                    # TODO :    extra time to request
-                                                    time.sleep(10)
+                                #                     # TODO :    extra time to request
+                                #                     time.sleep(10)
 
-                                                    print("--> DC : OPENSTACK ASSIGNED FLOATING IP REQUEST STARTED")
-                                                    response = s.post(f'{settings.OPENSTACK_SERVER_URL}/{dc_server_id}/action', headers=headers , json=json_data)
-                                                    if (response.status_code in [200, 201, 202]):
-                                                        print("--> DC : OPENSTACK ASSIGNED FLOATING IP REQUEST SUCCESSFUL")
-                                                    else:
-                                                        print("--> DC : OPENSTACK ASSIGNED FLOATING IP REQUEST ERROR")
-                                                        print(response.content)
-                                                else:
-                                                    print("--> DC : OPENSTACK CREATE NEW FLOATING IP REQUEST ERROR")
-                                                    print(response.content)
-                                        else:
-                                            print("--> DC : OPENSTACK FLOATING IP REQUEST ERROR")
-                                            print(response.content)
-                                    else:
-                                        print("--> DC : OPENSTACK SPAWN REQUEST ERROR")
-                                        print(response.content)
+                                #                     print(
+                                #                         "--> DC : OPENSTACK ASSIGNED FLOATING IP REQUEST STARTED")
+                                #                     response = s.post(
+                                #                         f'{settings.OPENSTACK_SERVER_URL}/{dc_server_id}/action', headers=headers, json=json_data)
+                                #                     if (response.status_code in [200, 201, 202]):
+                                #                         print(
+                                #                             "--> DC : OPENSTACK ASSIGNED FLOATING IP REQUEST SUCCESSFUL")
+                                #                     else:
+                                #                         print(
+                                #                             "--> DC : OPENSTACK ASSIGNED FLOATING IP REQUEST ERROR")
+                                #                         print(response.content)
+                                #                 else:
+                                #                     print(
+                                #                         "--> DC : OPENSTACK CREATE NEW FLOATING IP REQUEST ERROR")
+                                #                     print(response.content)
+                                #         else:
+                                #             print(
+                                #                 "--> DC : OPENSTACK FLOATING IP REQUEST ERROR")
+                                #             print(response.content)
+                                #     else:
+                                #         print(
+                                #             "--> DC : OPENSTACK SPAWN REQUEST ERROR")
+                                #         print(response.content)
 
-                                
-                                    
-                                    
-                                    # TODO :    save flags to local database
-                                    try:
-                                        time.sleep(3)
-                                        print("--> SAVE FLAGS FOR CURRENT INSTANCE TO LOAD DB")
-                                        response = s.get(f'{settings.OPENSTACK_IMAGE_URL}/{netObj.imageRef}', headers=headers )
-                                        if response.status_code in [200, 201, 202]:
-                                            for i in response.json():
-                                                if i[:4].lower() == "flag":
-                                                    try:
-                                                        netFlag = NetworkFlag.objects.get_or_create(
-                                                            course = netObj.course,
-                                                            flag_id = i
-                                                        )
-                                                        netFlag[0].original_answer = response.json()[i]
-                                                        netFlag[0].points = 50
-                                                        netFlag[0].imageRef = netObj.imageRef
-                                                        netFlag[0].save()
-                                                    except Exception as e:
-                                                        print("--> EXCEPTION OCCURED")
-                                                        traceback.print_exc() 
-                                            print("--> SAVE FLAGS FOR CURRENT INSTANCE TO LOAD DB SUCCESSFUL")
-                                        else:
-                                            print("--> SAVE FLAGS FOR CURRENT INSTANCE TO LOAD DB ERROR")
-                                            print(response.content)
-                                    except Exception as e:
-                                        print("--> EXCEPTION OCCURED")
-                                        traceback.print_exc() 
-                                    return JsonResponse(
-                                        json.loads(
-                                            json.dumps({
-                                                "data" : "Instance has been created successfully"
-                                            })
-                                        ),
-                                        status =200
-                                    )
-                            
+                                #     # TODO :    save flags to local database
+                                #     try:
+                                #         time.sleep(3)
+                                #         print(
+                                #             "--> SAVE FLAGS FOR CURRENT INSTANCE TO LOAD DB")
+                                #         response = s.get(
+                                #             f'{settings.OPENSTACK_IMAGE_URL}/{netObj.imageRef}', headers=headers)
+                                #         if response.status_code in [200, 201, 202]:
+                                #             for i in response.json():
+                                #                 if i[:4].lower() == "flag":
+                                #                     try:
+                                #                         netFlag = NetworkFlag.objects.get_or_create(
+                                #                             course=netObj.course,
+                                #                             flag_id=i
+                                #                         )
+                                #                         netFlag[0].original_answer = response.json()[
+                                #                             i]
+                                #                         netFlag[0].points = 50
+                                #                         netFlag[0].imageRef = netObj.imageRef
+                                #                         netFlag[0].save()
+                                #                     except Exception as e:
+                                #                         print(
+                                #                             "--> EXCEPTION OCCURED")
+                                #                         traceback.print_exc()
+                                #             print(
+                                #                 "--> SAVE FLAGS FOR CURRENT INSTANCE TO LOAD DB SUCCESSFUL")
+                                #         else:
+                                #             print(
+                                #                 "--> SAVE FLAGS FOR CURRENT INSTANCE TO LOAD DB ERROR")
+                                #             print(response.content)
+                                #     except Exception as e:
+                                #         print("--> EXCEPTION OCCURED")
+                                #         traceback.print_exc()
+                                #     return JsonResponse(
+                                #         json.loads(
+                                #             json.dumps({
+                                #                 "data": "Instance has been created successfully"
+                                #             })
+                                #         ),
+                                #         status=200
+                                #     )
+
                                 # TODO :    save flags to local database
                                 try:
                                     time.sleep(3)
-                                    print("--> SAVE FLAGS FOR CURRENT INSTANCE TO LOAD DB")
-                                    response = s.get(f'{settings.OPENSTACK_IMAGE_URL}/{netObj.imageRef}', headers=headers )
+                                    print(
+                                        "--> SAVE FLAGS FOR CURRENT INSTANCE TO LOAD DB")
+                                    # New Code
+                                    # # generate_flag(netObj.ip_address, )
+                                    # response = s.get(
+                                    #     f"{settings.OPENSTACK_IMAGE_URL}/{netObj.imageRef}", headers=headers)
+                                    # print(response.json())
+                                    # if response.status_code in [200, 201, 202]:
+                                    #     for i in response.json():
+                                    #         if i[:4].lower() == "user":
+                                    #             username, password = tuple(
+                                    #                 str(response.json()[i]).split(","))
+                                    #             print(
+                                    #                 "--> SAVE FLAGS INTO INSTANCE META-DATA")
+                                    #             try:
+                                    #                 flag = generate_flag(floating_ip=netObj.server_id, username=username.strip(
+                                    #                 ), password=password.strip())
+                                    #                 print(flag)
+                                    #             except Exception as e:
+                                    #                 print(e)
+                                    #             # if response.status_code in [200, 201, 202]:
+                                    #             #     try:
+                                    #             #         flag = generate_flag(floating_ip=netObj.server_id, username=username.strip(
+                                    #             #         ), password=password.strip())
+                                    #             #         print(flag)
+                                    #             #     except Exception as e:
+                                    #             #         print(e)
+                                    #             #     # try:
+                                    #             #     #     netFlag = NetworkFlag.objects.get_or_create(
+                                    #             #     #         course=netObj.course,
+                                    #             #     #         flag_id=i
+                                    #             #     #     )
+                                    #             #     #     netFlag[0].original_answer = response.json()[
+                                    #             #     #         i]
+                                    #             #     #     netFlag[0].points = 50
+                                    #             #     #     netFlag[0].imageRef = netObj.imageRef
+                                    #             #     #     netFlag[0].save()
+                                    #             #     # except Exception as e:
+                                    #             #     #     print("--> EXCEPTION OCCURED")
+                                    #             #     #     traceback.print_exc()
+                                    #             # else:
+                                    #             #     print(
+                                    #             #         "--> ERROR : SAVE FLAGS FOR CURRENT INSTANCE ")
+                                    #             #     print(response.content)
+                                    # else:
+                                    #     print(
+                                    #         "--> SAVE FLAGS FOR CURRENT INSTANCE TO LOAD DB ERROR")
+                                    #     print(response.content)
+                                    response = s.get(
+                                        f'{settings.OPENSTACK_IMAGE_URL}/{netObj.imageRef}', headers=headers)
                                     if response.status_code in [200, 201, 202]:
                                         for i in response.json():
                                             if i[:4].lower() == "flag":
                                                 try:
                                                     netFlag = NetworkFlag.objects.get_or_create(
-                                                        course = netObj.course,
-                                                        flag_id = i
+                                                        course=netObj.course,
+                                                        flag_id=i
                                                     )
-                                                    netFlag[0].original_answer = response.json()[i]
+                                                    netFlag[0].original_answer = response.json()[
+                                                        i]
                                                     netFlag[0].points = 50
                                                     netFlag[0].imageRef = netObj.imageRef
                                                     netFlag[0].save()
                                                 except Exception as e:
-                                                    print("--> EXCEPTION OCCURED")
-                                                    traceback.print_exc() 
-                                        print("--> SAVE FLAGS FOR CURRENT INSTANCE TO LOAD DB SUCCESSFUL")
+                                                    print(
+                                                        "--> EXCEPTION OCCURED")
+                                                    traceback.print_exc()
+                                        print(
+                                            "--> SAVE FLAGS FOR CURRENT INSTANCE TO LOAD DB SUCCESSFUL")
                                     else:
-                                        print("--> SAVE FLAGS FOR CURRENT INSTANCE TO LOAD DB ERROR")
+                                        print(
+                                            "--> SAVE FLAGS FOR CURRENT INSTANCE TO LOAD DB ERROR")
                                         print(response.content)
                                 except Exception as e:
                                     print("--> EXCEPTION OCCURED")
-                                    traceback.print_exc() 
+                                    traceback.print_exc()
                                 return JsonResponse(
                                     json.loads(
                                         json.dumps({
-                                            "data" : "Instance has been created successfully"
+                                            "data": "Instance has been created successfully"
                                         })
                                     ),
-                                    status =200
+                                    status=200
                                 )
-                            
+
                             else:
-                                print("--> OPENSTACK ASSIGNED FLOATING IP REQUEST ERROR")
+                                print(
+                                    "--> OPENSTACK ASSIGNED FLOATING IP REQUEST ERROR")
                                 print(response.content)
                                 if response.status_code == 400:
                                     return JsonResponse(
                                         json.loads(
                                             json.dumps({
-                                                "error" : str( response.json()["badRequest"]["message"] )
+                                                "error": str(response.json()["badRequest"]["message"])
                                             })
                                         ),
-                                        status =400
+                                        status=400
                                     )
                                 else:
                                     return JsonResponse(
                                         json.loads(
                                             json.dumps({
-                                                "error" : str( response.json()["error"]["message"] )
+                                                "error": str(response.json()["error"]["message"])
                                             })
                                         ),
-                                        status =400
+                                        status=400
                                     )
 
                         else:
@@ -1335,10 +1518,10 @@ def AdminCreateNetworkInstance(request, vn_id):
                             return JsonResponse(
                                 json.loads(
                                     json.dumps({
-                                        "error" : str( response.json()["error"]["message"] )
+                                        "error": str(response.json()["error"]["message"])
                                     })
                                 ),
-                                status =400
+                                status=400
                             )
                 else:
                     print("--> OPENSTACK FLOATING IP REQUEST ERROR")
@@ -1346,10 +1529,10 @@ def AdminCreateNetworkInstance(request, vn_id):
                     return JsonResponse(
                         json.loads(
                             json.dumps({
-                                "error" : str( response.json()["error"]["message"] )
+                                "error": str(response.json()["error"]["message"])
                             })
                         ),
-                        status =400
+                        status=400
                     )
             else:
                 print("--> OPENSTACK CREATE NEW SERVER INSTANCE REQUEST ERROR")
@@ -1357,10 +1540,10 @@ def AdminCreateNetworkInstance(request, vn_id):
                 return JsonResponse(
                     json.loads(
                         json.dumps({
-                            "error" : str(response.json()["error"]["message"])
+                            "error": str(response.json()["error"]["message"])
                         })
                     ),
-                    status =400
+                    status=400
                 )
         else:
             print("--> OPENSTACK AUTHENTICATION ERROR")
@@ -1369,21 +1552,21 @@ def AdminCreateNetworkInstance(request, vn_id):
                 json.loads(
                     json.dumps({
 
-                        "error" : str( response.json()["error"]["message"] )
+                        "error": str(response.json()["error"]["message"])
                     })
                 ),
-                status =400
+                status=400
             )
     except Exception as e:
         print("--> EXCEPTION OCCURED")
-        traceback.print_exc() 
+        traceback.print_exc()
         return JsonResponse(
             json.loads(
                 json.dumps({
-                    "error" : str(e)
+                    "error": str(e)
                 })
             ),
-            status =400
+            status=400
         )
 
 
@@ -1404,37 +1587,37 @@ def AdminInstructorsList(request):
 @teacher_required
 def InstructorDashboard(request):
     template_name = 'master_app/instructor/dashboard.html'
-        
+
     # # TODO  :   Retrieve All Instructors
     # instructors = User.objects.filter(is_instructor = True)
-    
+
     # TODO  :   Retrieve All Courses
-    courses = Course.objects.filter(instructor__id = request.user.id).order_by("-created_timestamp")
+    courses = Course.objects.filter(
+        instructor__id=request.user.id).order_by("-created_timestamp")
     # print(courses)
 
     # TODO  :   Retrieve All Students to that instructor
-    students=[]
+    students = []
     for course in courses:
         for student in course.assignedstudents_set.all():
             students.append(student.student)
 
-
     # TODO  :   Retrieve All Local Virutal Networks to that instructor
-    networks=[]
+    networks = []
     for course in courses:
         for network in course.virtualnetwork_set.all():
             networks.append(network)
 
     # print(networks)
 
-    # TODO  :   Recent Acitivty 
+    # TODO  :   Recent Acitivty
     # entries = LogEntry.objects.all()
-    
+
     context = {
         # "instructors"  : instructors,
-        "students" : students,
-        "courses" : courses,
-        "networks" : networks,
+        "students": students,
+        "courses": courses,
+        "networks": networks,
         # "entries" : entries
     }
     return render(request, template_name, context)
@@ -1456,7 +1639,8 @@ def CoursesList(request):
     template_name = 'master_app/instructor/courses_list.html'
 
     # TODO : Retrieve All Instructor Courses
-    all_courses = Course.objects.filter(instructor=request.user).order_by("-id")
+    all_courses = Course.objects.filter(
+        instructor=request.user).order_by("-id")
 
     # print(all_courses)
     context = {
@@ -1465,14 +1649,13 @@ def CoursesList(request):
     return render(request, template_name, context)
 
 
-
 # TODO  :   Instructor Students Lists
 @login_required
 @teacher_required
 def StudentList(request):
     template_name = 'master_app/instructor/student_list.html'
     # TODO  :   Retrieve All Instructor Courses
-    all_students = User.objects.filter(is_student = True)
+    all_students = User.objects.filter(is_student=True)
     # all_courses = Course.objects.filter(instructor=request.user)
 
     # TODO  :   Retrieve All Students
@@ -1489,12 +1672,12 @@ def StudentList(request):
 @login_required
 @teacher_required
 def InstructorCreateStudent(request):
-    template_name="master_app/instructor/student_create.html"
-    if request.method!='POST':
-            form = registerForm()
+    template_name = "master_app/instructor/student_create.html"
+    if request.method != 'POST':
+        form = registerForm()
     else:
         form = registerForm(request.POST)
-        if form.is_valid() :
+        if form.is_valid():
             user = form.save(commit=False)
             user.is_active = True
             user.is_student = True
@@ -1504,8 +1687,8 @@ def InstructorCreateStudent(request):
             user.save()
             messages.success(request, "New Student has been created")
             return redirect(reverse("students-all-url"))
-    context={
-        'form' : form
+    context = {
+        'form': form
     }
     return render(request, template_name, context)
 
@@ -1516,7 +1699,7 @@ def InstructorCreateStudent(request):
 def CreateCourse(request):
     template_name = 'master_app/instructor/create_course.html'
     if request.method == "POST":
-        form = CreateCourseForm(request.POST ,  request.FILES)
+        form = CreateCourseForm(request.POST,  request.FILES)
         if form.is_valid():
             new_course = form.save(commit=False)
             new_course.instructor = request.user
@@ -1552,15 +1735,17 @@ def InstructorCreateNewChallenge(request):
     return render(request, template_name, context)
 
 # TODO  :   Instructor Course Details
+
+
 @login_required
 @teacher_required
 def InstructorCourseDetails(request, course_id):
     template_name = 'master_app/instructor/courseDetails.html'
     try:
         course = Course.objects.get(id=course_id)
-        easy_challenges = course.coursechallenge_set.filter(levels=1)
-        medium_challenges = course.coursechallenge_set.filter(levels=2)
-        hard_challenges = course.coursechallenge_set.filter(levels=3)
+        # easy_challenges = course.coursechallenge_set.filter(levels=1)
+        # medium_challenges = course.coursechallenge_set.filter(levels=2)
+        # hard_challenges = course.coursechallenge_set.filter(levels=3)
         students = course.assignedstudents_set.all()
     except Course.DoesNotExist:
         messages.error(request, "Invalid Course URL")
@@ -1572,14 +1757,14 @@ def InstructorCourseDetails(request, course_id):
 
     context = {
         "course": course,
-        "easy_challenges": easy_challenges,
-        "medium_challenges": medium_challenges,
-        "hard_challenges": hard_challenges,
         "students": students,
         "form":  NewVirtualNetworkForm(),
         "form_2":  AddNewStudent(),
-        "WAZUH_SERVER_PUBLIC_IP" : settings.WAZUH_SERVER_PUBLIC_IP,
-        "DC_IP_ADDRESS" : settings.DC_IP_ADDRESS
+        # "easy_challenges": easy_challenges,
+        # "medium_challenges": medium_challenges,
+        # "hard_challenges": hard_challenges,
+        # "WAZUH_SERVER_PUBLIC_IP": settings.WAZUH_SERVER_PUBLIC_IP,
+        # "DC_IP_ADDRESS": settings.DC_IP_ADDRESS
     }
     return render(request, template_name, context)
 
@@ -1647,42 +1832,72 @@ def InstructorApproveCourse(request, course_id):
     #     )
 
 
-# TODO  :   Instructor Virutal Networks Create New
+# TODO :    Instructor Remove Student
+@login_required
+@teacher_required
+def InstructorRemoveStudent(request, student_id):
+    if request.method == "GET":
+        # TODO  :   Retrieve Course BY ID
+        # course = Course.objects.get(id=course_id)
+        # print(course)
+
+        # TODO  :   Retrieve Student
+        AssignedStudents.objects.get(id=student_id).delete()
+        return JsonResponse(
+            json.loads(
+                json.dumps({
+                    "text": "Valid method"
+                })
+            ),
+            status=200
+        )
+
+    else:
+        return JsonResponse(
+            json.loads(
+                json.dumps({
+                    "error": "Invalid request method"
+                })
+            ),
+            status=400
+        )
+
+
 @login_required
 @teacher_required
 def InstructorVirturalNetworkNew(request):
     # print(request.POST)
-    if request.method == "POST" :
+    if request.method == "POST":
         form = NewVirtualNetworkForm(request.POST)
         if form.is_valid():
             form.save()
             return JsonResponse(
                 json.loads(
                     json.dumps({
-                        "text" : "Valid method"
+                        "text": "Valid method"
                     })
                 ),
-                status =200
+                status=200
             )
         else:
             # print(form.errors)
             return JsonResponse(
-            json.loads(
-                json.dumps({
-                    "error" : json.dumps(form.errors)
-                })
-            ),
-            status =400
-        )
-        
+                json.loads(
+                    json.dumps({
+                        "error": json.dumps(form.errors)
+                    })
+                ),
+                status=400
+            )
+
     else:
         return JsonResponse(
             json.loads(
                 json.dumps({
-                    "error" : "Invalid request method"
+                    "error": "Invalid request method"
                 })
             ),
-            status =400
+            status=400
         )
     # ===========================
     # Oiginal code
@@ -1744,47 +1959,48 @@ def InstructorMachineDetail(request, vn_id):
 @teacher_required
 def AddNewStudents(request):
     try:
-        if request.method == "POST" :
+        if request.method == "POST":
             # print(request.POST)
             form = AddNewStudent(request.POST)
             if form.is_valid():
                 form.save()
+                # print(form.__dict__["instance"].id)
                 return JsonResponse(
                     json.loads(
                         json.dumps({
-                            "text" : "New Student has been added",
-                            "next" : request.POST.get("next", None)
+                            "obj": form.__dict__["instance"].id,
+                            "next": request.POST.get("next", None)
                         })
                     ),
-                    status = 200
+                    status=200
                 )
             else:
                 return JsonResponse(
-                json.loads(
-                    json.dumps({
-                        "error" : json.dumps(form.errors)
-                    })
-                ),
-                status = 400
-            )
+                    json.loads(
+                        json.dumps({
+                            "error": json.dumps(form.errors)
+                        })
+                    ),
+                    status=400
+                )
         else:
             return JsonResponse(
                 json.loads(
                     json.dumps({
-                        "error" : "Invalid request"
+                        "error": "Invalid request"
                     })
                 ),
-                status = 400
+                status=400
             )
-    except :
+    except:
         traceback.print_exc()
         return JsonResponse(
             json.loads(
                 json.dumps({
-                    "error" : "Invalid request"
+                    "error": "Invalid request"
                 })
             ),
-            status = 500
+            status=500
         )
 
 
@@ -1793,19 +2009,20 @@ def AddNewStudents(request):
 @student_required
 def StudentDashboard(request):
     template_name = 'master_app/student/dashboard.html'
-    
-    # TODO  :   Retrieve All Courses Active 
-    courses = [x for x in AssignedStudents.objects.filter(student__id = request.user.id).order_by("-created_timestamp") if x.course.is_course_approved()]
+
+    # TODO  :   Retrieve All Courses Active
+    courses = [x for x in AssignedStudents.objects.filter(student__id=request.user.id).order_by(
+        "-created_timestamp") if x.course.is_course_approved()]
 
     # TODO  :   Retrieve All Local Virutal Networks to that student
-    networks=[]
+    networks = []
     for course in courses:
         for network in course.course.virtualnetwork_set.all():
             networks.append(network)
-    
+
     context = {
-        "courses" : courses,
-        "networks" : networks,
+        "courses": courses,
+        "networks": networks,
     }
     return render(request, template_name, context)
 
@@ -1817,11 +2034,11 @@ def StudentCourses(request):
     template_name = 'master_app/student/courseList.html'
     courses = AssignedStudents.objects.filter(
         student__id=request.user.id
-        ).filter(
-            course__is_approved="3"
-        ).order_by(
-            '-id'
-        )
+    ).filter(
+        course__is_approved="3"
+    ).order_by(
+        '-id'
+    )
     # print(courses)
 
     context = {
@@ -1850,8 +2067,8 @@ def StudentCourseDetails(request, course_id):
         "easy_challenges": easy_challenges,
         "medium_challenges": medium_challenges,
         "hard_challenges": hard_challenges,
-        "wazuh_server_ip" : wazuh_server_ip,
-        "WAZUH_SERVER_PASSWORD" : settings.WAZUH_SERVER_PASSWORD
+        "wazuh_server_ip": wazuh_server_ip,
+        "WAZUH_SERVER_PASSWORD": settings.WAZUH_SERVER_PASSWORD
     }
     return render(request, template_name, context)
 
@@ -2052,26 +2269,22 @@ def StudentCreateNetworkInstance(request):
         )
 
 
-
-
 def StudentFlagSubmission(request):
-    # print(request.POST)
-    customPrint(request.POST)
-    if request.method == "POST" :
+    if request.method == "POST":
         try:
             netFlag = NetworkFlag.objects.get(
-                course__id = request.POST['course_id'],
-                flag_id = request.POST['flag_id']
+                course__id=request.POST['course_id'],
+                flag_id=request.POST['flag_id']
             )
             student = AssignedStudents.objects.get(
-                course__id = request.POST['course_id'],
-                student__id = request.user.id
+                course__id=request.POST['course_id'],
+                student__id=request.user.id
             )
             subObj = NetworkFlagSubmission.objects.get_or_create(
-                student = student,
-                flag_id = netFlag.flag_id
+                student=student,
+                flag_id=netFlag.flag_id
             )
-            if(subObj[0].submit_status != 1):
+            if (subObj[0].submit_status != 1):
                 subObj[0].attemptUsed = subObj[0].attemptUsed + 1
                 subObj[0].submittedAnswer = request.POST.get("flag", None)
                 subObj[0].save()
@@ -2081,76 +2294,78 @@ def StudentFlagSubmission(request):
                     subObj[0].save()
                     try:
                         LogEntry.objects.create(
-                            user = request.user,
+                            user=request.user,
                             action_flag=ADDITION,
                             object_id=request.user.id,
-                            content_type_id=get_content_type_for_model(request.user).pk,
+                            content_type_id=get_content_type_for_model(
+                                request.user).pk,
                             object_repr=force_str(request.user),
-                            change_message = f"{request.user} has successfully submitted flag for {netFlag.course}."
+                            change_message=f"{request.user} has successfully submitted flag for {netFlag.course}."
                         )
                     except Exception as e:
                         print(e)
                     return JsonResponse(
                         json.loads(
                             json.dumps({
-                                "text" : "Flag has been submitted successfully"
+                                "text": "Flag has been submitted successfully"
                             })
                         ),
-                        status =200
+                        status=200
                     )
                 else:
                     try:
                         LogEntry.objects.create(
-                            user = request.user,
+                            user=request.user,
                             action_flag=ADDITION,
                             object_id=request.user.id,
-                            content_type_id=get_content_type_for_model(request.user).pk,
+                            content_type_id=get_content_type_for_model(
+                                request.user).pk,
                             object_repr=force_str(request.user),
-                            change_message = f"{request.user} has submitted wrong flag for {netFlag.course}."
+                            change_message=f"{request.user} has submitted wrong flag for {netFlag.course}."
                         )
                     except Exception as e:
                         print(e)
                     return JsonResponse(
                         json.loads(
                             json.dumps({
-                                "error" : "Wrong Flag Submission"
+                                "error": "Wrong Flag Submission"
                             })
                         ),
-                        status =400
+                        status=400
                     )
             else:
                 return JsonResponse(
                     json.loads(
                         json.dumps({
-                            "error" : "Flag already has been submitted"
+                            "error": "Flag already has been submitted"
                         })
                     ),
-                    status =400
+                    status=400
                 )
         except Exception as e:
             customPrint(e)
             return JsonResponse(
                 json.loads(
                     json.dumps({
-                        "error" : "Invalid Flag Submission."
+                        "error": "Invalid Flag Submission."
                     })
                 ),
-                status =400
+                status=400
             )
     else:
         return JsonResponse(
             json.loads(
                 json.dumps({
-                    "error" : "Invalid request method"
+                    "error": "Invalid request method"
                 })
             ),
-            status =400
+            status=400
         )
 
 # # orignal_code
 # def StudentFlagSubmission(request):
 #     if request.method == "POST" :
-        
+
 #         # print(request.POST)
 
 #         try:
@@ -2184,7 +2399,7 @@ def StudentFlagSubmission(request):
 #                 "domain": { "id": "default" }
 #                 }
 #             }
-                
+
 #             },
 #             }
 
@@ -2196,7 +2411,7 @@ def StudentFlagSubmission(request):
 #                 # print(response.headers["x-subject-token"])
 #                 headers = {
 #                     'X-Auth-Token': f'{response.headers["x-subject-token"]}',
-                    
+
 #                 }
 
 #                 time.sleep(2)
@@ -2233,7 +2448,7 @@ def StudentFlagSubmission(request):
 #                             ),
 #                             status = 400
 #                         )
-                    
+
 #                     elif request.POST.get("Flag 2", None):
 #                         flag_2 = response.json()["Flag 2"]
 #                         # print(flag_2)
@@ -2264,10 +2479,8 @@ def StudentFlagSubmission(request):
 #                         ),
 #                         status = 400
 #                     )
-                
-                            
 
-                    
+
 #                 else:
 #                     return JsonResponse(
 #                     json.loads(
@@ -2296,8 +2509,7 @@ def StudentFlagSubmission(request):
 #             status =400
 #         )
 
-        
-        
+
 #     else:
 #         return JsonResponse(
 #             json.loads(
@@ -2307,7 +2519,6 @@ def StudentFlagSubmission(request):
 #             ),
 #             status =400
 #         )
-
 
 
 def ContactView(request):
@@ -2323,6 +2534,7 @@ def AboutView(request):
     }
     return render(request, template_name, context)
 
+
 @login_required
 def CreateVPN(request):
     try:
@@ -2330,35 +2542,37 @@ def CreateVPN(request):
         exe_path = f"{settings.BASE_DIR / 'openvpngen.sh'}"
         output_path = settings.MEDIA_ROOT / f'{filename}.ovpn'
         try:
-            subprocess.Popen(['sudo', '-S',  exe_path, filename], stdin=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True).communicate(settings.OPENSTACK + '\n')[1]
+            subprocess.Popen(['sudo', '-S',  exe_path, filename], stdin=subprocess.PIPE,
+                             stderr=subprocess.PIPE, universal_newlines=True).communicate(settings.OPENSTACK + '\n')[1]
         except:
             print("="*50)
             traceback.print_exc()
             print("="*50)
-        if request.method == "GET" :
+        if request.method == "GET":
             # TODO  :   Retrieve Current user object
             try:
-                current_user = User.objects.get(id = request.user.id)
+                current_user = User.objects.get(id=request.user.id)
                 if current_user.vpn_file:
                     return JsonResponse(
                         json.loads(
                             json.dumps({
-                                "error" : "Already File Generated."
+                                "error": "Already File Generated."
                             })
                         ),
-                        status =400
+                        status=400
                     )
                 else:
-                    current_user.vpn_file.save(f"{filename}.ovpn", File(open(output_path)))
+                    current_user.vpn_file.save(
+                        f"{filename}.ovpn", File(open(output_path)))
                     if os.path.exists(output_path):
-                       os.remove(output_path)
+                        os.remove(output_path)
                     return JsonResponse(
                         json.loads(
                             json.dumps({
-                                 "text" : "created" 
+                                "text": "created"
                             })
                         ),
-                        status =200
+                        status=200
                     )
             except Exception as e:
                 print("="*50)
@@ -2367,35 +2581,32 @@ def CreateVPN(request):
                 return JsonResponse(
                     json.loads(
                         json.dumps({
-                            "error" : "Please try again after sometime"
+                            "error": "Please try again after sometime"
                         })
                     ),
-                    status =400
+                    status=400
                 )
         else:
             return JsonResponse(
                 json.loads(
                     json.dumps({
-                        "error" : "Invalid request method"
+                        "error": "Invalid request method"
                     })
                 ),
-                status =400
+                status=400
             )
-    except :
+    except:
         print("="*50)
         traceback.print_exc()
         print("="*50)
         return JsonResponse(
             json.loads(
                 json.dumps({
-                    "error" : "Please try again after sometime"
+                    "error": "Please try again after sometime"
                 })
             ),
-            status =400
+            status=400
         )
-
-
-
 
 
 # sudo systemctl daemon-reload

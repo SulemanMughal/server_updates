@@ -1,11 +1,10 @@
+from django.contrib.auth import (
+    authenticate, get_user_model, password_validation,)
+from .models import Course, AssignedStudents, VirtualNetwork, CourseChallenge
 from django import forms
 
 from django.contrib.auth import get_user_model
-User  = get_user_model()
-
-from .models import Course, AssignedStudents, VirtualNetwork, CourseChallenge
-from django.contrib.auth import (
-    authenticate, get_user_model, password_validation,)
+User = get_user_model()
 
 
 # ? User Login Form
@@ -21,23 +20,24 @@ class CreateCourseForm(forms.ModelForm):
     # end_time = forms.DateTimeField()
     class Meta:
         model = Course
-        fields  = [
+        fields = [
             "name",
             "start_time",
             "end_time",
             "description",
-            "course_img"
+            "course_img",
+            "course_type",
         ]
 
 
 class AddNewStudent(forms.ModelForm):
     class Meta:
         model = AssignedStudents
-        fields =  "__all__"
+        fields = "__all__"
 
     def __init__(self, *args, **kwargs):
         super(AddNewStudent, self).__init__(*args, **kwargs)
-        self.fields['student'].queryset = User.objects.filter(is_student = True)
+        self.fields['student'].queryset = User.objects.filter(is_student=True)
 
 
 class NewVirtualNetworkForm(forms.ModelForm):
@@ -47,10 +47,11 @@ class NewVirtualNetworkForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(NewVirtualNetworkForm, self).__init__(*args, **kwargs)
-        excludes = [network.course.id for network in VirtualNetwork.objects.all()]
+        excludes = [
+            network.course.id for network in VirtualNetwork.objects.all()]
         # self.fields['course'].queryset = Course.objects.filter(is_student = True)
-        self.fields['course'].queryset = Course.objects.all().exclude(id__in=excludes)
-
+        self.fields['course'].queryset = Course.objects.all().exclude(
+            id__in=excludes)
 
 
 class CourseApprovalForm(forms.ModelForm):
@@ -69,8 +70,6 @@ class CourseChallengeForm(forms.ModelForm):
     class Meta:
         model = CourseChallenge
         fields = "__all__"
-
-
 
 
 class registerForm(forms.ModelForm):
@@ -92,7 +91,6 @@ class registerForm(forms.ModelForm):
         if self.cleaned_data.get('password') != cd['password2']:
             raise forms.ValidationError("Passwords don't match.")
         return cd['password2']
-
 
     def _post_clean(self):
         super()._post_clean()

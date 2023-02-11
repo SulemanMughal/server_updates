@@ -16,7 +16,7 @@
       {% else %}
         <div class="container-fluid">
           <div class="row justify-content-center">
-            <button class="btn btn-primary py-3  rounded-0" type="button" data-url="{% url 'admin-create-network-instance-url' course.get_virtual_network.id  %}" id="create_network_isntance"  >Activate an instance</button>
+            <button class="btn btn-primary py-3  rounded-0" type="button" data-url="{% url 'admin-create-network-instance-url' course.get_virtual_network.id  %}" id="create_network_isntance"  >Create an instance</button>
           </div>
         </div>
       {% endif %}
@@ -61,10 +61,11 @@
           {% if course.get_virtual_network.is_instance_created %}
             <li class="list-group-item d-flex justify-content-between align-items-start">
               <div class="ms-2 me-auto">
-                <div class="fw-bold">Client IP Address</div>
+                <div class="fw-bold">IP Address</div>
               </div>
               <p class="w-50 text-end">{{ course.get_virtual_network.ip_address }}</p>
             </li>
+            {% comment %}
             <li class="list-group-item d-flex justify-content-between align-items-start">
               <div class="ms-2 me-auto">
                 <div class="fw-bold">Wazuh IP Address</div>
@@ -77,6 +78,7 @@
               </div>
               <p class="w-50 text-end">{{ DC_IP_ADDRESS }}</p>
             </li>
+            {% endcomment %}
           {% endif %}
           <li class="list-group-item d-flex justify-content-between align-items-start">
             <div class="ms-2 me-auto">
@@ -110,7 +112,7 @@
             </div><p class="w-50 text-end">{{ course.get_virtual_network.min_disk }}</p>
           </li>
           
-          <li class="list-group-item text-center" aria-disabled="true"><a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">See Details<i class="fas fa-chevron-right fs-5 ms-3 pt-2"></i></a></li>
+          <li class="list-group-item text-center" aria-disabled="true"><a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">See Instructions<i class="fas fa-chevron-right fs-5 ms-3 pt-2"></i></a></li>
         </ul>
       {% endif %}
     </div>

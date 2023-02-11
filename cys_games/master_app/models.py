@@ -7,12 +7,10 @@ from django.core.exceptions import ValidationError
 from django.urls import reverse
 from django.utils.html import format_html
 
-from .choices import OPERATING_SYSTEM_CHOICES,  SCENARIOS_CATEGORYIES, RATING_CHOICES, CHALLENGE_LEVELS, CHALLENGE_LEVELS_TEXT, OPERATING_SYSTEM_CHOICES_TEXT, SCENARIOS_CATEGORYIES_TEXT, APPROVED_CHOICES, CHALLENGE_SUBMISSION_CHOICES, FLAG_SUBMISSION_CHOICES, USER_TYPE
+from .choices import *
 
 
 User = get_user_model()
-
-
 
 
 class Course(models.Model):
@@ -20,15 +18,17 @@ class Course(models.Model):
     name = models.CharField(max_length=100)
     start_time = models.DateTimeField(auto_now_add=False, default=timezone.now)
     end_time = models.DateTimeField(auto_now_add=False, default=timezone.now)
-    created_timestamp = models.DateTimeField( auto_now_add=True )
+    created_timestamp = models.DateTimeField(auto_now_add=True)
     description = RichTextField()
-    is_approved = models.CharField(max_length=2, choices=APPROVED_CHOICES, default="1")
+    is_approved = models.CharField(
+        max_length=2, choices=APPROVED_CHOICES, default="1")
     points = models.IntegerField(blank=True, null=True, default=60)
     course_img = models.ImageField(blank=True, upload_to="courses/")
-    
+    course_type = models.CharField(max_length=1,
+                                   blank=True, null=True, choices=COURSE_TYPE, default="1")
+
     def __str__(self):
         return self.name
-
 
     def is_course_approved(self):
         if self.is_approved == "3":
@@ -53,13 +53,11 @@ class Course(models.Model):
                 '<span class="badge bg-danger">Rejected</span>'
             )
 
-
     def get_virtual_network(self):
         try:
-            return VirtualNetwork.objects.get(course__id = self.id)
+            return VirtualNetwork.objects.get(course__id=self.id)
         except:
             return None
-
 
     def get_admin_url(self):
         try:
@@ -75,7 +73,7 @@ class Course(models.Model):
 
     def get_student_url(self):
         try:
-            return reverse("student-courses-details-url", args =[self.id])
+            return reverse("student-courses-details-url", args=[self.id])
         except:
             return "#"
 
@@ -113,7 +111,7 @@ class Course(models.Model):
         # ? New Course (About to Start)
         if current_time < start_time:
             return 1
-        
+
         # ? In-Progress Course (Already Course has started)
         elif start_time < current_time < end_time:
             return 2
@@ -125,7 +123,6 @@ class Course(models.Model):
         else:
             return 0
 
-
     def get_network_flags(self):
         try:
             return self.networkflag_set.all()
@@ -136,98 +133,95 @@ class Course(models.Model):
 class AssignedStudents(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     student = models.ForeignKey(User, on_delete=models.CASCADE)
-    created_timestamp = models.DateTimeField( auto_now_add=True)
-    user_type = models.CharField(max_length=2, choices=USER_TYPE, default="1", blank=True)
-
+    created_timestamp = models.DateTimeField(auto_now_add=True)
+    user_type = models.CharField(
+        max_length=2, choices=USER_TYPE, default="1", blank=True)
 
     def __str__(self):
         return "{course} - {student}".format(
-            course = self.course.name,
-            student = self.student.email
+            course=self.course.name,
+            student=self.student.email
         )
 
     def clean(self):
-        
-        if not self.student.is_student :
+
+        if not self.student.is_student:
             raise ValidationError("Only Students are allowed to added.")
 
     class Meta:
         unique_together = ('course', 'student')
 
-
     def get_easy_challenges(self):
-        return self.course.coursechallenge_set.filter(levels = "1")
+        return self.course.coursechallenge_set.filter(levels="1")
 
     def get_medium_challenges(self):
-        return self.course.coursechallenge_set.filter(levels = "2")
+        return self.course.coursechallenge_set.filter(levels="2")
 
     def is_all_easy_challenges_submitted(self):
         for q in self.get_easy_challenges():
             try:
                 if ChallengeSubmission.objects.filter(
-                        challenge__id = q.id,
-                        assinged_student__id = self.id,
-                        status= "SUBMITTED"
-                    ).count() == 0:
+                    challenge__id=q.id,
+                    assinged_student__id=self.id,
+                    status="SUBMITTED"
+                ).count() == 0:
                     return False
             except:
                 return False
         return True
-    
+
     def is_all_medium_challenges_submitted(self):
         for q in self.get_medium_challenges():
             try:
                 if ChallengeSubmission.objects.filter(
-                        challenge__id = q.id,
-                        assinged_student__id = self.id,
-                        status= "SUBMITTED"
-                    ).count() == 0:
+                    challenge__id=q.id,
+                    assinged_student__id=self.id,
+                    status="SUBMITTED"
+                ).count() == 0:
                     return False
             except:
                 return False
         return True
+
 
 class VirtualNetwork(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     description = RichTextField()
-    operating_system = models.CharField(max_length=100, default=1 )
-    scenarios = models.CharField(max_length=200, default="1" ,)
-    rating  = models.CharField(max_length=1 , default="1", choices=RATING_CHOICES, blank=True, null=True)
-    config_file_url = models.URLField(max_length=300 , default="" , blank=True, null=True)
-    
+    operating_system = models.CharField(max_length=100, default=1)
+    scenarios = models.CharField(max_length=200, default="1",)
+    rating = models.CharField(
+        max_length=1, default="1", choices=RATING_CHOICES, blank=True, null=True)
+    config_file_url = models.URLField(
+        max_length=300, default="", blank=True, null=True)
+
     # Set fields by admin at the time of approval
     ip_address = models.GenericIPAddressField(blank=True, null=True)
-    topology_image = models.ImageField(upload_to="topologies/", blank=True, null=True)
-    ssh_file = models.FileField(upload_to="sshFiles/" , blank=True, null=True)
-    instructions = RichTextField(blank = True, null=True, default="")
+    topology_image = models.ImageField(
+        upload_to="topologies/", blank=True, null=True)
+    ssh_file = models.FileField(upload_to="sshFiles/", blank=True, null=True)
+    instructions = RichTextField(blank=True, null=True, default="")
 
-    is_instance_created = models.BooleanField(default=False, blank=True, null=True)
+    is_instance_created = models.BooleanField(
+        default=False, blank=True, null=True)
 
-
-    imageRef = models.CharField(max_length=200 , blank=True, null=True)
-    size = models.CharField(max_length=200 , blank=True, null=True)
-    status = models.CharField(max_length=200 , blank=True, null=True)
-    state = models.CharField(max_length=200 , blank=True, null=True)
-    min_ram = models.CharField(max_length=200 , blank=True, null=True)
-    min_disk = models.CharField(max_length=200 , blank=True, null=True)
+    imageRef = models.CharField(max_length=200, blank=True, null=True)
+    size = models.CharField(max_length=200, blank=True, null=True)
+    status = models.CharField(max_length=200, blank=True, null=True)
+    state = models.CharField(max_length=200, blank=True, null=True)
+    min_ram = models.CharField(max_length=200, blank=True, null=True)
+    min_disk = models.CharField(max_length=200, blank=True, null=True)
 
     server_id = models.CharField(max_length=200, blank=True, null=True)
-    
-    
-    
-    
-    
 
     def clean(self):
         if self.pk is None:
-            if self.course.get_virtual_network() :
-                raise ValidationError("Virtual Network already exists for this course.")
-
+            if self.course.get_virtual_network():
+                raise ValidationError(
+                    "Virtual Network already exists for this course.")
 
     def __str__(self):
         return self.name
-
 
     def get_operating_system(self):
         try:
@@ -241,25 +235,22 @@ class VirtualNetwork(models.Model):
         except:
             return self.scenarios
 
-
     def instructor_network_url(self):
         try:
             return reverse("instructor-machine-detail-url", args=[self.id])
         except:
             return "#"
-    
-    
+
     def student_network_url(self):
         try:
             return reverse("student-machine-detail-url", args=[self.id])
-        except :
+        except:
             return "#"
-
 
     def admin_network_url(self):
         try:
             return reverse("admin-machine-detail-url", args=[self.id])
-        except :
+        except:
             return "#"
 
     # def network_url(self):
@@ -285,26 +276,22 @@ class VirtualNetwork(models.Model):
     #             return "#"
     #     except :
     #         return "#"
-        
-
-
-        
-
 
 
 class CourseChallenge(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     description = RichTextField()
-    levels = models.CharField(max_length=1, default="1", choices=CHALLENGE_LEVELS)
+    levels = models.CharField(
+        max_length=1, default="1", choices=CHALLENGE_LEVELS)
     points = models.IntegerField(blank=True, default=50)
-    original_flag = models.CharField(max_length=200, blank=True, null=True, default="")
-    
+    original_flag = models.CharField(
+        max_length=200, blank=True, null=True, default="")
 
     def __str__(self):
         return "{course} : {title}".format(
-            course = self.course,
-            title = self.title
+            course=self.course,
+            title=self.title
         )
 
     def get_difficulty_level(self):
@@ -315,22 +302,25 @@ class CourseChallenge(models.Model):
 
 
 class ChallengeSubmission(models.Model):
-    assinged_student = models.ForeignKey(AssignedStudents, on_delete=models.CASCADE)
-    challenge = models.ForeignKey(CourseChallenge , on_delete=models.CASCADE)
-    status= models.CharField(max_length=100, choices=CHALLENGE_SUBMISSION_CHOICES, default="PENDING", blank=True, null=True )
-    submitted_answer = models.TextField( max_length=200, blank=True, null=True)
-    obtained_points = models.IntegerField( blank=True, null=True, default=0)
-    timestamp=models.DateTimeField(auto_now_add=True)
+    assinged_student = models.ForeignKey(
+        AssignedStudents, on_delete=models.CASCADE)
+    challenge = models.ForeignKey(CourseChallenge, on_delete=models.CASCADE)
+    status = models.CharField(
+        max_length=100, choices=CHALLENGE_SUBMISSION_CHOICES, default="PENDING", blank=True, null=True)
+    submitted_answer = models.TextField(max_length=200, blank=True, null=True)
+    obtained_points = models.IntegerField(blank=True, null=True, default=0)
+    timestamp = models.DateTimeField(auto_now_add=True)
     attempts = models.IntegerField(blank=True, null=True, default=0)
 
 
 class NetworkFlag(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    flag_id = models.CharField(max_length=50, default="", blank=True, null=True)
-    points = models.IntegerField(default=50 , blank=True, null=True)
-    original_answer = models.CharField(max_length=200, default="" , blank=True, null=True)
+    flag_id = models.CharField(
+        max_length=50, default="", blank=True, null=True)
+    points = models.IntegerField(default=50, blank=True, null=True)
+    original_answer = models.CharField(
+        max_length=200, default="", blank=True, null=True)
     imageRef = models.CharField(max_length=100, blank=True, null=True)
-
 
     def __str__(self):
         return self.flag_id
@@ -339,18 +329,19 @@ class NetworkFlag(models.Model):
         # else:
         #     return "Root Flag"
 
+
 class NetworkFlagSubmission(models.Model):
     student = models.ForeignKey(AssignedStudents, on_delete=models.CASCADE)
-    flag_id = models.CharField(max_length=50, blank=True, null=True, default="")
+    flag_id = models.CharField(
+        max_length=50, blank=True, null=True, default="")
     obtainedPoints = models.IntegerField(default=0, blank=True, null=True)
     submittedAnswer = models.CharField(max_length=100, blank=True, default="")
-    attemptUsed = models.IntegerField(default=0 , blank=True)
-    status = models.CharField(max_length=12, choices=FLAG_SUBMISSION_CHOICES, default="PENDING", blank=True)
-
+    attemptUsed = models.IntegerField(default=0, blank=True)
+    status = models.CharField(
+        max_length=12, choices=FLAG_SUBMISSION_CHOICES, default="PENDING", blank=True)
 
     def __str__(self):
         return f"{self.student}-{self.flag_id}"
-
 
     def submit_status(self):
         if self.status == "SUBMITTED":

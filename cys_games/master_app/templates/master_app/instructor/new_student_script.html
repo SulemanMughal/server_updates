@@ -2,15 +2,33 @@
 <link href="{% static 'assets/vendor/select2/select2.min.css' %}" rel="stylesheet" />
 <script src="{% static 'assets/vendor/select2/select2.min.js' %}"></script>
 
+<style>
+    
 
+i.bi.rotate::before{
+    transition: 0.4s;
+    transform:rotate(90deg);
+    -o-transform:rotate(135deg);
+    -ms-transform:rotate(135deg);
+    -moz-transform:rotate(135deg);
+    -webkit-transform:rotate(135deg);
+    transform:rotate(135deg);
+}
+
+
+i.bi::before{
+    transition: 0.4s;
+    /* transform:rotate(90deg);
+    -o-transform:rotate(135deg);
+    -ms-transform:rotate(135deg);
+    -moz-transform:rotate(135deg);
+    -webkit-transform:rotate(135deg);
+    transform:rotate(135deg); */
+}
+
+</style>
 
 <script>
-
-
-    // $(document).on("click", 'button[data-bs-target="#create_student_modal"]', function(event){
-    //   $("input[name='user_type']").val($(this).attr("data-user-type"));
-    // });
-
     $("button.new_student_entry").on("click", function(event){
       var student_form = `
         <form class="row g-3 needs-validation new_student_entry_form mb-3" novalidate action="{% url 'course-students-new-url' %}" method="POST" id="student_add_form">
@@ -33,6 +51,7 @@
           </div>
         </form>`;
       if($(this).attr("data-user-type") == "1"){
+        $("button.new_student_entry").toggleClass("bg-danger border border-danger").children("i.bi").toggleClass("rotate");
         $("ul.list-2 form.new_student_entry_form").remove();
         if($("form.new_student_entry_form").length > 0){
           $("form.new_student_entry_form").remove();
@@ -84,9 +103,17 @@
             contentType: false,
             timeout: 5000,
             success : function(response){
-
-              
-
+                $("button.new_student_entry").toggleClass("bg-danger border border-danger").children("i.bi").toggleClass("rotate");
+                const selected_student = $("select#id_student option:selected").text();
+                var new_elem = `
+                  <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        ${selected_student}
+                    </div>
+                    <button class="cross btn btn-danger my-0 py-0 bg-transparent border-0 text-danger " data-remodal-target="modal"  data-url="/instructor/course/student/remove/${response["obj"]}" data-student="${selected_student}">
+                        <i class="fa fa-times fa-1x" ></i>
+                    </button>
+                    </li>`                
               
               new Noty({
             //  alert, success, error, warning, info
@@ -178,25 +205,21 @@
             }
         }).show();    
     
-                const selected_student = $("select#id_student option:selected").text();
+                
                 
                 $("form.new_student_entry_form").hide();
                 if($("input[name='user_type']").val() == "1"){
-                  $("ul.list-1").prepend(`<li class="list-group-item">${selected_student}</li>`); 
+                  $("ul.list-1").prepend(new_elem); 
                 }
                 else if($("input[name='user_type']").val() == "2"){
-                  $("ul.list-2").prepend(`<li class="list-group-item">${selected_student}</li>`); 
+                  $("ul.list-2").prepend(new_elem); 
                 }
                 $("form.new_student_entry_form").remove();
                 
     
             },
             error : function(xmlhttprequest, textstatus, response){
-              
-              var response = xmlhttprequest.responseJSON;
-              // console.debug(xmlhttprequest);
-              // console.debug(xmlhttprequest);
-              // console.debug(xmlhttprequest.response);
+                var response = xmlhttprequest.responseJSON;
 
               // in case of error from server
               if(xmlhttprequest.status == 500){

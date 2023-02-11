@@ -17,8 +17,7 @@
                 <div class="ms-2 me-auto">
                   {{ std.student.email }}
                 </div>
-                <button class="cross btn btn-danger my-0 py-0 bg-transparent border-0 text-danger "><i class="fa fa-times fa-1x" ></i></button>
-                
+                <button class="cross btn btn-danger my-0 py-0 bg-transparent border-0 text-danger " data-remodal-target="modal" data-url="{% url 'instructor-remove-student' std.id %}" data-student="{{ std.student.email }}"><i class="fa fa-times fa-1x" ></i></button>
               </li>
             {% endif %}
           {% endfor %}
@@ -26,3 +25,4 @@
       </ul><!-- End Clean list group -->
     </div>
 </div>
+

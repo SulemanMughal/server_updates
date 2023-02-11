@@ -70,9 +70,11 @@ width: 45%!important;
                   {% include 'master_app/admin/cd_studentList.html' %}
                  <!-- End : Attack Group Students List -->
 
-                 <!-- Defense Group Students List -->
-                 {% include 'master_app/admin/cd_students_2.html' %}
-                 <!-- End : Defense Group Students List -->
+                 {% if course.course_type == "2" %}
+                    <!-- Defense Group Students List -->
+                    {% include 'master_app/admin/cd_students_2.html' %}
+                    <!-- End : Defense Group Students List -->
+                 {% endif %}
                 
                 <!-- Results -->
                 {% if course.is_approved == "3" %}
@@ -106,12 +108,13 @@ width: 45%!important;
       
   <div class="row justify-content-center my-3">
     <div class="col-12">
+      {% comment %}
         <p>
           Follow instructions on the link below to get access to machine 
         </p>
         <a href="{% url 'how-to-connect-vpn' %}">How to get access through VPN</a>
+      {% endcomment %}
       <p>
-        
           {{ course.get_virtual_network.description|safe }}
       </p>
     </div>
