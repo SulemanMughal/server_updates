@@ -58,6 +58,10 @@ background: #ffecdf;
   color: #6b717e;
   background: #bfd3ff;
 }
+.color-dark{
+  color: red;
+  background: rgb(255, 0, 0 , 0.3);
+}
 </style>
 
 <!-- <div class="container-fluid py-4"> -->
@@ -106,6 +110,15 @@ background: #ffecdf;
             <i class="fas fa-paper-plane "></i>
           </div>
           <h4 class="text-center "><a href="{% url 'admin:master_app_networkflagsubmission_changelist' %}">Flags Submission Management</a></h4>
+        </div>        
+      </div>
+      <!-- Logs Management -->
+      <div class="col-xl-3 col-md-4 d-flex align-items-stretch my-3"  >
+        <div class="icon-box d-flex flex-column ">
+          <div class="card-icon rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3 color-dark">
+            <i class="fas fa-history "></i>
+          </div>
+          <h4 class="text-center "><a href="{% url 'admin:admin_logentry_changelist' %}">Logs Management</a></h4>
         </div>        
       </div>
     </div>

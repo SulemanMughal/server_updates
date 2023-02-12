@@ -40,15 +40,13 @@
     var students_data = [];
 </script>
 {% for student in all_students %}
-    
-        <script>
-            students_data.push(
-                [
-                    "{{ student.email }}"   
-                ]
-            )
-        </script>
-    
+  <script>
+      students_data.push(
+          [
+              "{{ student.email }}"   
+          ]
+      )
+  </script>
 {% endfor %}
 <script type="text/javascript">
     $(function(){

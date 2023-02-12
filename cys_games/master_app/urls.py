@@ -30,6 +30,10 @@ urlpatterns = [
     # ? Admin Dashbaord
     path("admin/", views.AdminDashboard, name="admin-dasboard-url"),
 
+    # ?  Admin : Recent Activity Monitoring
+    path("admin/activity-logs", views.AdminActivityLogs,
+         name="admin-activity-logs-url"),
+
     # ? Admin Profile
     path("admin/profile", views.AdminProfile, name="admin-profile-url"),
 
@@ -102,6 +106,9 @@ urlpatterns = [
     # ? Instructor Dashbaord
     path("instructor/", views.InstructorDashboard,
          name="instructor-dasboard-url"),
+
+
+
 
     # ? Instructor Profile
     path("instructor/profile", views.InsturctorProfile,
@@ -199,7 +206,7 @@ urlpatterns = [
     path("about", views.AboutView, name="about_url"),
 
 
-    # Create VPN File
+    # ?  Create VPN File
     path("create-vpn", views.CreateVPN, name="create_vpn_url"),
 
 ]

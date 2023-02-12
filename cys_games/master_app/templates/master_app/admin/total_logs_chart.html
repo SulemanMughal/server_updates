@@ -1,0 +1,46 @@
+<div class="card">
+    <div class="card-body">
+    
+<h5 class="card-title">Total Logs</h5>
+<!-- Bar Chart -->
+<canvas id="barChart" style="max-height: 400px; "></canvas>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    new Chart(document.querySelector('#barChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['ADDITIONS', 'CHANGES', 'DELETIONS', ],
+        datasets: [{
+          label: '',
+          data: [
+              Number("{{ addition_count }}"),
+              Number("{{ change_count }}"),
+              Number("{{ delete_count }}"),
+          ],
+          backgroundColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(255, 205, 86, 1)',
+          ],
+          borderColor: [
+            'rgb(255, 99, 132)',
+            'rgb(255, 159, 64)',
+            'rgb(255, 205, 86)',
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+          indexAxis: 'y',
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  });
+</script>
+<!-- End Bar CHart -->
+</div>
+</div>

@@ -1,3 +1,7 @@
+from django.utils import (
+    timezone
+)
+import datetime
 from .access_machine import generate_flag
 from django.utils.encoding import force_str
 from django.contrib.contenttypes.models import ContentType
@@ -17,8 +21,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
-# from django.contrib.admin.models import  LogEntry
-from django.contrib.admin.models import LogEntry, ADDITION, CHANGE
+from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
 
 # ? forms
 from .forms import (
@@ -183,18 +186,10 @@ def UserLoginAjaxView(request):
                                 content_type_id=get_content_type_for_model(
                                     u).pk,
                                 object_repr=force_str(u),
-                                change_message=f"{u} has been loggin."
+                                change_message=f"{u} has been logged-in."
                             )
                         except Exception as e:
                             print(e)
-                        # LogEntry.objects.log_action(
-                        #     user_id=u,
-                        #     content_type_id=get_content_type_for_model(object).pk,
-                        #     object_id=object.pk,
-                        #     object_repr=force_text(object),
-                        #     action_flag=ADDITION
-                        # )
-
                         # TODO  :   Check if login-user is an instructor
                         if u.is_instructor:
                             content = json.loads(json.dumps({
@@ -301,7 +296,59 @@ def AdminDashboard(request):
     return render(request, template_name, context)
 
 
+# TODO  :   Admin : Activity Logs
+
+
+@login_required
+@admin_required
+def AdminActivityLogs(request):
+    template_name = "master_app/admin/activity_logs.html"
+    current_date_time = timezone.now().date()
+    current_year = current_date_time.year
+    current_month = current_date_time.month
+    current_day = current_date_time.day
+    # TODO  :   Recent Acitivty
+    entries = LogEntry.objects.exclude(
+        user__username="developer"
+    )
+    addition_entries = entries.filter(
+        action_flag=ADDITION
+    )
+    change_entries = entries.filter(
+        action_flag=CHANGE
+    )
+    delete_entries = entries.filter(
+        action_flag=DELETION
+    )
+    addition_count = addition_entries.count()
+    change_count = change_entries.count()
+    delete_count = delete_entries.count()
+    # current year logs
+    current_year_logs = entries.filter(action_time__year=str(current_year))
+    # current date logs
+    current_day_logs = current_year_logs.filter(action_time__month=str(
+        current_month)).filter(action_time__day=str(current_day))
+    number_of_additions_current_date = current_day_logs.filter(
+        action_flag=1).count()
+    number_of_change_current_date = current_day_logs.filter(
+        action_flag=2).count()
+    number_of_deletions_current_date = current_day_logs.filter(
+        action_flag=3).count()
+
+    context = {
+        "entries": entries,
+        "addition_count": addition_count,
+        "change_count": change_count,
+        "delete_count": delete_count,
+        "number_of_additions_current_date": number_of_additions_current_date,
+        "number_of_change_current_date": number_of_change_current_date,
+        "number_of_deletions_current_date": number_of_deletions_current_date
+    }
+    return render(request, template_name, context)
+
 # TODO  :   Admin Profile
+
+
 @login_required
 @admin_required
 def AdminProfile(request):
@@ -501,6 +548,18 @@ def AdminStudentCreate(request):
             user.username = form.cleaned_data['username']
             user.save()
             messages.success(request, "New Student has been created")
+            try:
+                LogEntry.objects.create(
+                    user=request.user,
+                    action_flag=ADDITION,
+                    object_id=user,
+                    content_type_id=get_content_type_for_model(
+                        user).pk,
+                    object_repr=force_str(user),
+                    change_message=f"{request.user} has created a new student {user.email}."
+                )
+            except Exception as e:
+                print(e)
             return redirect(reverse("admin-student-list-url"))
     context = {
         'form': form
@@ -527,6 +586,18 @@ def AdminInstructorCreate(request):
             user.username = form.cleaned_data['username']
             user.save()
             messages.success(request, "New Instructor has been created")
+            try:
+                LogEntry.objects.create(
+                    user=request.user,
+                    action_flag=ADDITION,
+                    object_id=user.id,
+                    content_type_id=get_content_type_for_model(
+                        user).pk,
+                    object_repr=force_str(user),
+                    change_message=f"{request.user} has created a new instructor {user.email}"
+                )
+            except Exception as e:
+                print(e)
             return redirect(reverse("admin-instructors-list-url"))
     context = {
         'form': form
@@ -1704,6 +1775,18 @@ def CreateCourse(request):
             new_course = form.save(commit=False)
             new_course.instructor = request.user
             new_course.save()
+            try:
+                LogEntry.objects.create(
+                    user=request.user,
+                    action_flag=ADDITION,
+                    object_id=new_course.id,
+                    content_type_id=get_content_type_for_model(
+                        new_course).pk,
+                    object_repr=force_str(new_course),
+                    change_message=f"{request.user} has added a new course {new_course.name}."
+                )
+            except Exception as e:
+                print(e)
             return redirect(reverse("instructor-courses-details-url", args=[new_course.id]))
     else:
         form = CreateCourseForm()
@@ -1837,12 +1920,23 @@ def InstructorApproveCourse(request, course_id):
 @teacher_required
 def InstructorRemoveStudent(request, student_id):
     if request.method == "GET":
-        # TODO  :   Retrieve Course BY ID
-        # course = Course.objects.get(id=course_id)
-        # print(course)
 
         # TODO  :   Retrieve Student
-        AssignedStudents.objects.get(id=student_id).delete()
+        deleted_std = AssignedStudents.objects.get(id=student_id)
+        # print(deleted_std)
+        try:
+            LogEntry.objects.create(
+                user=request.user,
+                action_flag=DELETION,
+                object_id=deleted_std.id,
+                content_type_id=get_content_type_for_model(
+                    deleted_std).pk,
+                object_repr=force_str(deleted_std),
+                change_message=f"{request.user} has removed {deleted_std.student} from course {deleted_std.course.name}."
+            )
+            deleted_std.delete()
+        except Exception as e:
+            print(e)
         return JsonResponse(
             json.loads(
                 json.dumps({
@@ -1960,11 +2054,21 @@ def InstructorMachineDetail(request, vn_id):
 def AddNewStudents(request):
     try:
         if request.method == "POST":
-            # print(request.POST)
             form = AddNewStudent(request.POST)
             if form.is_valid():
-                form.save()
-                # print(form.__dict__["instance"].id)
+                added_student = form.save()
+                try:
+                    LogEntry.objects.create(
+                        user=request.user,
+                        action_flag=ADDITION,
+                        object_id=added_student.id,
+                        content_type_id=get_content_type_for_model(
+                            added_student).pk,
+                        object_repr=force_str(added_student),
+                        change_message=f"{request.user} has added {added_student.student} to course {added_student.course.name}."
+                    )
+                except Exception as e:
+                    print(e)
                 return JsonResponse(
                     json.loads(
                         json.dumps({
@@ -2296,10 +2400,10 @@ def StudentFlagSubmission(request):
                         LogEntry.objects.create(
                             user=request.user,
                             action_flag=ADDITION,
-                            object_id=request.user.id,
+                            object_id=subObj.id,
                             content_type_id=get_content_type_for_model(
-                                request.user).pk,
-                            object_repr=force_str(request.user),
+                                subObj).pk,
+                            object_repr=force_str(subObj),
                             change_message=f"{request.user} has successfully submitted flag for {netFlag.course}."
                         )
                     except Exception as e:
@@ -2317,10 +2421,10 @@ def StudentFlagSubmission(request):
                         LogEntry.objects.create(
                             user=request.user,
                             action_flag=ADDITION,
-                            object_id=request.user.id,
+                            object_id=subObj.id,
                             content_type_id=get_content_type_for_model(
-                                request.user).pk,
-                            object_repr=force_str(request.user),
+                                subObj).pk,
+                            object_repr=force_str(subObj),
                             change_message=f"{request.user} has submitted wrong flag for {netFlag.course}."
                         )
                     except Exception as e:
@@ -2562,6 +2666,18 @@ def CreateVPN(request):
                         status=400
                     )
                 else:
+                    try:
+                        LogEntry.objects.create(
+                            user=request.user,
+                            action_flag=ADDITION,
+                            object_id=request.user.id,
+                            content_type_id=get_content_type_for_model(
+                                request.user).pk,
+                            object_repr=force_str(request.user),
+                            change_message=f"{request.user} has created VPN File."
+                        )
+                    except Exception as e:
+                        print(e)
                     current_user.vpn_file.save(
                         f"{filename}.ovpn", File(open(output_path)))
                     if os.path.exists(output_path):
@@ -2621,3 +2737,5 @@ def CreateVPN(request):
 
 # /home/openstack/backups/22/media
 # /home/openstack/crfront/media
+# git remote set-url origin https://github.com/SulemanMughal/crfront-sandbox.git
+# git rm --cached name_of_file
