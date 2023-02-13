@@ -1,3 +1,16 @@
+{% if course.get_virtual_network.is_instance_created %}
+<div class="card  p-0  bg-transparent border-0">
+  <div class="card-body  p-0 bg-transparent border-0">
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <a class="btn btn-warning py-3  rounded-4 col-12 fw-bolder fs-4 reset-initi-btn" data-remodal-target="modal"  type="button" href="#!" > <i class="fa fa-refresh me-2" aria-hidden="true"></i> Reset Instance</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+
 <div class="card {% if not course.get_virtual_network %} bg-transparent shadow-none {% endif %} p-0 ">
     <div class="card-body  px-0">
       
@@ -36,6 +49,7 @@
     <h3 class="p-3">Virtual Network</h3>
     {% endif %}
     
+   
   
         
         <ul class="list-group list-group-flush">
@@ -81,6 +95,7 @@
               <p class="w-50 text-end">{{ DC_IP_ADDRESS }}</p>
             </li>
             {% endcomment %}
+            
             <li class="list-group-item text-center" aria-disabled="true"><a  href="{% url 'admin-machine-detail-url' course.get_virtual_network.id %}" >See Details<i class="fas fa-chevron-right fs-5 ms-3 pt-2"></i></a></li>
             {% else %}
           <li class="list-group-item d-flex justify-content-between align-items-start">
@@ -114,5 +129,6 @@
           
         </ul>
       {% endif %}
+      
     </div>
   </div>

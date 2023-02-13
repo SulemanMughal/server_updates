@@ -12,6 +12,12 @@
 <link rel="stylesheet" href="{% static 'assets/vendor/flickity/flickity.min.css' %}">
 <script src="{% static 'assets/vendor/flickity/flickity.pkgd.min.js' %}"></script>
 <link rel="stylesheet" href="{% static 'assets/vendor/loader/loader-double.css' %}"  />
+
+<!-- remodal libs -->
+<link rel="stylesheet" href="{% static 'assets/vendor/remodal/remodal.min.css' %}"  />
+<link rel="stylesheet" href="{% static 'assets/vendor/remodal/remodal-default-theme.min.css' %}"  />
+<script src="{% static 'assets/vendor/remodal/remodal.min.js' %}" ></script>
+
 <style>
 .dashboard .activity .activity-item .activite-label{
   min-width: 0px;
@@ -155,6 +161,21 @@ width: 45%!important;
   
 </div>
 </div>
+
+
+{% if course.get_virtual_network.is_instance_created %}
+<!-- rebuild Instance -->
+<div class="remodal" data-remodal-id="modal">
+  <button data-remodal-action="close" class="remodal-close"></button>
+  <h1>Reset Instance</h1>
+  <p>
+    Are you sure you want to reset instance?
+  </p>
+  <!-- Actions performed on reset isntance -->
+  <button data-remodal-action="cancel" class="remodal-cancel">Cancel</button>
+  <button data-remodal-action="confirm" class="remodal-confirm" data-url="{% url 'admin-reboot-network-instance-url' course.get_virtual_network.id %}" >Reset</button>
+</div>
+{% endif %}
 
 {% endblock %}
 
@@ -422,6 +443,9 @@ $(function(){
 {% include 'master_app/admin/create_instance_script.html' %}
 <!-- END : Admin : Send Request : Create an instance -->
 
+
+<!-- Reset Instance -->
+{% include 'master_app/admin/reset_instance_script.html' %}
 
 
 

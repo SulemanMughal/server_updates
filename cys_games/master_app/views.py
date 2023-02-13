@@ -1,3 +1,4 @@
+from .rebuild_server import build_server
 from django.template.defaultfilters import slugify  # new
 from django.db import IntegrityError
 from django.utils import (
@@ -1090,7 +1091,8 @@ def AdminStartNetworkInstance(request, vn_id):
 
 
 # TODO  :   # ? Create an instance in openstack for requested virtual image
-
+@login_required
+@admin_required
 def AdminCreateNetworkInstance(request, vn_id):
     try:
         netObj = VirtualNetwork.objects.get(id=vn_id)
@@ -1725,6 +1727,99 @@ def AdminCreateNetworkInstance(request, vn_id):
             json.loads(
                 json.dumps({
                     "error": str(e)
+                })
+            ),
+            status=400
+        )
+
+
+# TODO  :   Admin : Reset Instance on Openstack
+
+
+@login_required
+@admin_required
+def AdminRebootNetworkInstance(request, vn_id):
+    if request.method == "GET":
+        try:
+            # TODO  :   Retrrieve VirtualNetwork
+            netObj = VirtualNetwork.objects.get(id=vn_id)
+            build_server(imageRef=netObj.imageRef, server_id=netObj.server_id)
+
+            time.sleep(5)
+
+            # TODO  :   Update Flags
+            flag_list = copy_file(
+                host=netObj.ip_address, imageRef=netObj.imageRef)
+            if not flag_list:
+                return JsonResponse(
+                    json.loads(
+                        json.dumps({
+                            "error": "Flags are not updated entirely. See logs for futher details"
+                        })
+                    ),
+                    status=400
+                )
+            else:
+                # TODO  :   Retrieve Corresponding Course of this network
+                course = netObj.course
+
+                # TODO  :   Retreive All "AssignedStudents" for this course
+                students = course.assignedstudents_set.all()
+                # print(students)
+                for std in students:
+                    for i in range(len(flag_list)):
+                        # print(std, flag)
+                        obj, created = NetworkFlagSubmission.objects.get_or_create(
+                            student=std,
+                            flag_id=f"flag_{i+1}",
+                            status="PENDING"
+                        )
+                        obj.original_answer = flag_list[i]
+                        obj.save()
+                        # print(obj, created)
+                # netObj.course.is_approved = "3"
+                netObj.course.number_of_flags = len(flag_list)
+                netObj.course.save()
+                netObj.save()
+                # print(updated_obj.ip_address)
+
+            try:
+                LogEntry.objects.create(
+                    user=request.user,
+                    action_flag=ADDITION,
+                    object_id=netObj.id,
+                    content_type_id=get_content_type_for_model(
+                        netObj).pk,
+                    object_repr=force_str(netObj),
+                    change_message=f"{request.user} has reset instance '{netObj.server_id}' for course '{netObj.course.name}'."
+                )
+            except Exception as e:
+                print(e)
+
+            return JsonResponse(
+                json.loads(
+                    json.dumps({
+                        "text": "Instance reset successfully."
+                    })
+                ),
+                status=200
+            )
+        except Exception as e:
+            print(e)
+            return JsonResponse(
+                json.loads(
+                    json.dumps({
+                        "error": "Can't reset instance. Please try again or see logs for details."
+                    })
+                ),
+                status=400
+            )
+
+    else:
+        return JsonResponse(
+            json.loads(
+                json.dumps({
+                    "error": "Invalid request method"
                 })
             ),
             status=400

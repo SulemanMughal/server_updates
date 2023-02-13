@@ -102,6 +102,11 @@ urlpatterns = [
     path("admin/network/<int:vn_id>/instance/create",
          views.AdminCreateNetworkInstance, name="admin-create-network-instance-url"),
 
+
+    # ? Reset Instance
+    path("admin/network/<int:vn_id>/instance/reset",
+         views.AdminRebootNetworkInstance, name="admin-reboot-network-instance-url"),
+
     # ==========================================================
     # ? Instructor Dashbaord
     path("instructor/", views.InstructorDashboard,
