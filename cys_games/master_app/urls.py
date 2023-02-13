@@ -48,7 +48,7 @@ urlpatterns = [
     path("admin/course/<int:course_id>/details",
          views.AdminCourseDetails, name="admin-courses-details-url"),
 
-    # ? Admin Course Approval Form Submission
+    # ? Admin Course Approve
     path("admin/course/<int:vn_id>/approval",
          views.AdminCourseApproval, name="admin-course-approval-url"),
 

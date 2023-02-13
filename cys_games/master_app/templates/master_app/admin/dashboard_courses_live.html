@@ -44,10 +44,10 @@
                             });
                         </script>
 
-                        {% for flag in course.networkflag_set.all %}
+                        {% for flag in student.networkflagsubmission_set.all %}
                             <script>
                                  document.addEventListener("DOMContentLoaded", () => {
-                                    data_arr.push(Number("{% flag_sub_points flag.id student.student.id  %}"));
+                                    data_arr.push(Number("{% flag_sub_points flag.id %}"));
                                  });
                                 
                             </script>
@@ -70,14 +70,25 @@
 
                         {% endif %}
                         {% endfor %}
-                        {% for flag in course.networkflag_set.all %}
-                                <script>
-                                    document.addEventListener("DOMContentLoaded", () => {
-                                        flag_arr.push("{{ flag.flag_id }}");
-                                    });
-                                    
-                                </script>
-                            {% endfor %}
+                        {% with ''|center:course.number_of_flags as range %}
+                          {% for _ in range %}
+                            <script>
+                              document.addEventListener("DOMContentLoaded", () => {
+                                flag_arr.push("flag_{{ forloop.counter }}");
+                              });
+                            </script>
+                          {% endfor %}
+                        {% endwith %}
+                        {% comment %}
+                          {% for flag in course.networkflag_set.all %}
+                            <script>
+                                document.addEventListener("DOMContentLoaded", () => {
+                                    flag_arr.push("flag_{{ flag.flag_id }}");
+                                });
+                                
+                            </script>
+                          {% endfor %}
+                        {% endcomment %}
                         <div class="row">
                         <div class="col-6">
                             <div class="card shadow-none bg-transparent mb-0 pb-0">

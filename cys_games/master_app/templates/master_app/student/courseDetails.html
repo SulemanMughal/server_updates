@@ -121,11 +121,9 @@ color: #47b2e4;
                   <!-- Flag Submission -->
                   {% attacker_flag course.id request.user.id as result  %}
                   {% if course.course_status == 2 %}
-                    {% if course.get_network_flags %}
                       {% if result %}
-                        {% include 'master_app/student/flag_submission.html' with flags=course.get_network_flags %}
+                        {% include 'master_app/student/flag_submission.html' with flags=flags %}
                       {% endif %}
-                    {% endif %}
                   {% endif %}
                   <!-- End : Flag Submission -->
 
@@ -223,23 +221,6 @@ freeScroll: true
 </script>
 
 
-<script>
-//   var myOffcanvas = document.getElementById('offcanvasflag_2')
-
-//   if(myOffcanvas.length != 0){
-//     myOffcanvas.addEventListener('shown.bs.offcanvas', function () {
-//   $("#id_flag_1").val("");
-// })
-//   }
-
-
-
-// var myOffcanvas = document.getElementById('offcanvasflag_1')
-// myOffcanvas.addEventListener('shown.bs.offcanvas', function () {
-//   $("#id_flag_2").val("");
-// })
-
-</script>
 
 
 {% include 'master_app/student/flag_a_submission.html' %}

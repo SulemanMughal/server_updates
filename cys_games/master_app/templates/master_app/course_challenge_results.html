@@ -1,42 +1,40 @@
-
 {% load flag_sub_points student_course_points %}
-
 <div class="card mb-0 px-0">
     <div class="card-body pb-0 px-0">
       <h5 class="card-title px-3">Results</h5>
-
-
       <div data-flickity='{"pageDots":true,"cellAlign": "left", "wrapAround": true, "imagesLoaded": true, "prevNextButtons": false, "adaptiveHeight" : true}' class="flickity-viewport-visible">
-        
-        
-        
-
-
         <div class="col-12 "  aria-hidden="true">
           <div class="card shadow-none bg-transparent mb-0 pb-0">
             <div class="card-body pb-0">
-        <!-- Bar Chart -->
-      <div id="barChart"></div>
-
-              <script>
-                
+              <!-- Bar Chart -->
+              <div id="barChart"></div>
+              <script>          
                   var flag_arr = [];
                   var data_arr = [];
                   var series_data_arr = [];
                   var donut_series_arr = [];
                   var donut_students_arr = [];
-                  
-                
-                
               </script>
 
-              {% for flag in course.networkflag_set.all %}
-                <script>
-                  document.addEventListener("DOMContentLoaded", () => {
-                    flag_arr.push("{{ flag.flag_id }}");
-                  });
-                </script>
-              {% endfor %}
+              {% with ''|center:course.number_of_flags as range %}
+                {% for _ in range %}
+                  <script>
+                    document.addEventListener("DOMContentLoaded", () => {
+                      flag_arr.push("flag_{{ forloop.counter }}");
+                    });
+                  </script>
+                {% endfor %}
+              {% endwith %}
+
+              {% comment %}
+                {% for flag in course.networkflag_set.all %}
+                  <script>
+                    document.addEventListener("DOMContentLoaded", () => {
+                      flag_arr.push("{{ flag.flag_id }}");
+                    });
+                  </script>
+                {% endfor %}
+              {% endcomment %}
 
                 {% for assign_student in course.assignedstudents_set.all %}
                     
@@ -45,9 +43,9 @@
                     data_arr = [];
                     donut_series_arr.push(Number("{% student_course_points  assign_student.id %}"))
                   </script>
-                    {% for flag in course.networkflag_set.all %}
+                    {% for flag in assign_student.networkflagsubmission_set.all %}
                       <script>
-                        data_arr.push(Number("{% flag_sub_points flag.id assign_student.student.id  %}"))
+                        data_arr.push(Number("{% flag_sub_points flag.id   %}"))
                       </script>
                     {% endfor %}
                     <script>
@@ -144,6 +142,3 @@ labels: donut_students_arr,
 
     </div>
   </div>
-
-  {% comment %}
-  {% endcomment %}

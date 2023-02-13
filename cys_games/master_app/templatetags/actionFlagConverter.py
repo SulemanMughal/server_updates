@@ -2,7 +2,7 @@ from django import template
 register = template.Library()
 
 ACTION_FLAGS = {
-    "1": "ADDTION",
+    "1": "ADDITION",
     "2": "CHANGED",
     "3": "DELETION"
 }

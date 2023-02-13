@@ -26,6 +26,7 @@ class Course(models.Model):
     course_img = models.ImageField(blank=True, upload_to="courses/")
     course_type = models.CharField(max_length=1,
                                    blank=True, null=True, choices=COURSE_TYPE, default="1")
+    number_of_flags = models.IntegerField(default=2, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -125,7 +126,7 @@ class Course(models.Model):
 
     def get_network_flags(self):
         try:
-            return self.networkflag_set.all()
+            return self.number_of_flags
         except:
             return None
 
@@ -337,11 +338,23 @@ class NetworkFlagSubmission(models.Model):
     obtainedPoints = models.IntegerField(default=0, blank=True, null=True)
     submittedAnswer = models.CharField(max_length=100, blank=True, default="")
     attemptUsed = models.IntegerField(default=0, blank=True)
+    original_answer = models.CharField(
+        max_length=100, default="", blank=True, null=True)
     status = models.CharField(
         max_length=12, choices=FLAG_SUBMISSION_CHOICES, default="PENDING", blank=True)
 
     def __str__(self):
         return f"{self.student}-{self.flag_id}"
+
+    def get_flag_repr(self):
+        try:
+            if self.flag_id == "flag_1":
+                return "Root Flag"
+            else:
+                return "User Flag"
+        except Exception as e:
+            print(e)
+            return self.flag_id
 
     def submit_status(self):
         if self.status == "SUBMITTED":

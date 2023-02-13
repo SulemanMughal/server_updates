@@ -8,7 +8,7 @@
       var sibmit_form = $(event.target)[0];
       if($(sibmit_form).get(0).checkValidity()){
         $(".loader-double").addClass("is-active");
-        fd.append("course_id" , "{{ course.id }}");
+        // fd.append("course_id" , "{{ course.id }}");
         fd.append("flag_id" , $(sibmit_form).attr("data-flag-id"));
       $.ajaxSetup({
         beforeSend: function(xhr, settings){

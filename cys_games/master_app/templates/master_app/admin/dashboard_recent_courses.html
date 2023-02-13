@@ -33,7 +33,7 @@
                     <td><a href="{{ course.get_admin_url }}" class="card-link">{{ course.name|truncatechars:37 }}</a></td>
                     <td>{{ course.instructor }}</td>
                     <td>{{ course.assignedstudents_set.all.count }}</td>
-                    <td>{{ course.networkflag_set.all.count }}</td>
+                    <td>{{ course.number_of_flags }}</td>
                     <td>{{ course.is_approved_display }}</td>
                 </tr>
             {% empty %}

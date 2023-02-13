@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+from django.urls import reverse_lazy
 from pathlib import Path
 from decouple import config, Csv
 
@@ -26,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
 
-OPENSTACK=config('OPENSTACK')
+OPENSTACK = config('OPENSTACK')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', cast=bool)
@@ -39,7 +40,7 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
-    'django.contrib.contenttypes',          
+    'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -62,8 +63,8 @@ INSTALLED_APPS = [
 
     'django.contrib.humanize',
 
-    
-    
+
+
 ]
 
 MIDDLEWARE = [
@@ -151,13 +152,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT= BASE_DIR / 'static'
-STATICFILES_DIRS=[
+STATIC_ROOT = BASE_DIR / 'static'
+STATICFILES_DIRS = [
 ]
 
 # Media Files
 MEDIA_URL = '/media/'
-MEDIA_ROOT= BASE_DIR.parent / 'media'
+MEDIA_ROOT = BASE_DIR.parent / 'media'
 
 
 CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
@@ -167,28 +168,29 @@ CKEDITOR_UPLOAD_PATH = "uploads/"
 
 # ? Login Redirect
 
-from django.urls import reverse_lazy
 
 LOGIN_REDIRECT_URL = reverse_lazy('master_index')
 LOGIN_URL = reverse_lazy('user-login')
 LOGOUT_URL = reverse_lazy('user-logout')
 
 # OpenStack configurtaions
-OPENSTACK_USER=config('OPENSTACK_USER')
-OPENSTACK_PASSWORD=config('OPENSTACK_PASSWORD')
-OPENSTACK_AUTHORIZED_URL=config('OPENSTACK_AUTHORIZED_URL')
-OPENSTACK_IMAGE_URL=config('OPENSTACK_IMAGE_URL')
-OPENSTACK_SERVER_URL=config('OPENSTACK_SERVER_URL')
-OPENSTACK_FLOATING_IP_URL=config('OPENSTACK_FLOATING_IP_URL')
-OPENSTACK_FLAVOR_URL=config('OPENSTACK_FLAVOR_URL')
-OPENSTACK_NETWORK_UUID=config('OPENSTACK_NETWORK_UUID')
-OPENSTACK_DC_UUID=config('OPENSTACK_DC_UUID')
-OPENSTACK_NETWORK_POOL=config('OPENSTACK_NETWORK_POOL')
-IS_SPAWN_DC=config('IS_SPAWN_DC', cast=bool)
-DC_CLIENT_SERVER=config("DC_CLIENT_SERVER")
-OPENSTACK_NETWORK_LABEL=config('OPENSTACK_NETWORK_LABEL')
-OPENSTACK_OS_TYPE=config('OPENSTACK_OS_TYPE')
-WAZUH_SERVER_PUBLIC_IP=config('WAZUH_SERVER_PUBLIC_IP')
-DC_IP_ADDRESS=config('DC_IP_ADDRESS')
-WAZUH_SERVER_PASSWORD=config('WAZUH_SERVER_PASSWORD')
-CONNECTION_TIMEOUT=config('CONNECTION_TIMEOUT', cast=int)
+OPENSTACK_USER = config('OPENSTACK_USER')
+OPENSTACK_PASSWORD = config('OPENSTACK_PASSWORD')
+OPENSTACK_AUTHORIZED_URL = config('OPENSTACK_AUTHORIZED_URL')
+OPENSTACK_IMAGE_URL = config('OPENSTACK_IMAGE_URL')
+OPENSTACK_SERVER_URL = config('OPENSTACK_SERVER_URL')
+OPENSTACK_FLOATING_IP_URL = config('OPENSTACK_FLOATING_IP_URL')
+OPENSTACK_FLAVOR_URL = config('OPENSTACK_FLAVOR_URL')
+OPENSTACK_NETWORK_UUID = config('OPENSTACK_NETWORK_UUID')
+OPENSTACK_DC_UUID = config('OPENSTACK_DC_UUID')
+OPENSTACK_NETWORK_POOL = config('OPENSTACK_NETWORK_POOL')
+IS_SPAWN_DC = config('IS_SPAWN_DC', cast=bool)
+DC_CLIENT_SERVER = config("DC_CLIENT_SERVER")
+OPENSTACK_NETWORK_LABEL = config('OPENSTACK_NETWORK_LABEL')
+OPENSTACK_OS_TYPE = config('OPENSTACK_OS_TYPE')
+WAZUH_SERVER_PUBLIC_IP = config('WAZUH_SERVER_PUBLIC_IP')
+DC_IP_ADDRESS = config('DC_IP_ADDRESS')
+WAZUH_SERVER_PASSWORD = config('WAZUH_SERVER_PASSWORD')
+CONNECTION_TIMEOUT = config('CONNECTION_TIMEOUT', cast=int)
+FLAG_FILE_PATH = config("FLAG_FILE_PATH", cast=str)
+SUBMISSION_POINTS = config("SUBMISSION_POINTS", cast=int)

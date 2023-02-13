@@ -18,37 +18,40 @@ class VirtualNetworkInline(admin.TabularInline):
     max_num = 1
     extra = 0
 
+
 class CourseAdmin(admin.ModelAdmin):
     inlines = [
         AssignedStudentInline,
         VirtualNetworkInline
     ]
-    list_display=[
+    list_display = [
         "name",
         "is_approved"
     ]
 
 
 class VirtualNetworkAdmin(admin.ModelAdmin):
-    list_display=[
+    list_display = [
         "name",
         "course",
         "operating_system",
         "scenarios"
     ]
 
+
 class NetworkFlagSubmissionAdmin(admin.ModelAdmin):
-    list_display=[
+    list_display = [
         'student',
         'flag_id',
         'attemptUsed',
         'status',
         'obtainedPoints',
+        "original_answer",
     ]
 
 
 class NetworkFlagAdmin(admin.ModelAdmin):
-    list_display=[
+    list_display = [
         "course",
         "flag_id",
         "points",
@@ -57,12 +60,10 @@ class NetworkFlagAdmin(admin.ModelAdmin):
     ]
 
 
-
-
-
 class MoniterLog(admin.ModelAdmin):
-    list_display = ('action_time','user','content_type','object_repr','change_message','action_flag')
-    list_filter = ['action_time','user','content_type']
+    list_display = ('action_time', 'user', 'content_type',
+                    'object_repr', 'change_message', 'action_flag')
+    list_filter = ['action_time', 'user', 'content_type']
     ordering = ('-action_time',)
 
 
@@ -72,5 +73,5 @@ admin.site.register(CourseChallenge)
 admin.site.register(ChallengeSubmission)
 admin.site.register(NetworkFlag, NetworkFlagAdmin)
 admin.site.register(NetworkFlagSubmission, NetworkFlagSubmissionAdmin)
-admin.site.register(LogEntry,MoniterLog)
+admin.site.register(LogEntry, MoniterLog)
 admin.site.register(AssignedStudents)
