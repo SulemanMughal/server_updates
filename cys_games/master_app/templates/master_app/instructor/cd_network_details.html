@@ -9,6 +9,8 @@
           <h3 class="p-3">Virtual Network</h3>
         {% endif %}
           <ul class="list-group list-group-flush">
+            {% comment %}
+            <!-- Hide Status -->
             <li class="list-group-item d-flex justify-content-between align-items-start">
               <div class="ms-2 me-auto">
                 <div class="fw-bold">Status</div>
@@ -28,6 +30,7 @@
     {% endif %}
     {% endif %}
             </li>
+            {% endcomment %}
             <li class="list-group-item d-flex justify-content-between align-items-start">
               <div class="ms-2 me-auto">
                 <div class="fw-bold">Name</div>

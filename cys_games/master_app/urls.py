@@ -38,7 +38,7 @@ urlpatterns = [
     path("admin/profile", views.AdminProfile, name="admin-profile-url"),
 
     # ? Admin Course List
-    path("admin/course/all", views.AdminCourseList, name="admin-course-list-url"),
+    path("admin/course", views.AdminCourseList, name="admin-course-list-url"),
 
     # ? Admin Create New Course
     path("admin/course/new", views.AdminCreateCourse,

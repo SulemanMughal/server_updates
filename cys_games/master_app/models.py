@@ -1,4 +1,6 @@
 # Built-in
+from django.template.defaultfilters import slugify  # new
+from django.utils.translation import gettext_lazy as _
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils import timezone
@@ -15,7 +17,9 @@ User = get_user_model()
 
 class Course(models.Model):
     instructor = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
+    slug_name = models.SlugField(verbose_name=_("Slug"),  max_length=200,  blank=True, null=True, help_text=_(
+        "Slugify title of event"), default="", editable=True, unique=True)
     start_time = models.DateTimeField(auto_now_add=False, default=timezone.now)
     end_time = models.DateTimeField(auto_now_add=False, default=timezone.now)
     created_timestamp = models.DateTimeField(auto_now_add=True)
@@ -30,6 +34,12 @@ class Course(models.Model):
 
     def __str__(self):
         return self.name
+
+    # TODO  :   Override Default Save Method
+    def save(self, *args, **kwargs):  # new
+        if not self.slug_name:
+            self.slug_name = slugify(self.name)
+        return super().save(*args, **kwargs)
 
     def is_course_approved(self):
         if self.is_approved == "3":

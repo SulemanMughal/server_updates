@@ -1,3 +1,5 @@
+from django.template.defaultfilters import slugify  # new
+from django.db import IntegrityError
 from django.utils import (
     timezone
 )
@@ -486,6 +488,7 @@ def AdminCourseApproval(request, vn_id):
                 )
 
         except Exception as e:
+            print(e)
             return JsonResponse(
                 json.loads(
                     json.dumps({
@@ -1865,6 +1868,8 @@ def InstructorCreateStudent(request):
 
 
 # TODO  :   Instructor Create New Course
+
+
 @login_required
 @teacher_required
 def CreateCourse(request):
@@ -1872,22 +1877,27 @@ def CreateCourse(request):
     if request.method == "POST":
         form = CreateCourseForm(request.POST,  request.FILES)
         if form.is_valid():
-            new_course = form.save(commit=False)
-            new_course.instructor = request.user
-            new_course.save()
             try:
-                LogEntry.objects.create(
-                    user=request.user,
-                    action_flag=ADDITION,
-                    object_id=new_course.id,
-                    content_type_id=get_content_type_for_model(
-                        new_course).pk,
-                    object_repr=force_str(new_course),
-                    change_message=f"{request.user} has added a new course {new_course.name}."
-                )
+                new_course = form.save(commit=False)
+                new_course.instructor = request.user
+                # new_course.slug_name = slugify(new_course.name)
+                new_course.save()
+                try:
+                    LogEntry.objects.create(
+                        user=request.user,
+                        action_flag=ADDITION,
+                        object_id=new_course.id,
+                        content_type_id=get_content_type_for_model(
+                            new_course).pk,
+                        object_repr=force_str(new_course),
+                        change_message=f"{request.user} has added a new course {new_course.name}."
+                    )
+                except Exception as e:
+                    print(e)
+                return redirect(reverse("instructor-courses-details-url", args=[new_course.id]))
             except Exception as e:
                 print(e)
-            return redirect(reverse("instructor-courses-details-url", args=[new_course.id]))
+                # form = CreateCourseForm(request.POST,  request.FILES)
     else:
         form = CreateCourseForm()
     context = {
@@ -1929,7 +1939,7 @@ def InstructorCourseDetails(request, course_id):
 
         students = course.assignedstudents_set.all()
     except Course.DoesNotExist:
-        messages.error(request, "Invalid Course URL")
+        messages.error(request, "Requested course doesn't exist.")
         return redirect(reverse("courses-all-url"))
     except Exception as e:
         messages.error(
@@ -2528,17 +2538,17 @@ def StudentFlagSubmission(request):
 
                             # TODO  :   Retrieve All "AssignedStudents" for this course
                             students = course.assignedstudents_set.all()
-                            print(students)
+                            # print(students)
                             for std in students:
                                 for i in range(len(flag_list)):
-                                    print(std, i)
+                                    # print(std, i)
                                     try:
                                         obj = NetworkFlagSubmission.objects.get(
                                             student=std,
                                             flag_id=f"flag_{i+1}",
                                             status="PENDING"
                                         )
-                                        print(obj)
+                                        # print(obj)
                                         obj.original_answer = flag_list[i]
                                         obj.save()
                                     except:

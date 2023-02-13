@@ -55,7 +55,7 @@ def get_instance_users(imageRef=None):
                 f'{settings.OPENSTACK_IMAGE_URL}/{imageRef}', headers=headers)
             if response.status_code in [200, 201, 202]:
                 for i in response.json():
-                    if i[:4].lower() == "user":
+                    if i[:5].lower() == "vuser":
                         users_list.append(
                             tuple(str(response.json()[i]).split(",")))
                 return users_list
@@ -94,14 +94,21 @@ def generate_flag(host=None, username=None, password=None):
 def copy_file(host=None, imageRef=None):
     users_list = get_instance_users(imageRef=imageRef)
     flag_list = []
-    if users_list:
-        for i in users_list:
-            flag = generate_flag(
-                host, username=i[0].strip(), password=i[1].strip())
-            # print(flag)
-            if not flag:
-                print("--> Flags Not Updated For User : ", i)
-                return None
-            flag_list.append(flag)
+    print(users_list)
+    try:
+        if users_list:
+            for i in users_list:
+                print(i)
+                flag = generate_flag(
+                    host, username=i[0].strip(), password=i[1].strip())
+                # print(flag)
+                if not flag:
+                    print("--> Flags Not Updated For User : ", i)
+                    return None
+                flag_list.append(flag)
         return flag_list
+    except Exception as e:
+        print(e)
+
+        return None
     return None

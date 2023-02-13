@@ -39,6 +39,7 @@
   
         
         <ul class="list-group list-group-flush">
+          {% comment %}
           <li class="list-group-item d-flex justify-content-between align-items-start">
             <div class="ms-2 me-auto">
               <div class="fw-bold">Status</div>
@@ -47,6 +48,7 @@
               {{ course.is_approved_display }}
             {% endif %}
           </li>
+          {% endcomment %}
           <li class="list-group-item d-flex justify-content-between align-items-start">
             <div class="ms-2 me-auto">
               <div class="fw-bold">Name</div>
@@ -79,13 +81,8 @@
               <p class="w-50 text-end">{{ DC_IP_ADDRESS }}</p>
             </li>
             {% endcomment %}
-          {% endif %}
-          <li class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="ms-2 me-auto">
-              <div class="fw-bold">OS</div>
-            </div>
-            <p class="w-50 text-end">{{ course.get_virtual_network.get_operating_system }}</p></li>
-          
+            <li class="list-group-item text-center" aria-disabled="true"><a  href="{% url 'admin-machine-detail-url' course.get_virtual_network.id %}" >See Details<i class="fas fa-chevron-right fs-5 ms-3 pt-2"></i></a></li>
+            {% else %}
           <li class="list-group-item d-flex justify-content-between align-items-start">
             <div class="ms-2 me-auto">
               <div class="fw-bold">Size</div>
@@ -111,8 +108,10 @@
               <div class="fw-bold">Min. Disk</div>
             </div><p class="w-50 text-end">{{ course.get_virtual_network.min_disk }}</p>
           </li>
-          
           <li class="list-group-item text-center" aria-disabled="true"><a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">See Instructions<i class="fas fa-chevron-right fs-5 ms-3 pt-2"></i></a></li>
+          {% endif %}
+          
+          
         </ul>
       {% endif %}
     </div>

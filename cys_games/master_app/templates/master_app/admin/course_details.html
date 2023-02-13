@@ -206,7 +206,8 @@ $(function(){
 <script>
   $(function(){
     $("#course_approval_btn").on("click", function(event){
-      // $(".loader-double").addClass("is-active");
+      // console.debug("Approve Course Request");
+      $(".loader-double").addClass("is-active");
       event.preventDefault();
       event.stopPropagation();
       
@@ -311,14 +312,8 @@ $(function(){
     }, 2000);
                 },
                 error : function(response){
-                  // console.debug(JSON.parse("" +  + ""));
-                  // console.debug(JSON.parse("" +  + ""));
-                  // console.debug((response.responseJSON.error));
-                  // console.debug(`'${response.responseJSON.error}'`);
+                  console.debug(response);
                   var text = "";
-                  // for (const [key, value] of Object.entries(JSON.parse(response.responseJSON.error))) {
-                  //   text  = text + '<i class="fas fa-exclamation-circle"></i>&nbsp;' + value;
-                  // }
                   new Noty({
                     //  alert, success, error, warning, info
                     timeout: 5000 ,
@@ -410,7 +405,9 @@ $(function(){
                     }
                 }).show(); 
                   }
-                
+                ,complete : function(){
+                  $(".loader-double").removeClass("is-active");
+                }
               
               });
 

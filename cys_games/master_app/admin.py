@@ -28,6 +28,11 @@ class CourseAdmin(admin.ModelAdmin):
         "name",
         "is_approved"
     ]
+    prepopulated_fields = {
+        "slug_name": [
+            "name",
+        ],
+    }
 
 
 class VirtualNetworkAdmin(admin.ModelAdmin):
