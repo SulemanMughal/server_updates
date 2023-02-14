@@ -3001,20 +3001,3 @@ def CreateVPN(request):
             ),
             status=400
         )
-
-
-# sudo systemctl daemon-reload
-# sudo systemctl restart gunicorn
-# sudo systemctl restart nginx
-# sudo nano /etc/nginx/sites-available/crfront
-# sudo journalctl -u gunicorn
-# sudo chmod -R 777 ./crfront/
-# cyber-range.rocks
-
-# /home/openstack/backups/22/cys_games/db.sqlite3
-# /home/openstack/crfront/cys_games/db.sqlite3
-
-# /home/openstack/backups/22/media
-# /home/openstack/crfront/media
-# git remote set-url origin https://github.com/SulemanMughal/crfront-sandbox.git
-# git rm --cached name_of_file

@@ -1,13 +1,27 @@
 {% if course.get_virtual_network.is_instance_created %}
-<div class="card  p-0  bg-transparent border-0">
+{% comment %}
+ <!-- ! Shutoff Instance -->
+ <div class="card  p-0  bg-transparent border-0 my-2">
   <div class="card-body  p-0 bg-transparent border-0">
     <div class="container-fluid">
       <div class="row justify-content-center">
-        <a class="btn btn-warning py-3  rounded-4 col-12 fw-bolder fs-4 reset-initi-btn" data-remodal-target="modal"  type="button" href="#!" > <i class="fa fa-refresh me-2" aria-hidden="true"></i> Reset Instance</a>
+        <a class="btn btn-success py-3   col-12 fw-bolder fs-4 "   type="button" href="#!" > <i class="fa fa-power-off me-2" aria-hidden="true"></i> Shutoff Instance</a>
       </div>
     </div>
   </div>
 </div>
+<!-- ! Shutoff Instance -->
+{% endcomment %}
+<div class="card  p-0  bg-transparent border-0 my-2">
+  <div class="card-body  p-0 bg-transparent border-0">
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <a class="btn btn-warning py-3   col-12 fw-bolder fs-4 reset-initi-btn" data-remodal-target="modal"  type="button" href="#!" > <i class="fa fa-refresh me-2" aria-hidden="true"></i> Reset Instance</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endif %}
 
 
@@ -36,7 +50,7 @@
     {% elif course.is_approved == "3" %}
       <div class="container-fluid">
         <div class="row justify-content-center">
-          <a class="btn btn-danger py-3  col-12 rounded-0" type="button" href="{% url 'admin-course-reject-url' course.id %}" >Reject Course</a>
+          <a class="btn btn-danger py-3  col-12 rounded-0" data-remodal-target="reject-course" type="button" >Reject Course</a>
         </div>
       </div>
       <h3 class="p-3">Virtual Network</h3>

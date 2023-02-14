@@ -164,7 +164,7 @@ width: 45%!important;
 
 
 {% if course.get_virtual_network.is_instance_created %}
-<!-- rebuild Instance -->
+<!-- reset Instance -->
 <div class="remodal" data-remodal-id="modal">
   <button data-remodal-action="close" class="remodal-close"></button>
   <h1>Reset Instance</h1>
@@ -173,8 +173,21 @@ width: 45%!important;
   </p>
   <!-- Actions performed on reset isntance -->
   <button data-remodal-action="cancel" class="remodal-cancel">Cancel</button>
-  <button data-remodal-action="confirm" class="remodal-confirm" data-url="{% url 'admin-reboot-network-instance-url' course.get_virtual_network.id %}" >Reset</button>
+  <button data-remodal-action="confirm" class="remodal-confirm reset-instance" data-url="{% url 'admin-reboot-network-instance-url' course.get_virtual_network.id %}" >Reset</button>
 </div>
+
+<!-- Reject Course -->
+<div class="remodal" data-remodal-id="reject-course">
+  <button data-remodal-action="close" class="remodal-close"></button>
+  <h1>Reject Course Approval</h1>
+  <p>
+    Are you sure you want to reject approval for this course?
+  </p>
+  <!-- Actions performed on reset isntance -->
+  <button data-remodal-action="cancel" class="remodal-cancel">Cancel</button>
+  <button data-remodal-action="confirm" class="remodal-confirm" data-href="{% url 'admin-course-reject-url' course.id %}" >Reject</button>
+</div>
+
 {% endif %}
 
 {% endblock %}
@@ -447,7 +460,16 @@ $(function(){
 <!-- Reset Instance -->
 {% include 'master_app/admin/reset_instance_script.html' %}
 
-
+<!-- Course Rejection -->
+<script>
+  $(document).on('confirmation', '[data-remodal-id="reject-course"]', function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    // window.location.href = "";
+    // console.debug($('[data-remodal-id="reject-course"] .remodal-confirm').attr("data-href"));
+    window.location.href = $('[data-remodal-id="reject-course"] .remodal-confirm').attr("data-href");
+});
+</script>
 
 
 {% endblock %}
