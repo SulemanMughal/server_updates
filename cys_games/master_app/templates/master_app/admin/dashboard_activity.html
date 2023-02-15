@@ -5,10 +5,8 @@
 
     <!-- Filter -->
     <div class="filter">
-      <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-      <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-        <li><a class="dropdown-item" href="{% url 'admin-activity-logs-url' %}">All Logs</a></li>
-      </ul>
+      <a class="card-title " target="_blank" href="{% url 'admin-activity-logs-url' %}">See Details <i class="fas fa-external-link-alt pe-5 ps-2"></i></a>
+      
     </div>
     <!-- End : Filter -->
 
@@ -17,7 +15,7 @@
 
       <div class="activity">
 
-        {% for entry in entries|slice:":5" %}
+        {% for entry in entries|slice:":10" %}
         <div class="activity-item d-flex">
           <div class="activite-label text-dark">
             <p class="mb-0">

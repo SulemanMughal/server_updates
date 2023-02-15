@@ -121,16 +121,21 @@
               <!-- END : Active Courses Progress -->
             </div>
 
-            
+            <!-- Recent Activity -->
+            {% include 'master_app/admin/dashboard_activity.html' %}
+          <!-- End Recent Activity -->
 
 
             <!-- Courses Table -->
             {% include 'master_app/admin/dashboard_recent_courses.html' %}
             <!-- END : Courses Table -->
 
+
+            {% comment %}
             <!-- Students -->
             {% include 'master_app/admin/dashboard_students.html' %}
             <!-- END : Students -->
+            {% endcomment %}
 
           </div>
         </div><!-- End Left side columns -->
@@ -143,17 +148,27 @@
             {% include 'master_app/admin/dashboard_statistics.html' %}
           <!-- End Info -->
 
+<!-- Students -->
+{% include 'master_app/admin/dashboard_students.html' %}
+<!-- END : Students -->
+
           <!-- Operating System -->
           {% include 'master_app/admin/dashboard_os.html' %}
           <!-- End : Operating System -->
+
+          
 
           <!-- Courses By Status -->
           {% include 'master_app/admin/dashboard_course_by_status.html' %}          
           <!-- End : Courses By Status -->
 
+          
+
+          {% comment %}
           <!-- Recent Activity -->
             {% include 'master_app/admin/dashboard_activity.html' %}
           <!-- End Recent Activity -->
+          {% endcomment %}
 
           
 

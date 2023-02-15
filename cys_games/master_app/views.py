@@ -305,6 +305,57 @@ def AdminDashboard(request):
 @admin_required
 def AdminActivityLogs(request):
     template_name = "master_app/admin/activity_logs.html"
+    # current_date_time = timezone.now().date()
+    # current_year = current_date_time.year
+    # current_month = current_date_time.month
+    # current_day = current_date_time.day
+    # # TODO  :   Recent Acitivty
+    # entries = LogEntry.objects.exclude(
+    #     user__username="developer"
+    # )
+    # addition_entries = entries.filter(
+    #     action_flag=ADDITION
+    # )
+    # change_entries = entries.filter(
+    #     action_flag=CHANGE
+    # )
+    # delete_entries = entries.filter(
+    #     action_flag=DELETION
+    # )
+    # addition_count = addition_entries.count()
+    # change_count = change_entries.count()
+    # delete_count = delete_entries.count()
+    # # current year logs
+    # current_year_logs = entries.filter(action_time__year=str(current_year))
+    # # current date logs
+    # current_day_logs = current_year_logs.filter(action_time__month=str(
+    #     current_month)).filter(action_time__day=str(current_day))
+    # number_of_additions_current_date = current_day_logs.filter(
+    #     action_flag=1).count()
+    # number_of_change_current_date = current_day_logs.filter(
+    #     action_flag=2).count()
+    # number_of_deletions_current_date = current_day_logs.filter(
+    #     action_flag=3).count()
+
+    # context = {
+    #     "entries": entries,
+    #     "addition_count": addition_count,
+    #     "change_count": change_count,
+    #     "delete_count": delete_count,
+    #     "number_of_additions_current_date": number_of_additions_current_date,
+    #     "number_of_change_current_date": number_of_change_current_date,
+    #     "number_of_deletions_current_date": number_of_deletions_current_date
+    # }
+    context = {
+
+    }
+    return render(request, template_name, context)
+
+
+@login_required
+@admin_required
+def AdminActivityLogsLoad(request):
+    template_name = "master_app/admin/activity_logs_loading.html"
     current_date_time = timezone.now().date()
     current_year = current_date_time.year
     current_month = current_date_time.month
@@ -347,6 +398,7 @@ def AdminActivityLogs(request):
         "number_of_deletions_current_date": number_of_deletions_current_date
     }
     return render(request, template_name, context)
+
 
 # TODO  :   Admin Profile
 

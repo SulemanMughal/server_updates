@@ -1,231 +1,86 @@
 {%  extends 'base.html' %}
 {% load static actionFlagConverter  %}
 {% block title %} Activity Logs {% endblock %}
-
-
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'assets/vendor/grid/mermaid.min.css' %}"  />
 <style>
-
-/* Table hover styles */
-
 #wrapper tr:hover td {
   color: rgb(255, 38, 0);
   background: rgba(252, 164, 50, 0.692);
 }
-
-/* #wrapper tr:nth-child(1):contains("DELETION") {
-  color: rgb(255, 38, 255);
-  background: rgba(252, 164, 50, 0.692);
-} */
-/* 
-[data-column-id="activityLogs"]:contains("DELETION"){
-  color: rgb(255, 38, 0);
-  background: rgba(252, 164, 50, 0.692);
-} */
-
-/* #wrapper tr:hover td:last-child {
-  background: rgba(50, 252, 174, 0.692);
-} */
-
 </style>
+<script src="{% static 'assets/vendor/loading-overlay/loadingoverlay.min.js' %}" ></script>
+<script src="{% static 'assets/vendor/grid/gridjs.umd.js' %}" ></script>
 {% endblock %}
 {% block content %}
 
-<main id="main" class="main">
-    <section class="section dashboard">
-        <div class="container">
-            <div class="pagetitle">
-                <h1>Activity Logs</h1>
-                <nav>
-                  <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'master_index' %}">Home</a></li>
-                    <li class="breadcrumb-item "><a href="{% url 'admin-dasboard-url' %}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Activity Logs</li>
-                  </ol>
-                </nav>
-              </div><!-- End Page Title -->
-              <div class="row">
-                 <!-- Left side columns -->
-                <div class="col-lg-8">
-                    <div class="card bg-transparent p-0 m-0 border-0">
-                      <div id="wrapper" class="w-100 m-0 bg-transparent"></div>  
-                      {% comment %}
-                        <div class="card-body p-0 m-0 border-0">
-                          
-                          
-                            <h5 class="card-title">Recent Activity </h5>
-                            <div class="activity">
-                      
-                              {% for entry in entries %}
-                              <div class="activity-item d-flex">
-                                <div class="activite-label text-dark">
-                                  <p class="mb-0">
-                                    {{ entry.action_time|date:"d/m" }}
-                                  </p>
-                                  <p>
-                                    {{ entry.action_time|time:"H:i" }}
-                                  </p>
-                                </div>
-                                <i class='bi bi-circle-fill  activity-badge {% if entry.action_flag == 3 %} text-danger {% elif entry.action_flag == 2 %} text-success {% elif entry.action_flag == 1 %} text-info {% else %} text-warning {% endif %} align-self-start'></i>
-                                <div class="activity-content">
-                                  {{ entry.change_message }} 
-                                </div>
-                              </div>
-                              {% endfor %}
-                      
-                              
-                              <div class="activity-item d-flex">
-                                <div class="activite-label">56 min</div>
-                                <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
-                                <div class="activity-content">
-                                  Admin rejected "Drive-by attack"
-                                </div>
-                              </div><!-- End activity item-->
-                      
-                              <div class="activity-item d-flex">
-                                <div class="activite-label">2 hrs</div>
-                                <i class='bi bi-circle-fill activity-badge text-primary align-self-start'></i>
-                                <div class="activity-content">
-                                  Alexis submitted an answer to challenge #325
-                                </div>
-                              </div><!-- End activity item-->
-                      
-                              <div class="activity-item d-flex">
-                                <div class="activite-label">1 day</div>
-                                <i class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
-                                <div class="activity-content">
-                                  Raheem Lehner sent approval request of "phishing attacks" to admin
-                                </div>
-                              </div><!-- End activity item-->
-                      
-                              <div class="activity-item d-flex">
-                                <div class="activite-label">2 days</div>
-                                <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
-                                <div class="activity-content">
-                                  "Collier" registered as a new student.
-                                </div>
-                              </div><!-- End activity item-->
-                      
-                              <div class="activity-item d-flex">
-                                <div class="activite-label">4 weeks</div>
-                                <i class='bi bi-circle-fill activity-badge text-muted align-self-start'></i>
-                                <div class="activity-content">
-                                  Brandon Jacob created a new challenged #413 to course "linux exploitation"
-                                </div>
-                              </div><!-- End activity item-->
-                      
-                              
-                      
-                            </div>
-                          
-                          
-                      
-                          </div>
-                          {% endcomment %}
-                    </div>
-                </div>
-                <!-- Right side columns -->
-                <div class="col-lg-4">
-                  
-                  <!-- Today Logs -->
-                  {% include 'master_app/admin/today_logs_chart.html' %}
 
-                  <!-- Total Logs -->
-                  {% include 'master_app/admin/total_logs_chart.html' %}
+<main id="main" class="main"></main>
 
-                  
-                </div>
-              </div>
-        </div>
-    </section>
-</main> 
+
+
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'assets/vendor/grid/gridjs.umd.js' %}" ></script>
+
+
+
+<!-- load logs by ajax script -->
 <script>
-  var logs_data = [];
-</script>
-{% for entry in entries %}
-  <script>
-      logs_data.push(
-          [ "{{ entry.action_time }}",
-            "{{ entry.action_flag|actionFlagConverter }}",
-            "{{ entry.change_message }}",
-            
-          ]
-      )
-  </script>
-{% endfor %}
-<script type="text/javascript">
   $(function(){
-      new gridjs.Grid({
-columns: [ "Action Time" ,  "Activity Logs" , "Action"],
-data:  logs_data,
-style: { 
-  table: { 
-    'white-space': 'nowrap'
-  }
-},
-fixedHeader: true,
-sort: true,
-resizable: false,
-pagination: {
-  enabled: true,
-  limit: 15
-},
-search: {
-  enabled: true
-},
-className: {
-  table: 'shadow-lg'
-}
-}).render(document.getElementById("wrapper"));
-  
+    $.LoadingOverlay("show"); 
+    $.ajax({
+              url : "{% url 'admin-activity-logs--load-url' %}",
+              type  : "GET",
+              processData: false,
+              contentType: false,
+              success : function(response){
+              $("#main").html(
+                response
+              );
+              setTimeout(function(){
+                $.LoadingOverlay("hide");  
+              }, 2500);
+              },
+              error : function(response){
+                  $.LoadingOverlay("hide");  
+                  alert("There is an error while loading page. Please try again after some time");
+                
+              }
+            });
 
 
+
+            setInterval(() => {
+        $.LoadingOverlay("show");  
+          var fd = new FormData();
+          $.ajax({
+            url : "{% url 'admin-activity-logs--load-url' %}",
+            type  : "GET",
+            data: fd,
+            processData: false,
+            contentType: false,
+            success : function(response){
+                // alert("successfull")
+                $("#main").html(
+              ""
+            );
+            $("#main").html(
+              response
+            );
+            setInterval(function(){
+              $.LoadingOverlay("hide");  
+            }, 1500);
+            },
+            error : function(response){
+                $.LoadingOverlay("hide");  
+                alert("There is an error while loading page. Please try again after some time");
+            }
+          });
+        }, 30000);
   });
-//   $(function(){
-//     $("tr").each(function(){
-//     var $this = $(this);
-    
-//     if($($this.children()[1]).html() == "DELETION"){
-//       $this.children().css({
-//         "color": "rgb(255, 38, 0)",
-//         "background": "rgba(252, 164, 50, 0.692)",
-//       })
-//       $this.css({
-//         "color": "rgb(255, 38, 0)",
-//         "background": "rgba(252, 164, 50, 0.692)",
-//       })
-//     }
-//   });
-// });
-// $(document).on("click" , '* , .gridjs-th' ,  function(){
-//   $("tr").each(function(){
-//     var $this = $(this);
-    
-//     if($($this.children()[1]).html() == "DELETION"){
-//       $this.children().css({
-//         "color": "rgb(255, 38, 0)",
-//         "background": "rgba(252, 164, 50, 0.692)",
-//       })
-//       $this.css({
-//         "color": "rgb(255, 38, 0)",
-//         "background": "rgba(252, 164, 50, 0.692)",
-//       })
-//     }
-//   });
-// });
-    
-// console.debug(document.getElementsByClassName("gridjs-tbody"));
-// document.getElementsByClassName("gridjs-tbody").addEventListener("change", function(){
-//   alert("The Times They Are a-Changin'");
-// });
-// onDomChange(function(){ 
-//     alert("The Times They Are a-Changin'");
-// });
 
 </script>
+
+
 {% endblock %}
