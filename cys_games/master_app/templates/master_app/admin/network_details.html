@@ -95,7 +95,6 @@
 </div>
 <div class="row ">
     <div class="col-md-6 col-lg-4">
-       
         <div class="card  p-0">
             {% comment %}
             <div class="card-body p-3" style="background: rgba(255, 39, 39, 0.1) !important;">
@@ -158,11 +157,6 @@
                 </div>
             </div>
             
-            
-            {%  endcomment %}
-          
-            
-            
             <!-- Instance Size -->
             <div class="card-body p-3" >
               <div class="d-flex align-items-center">
@@ -176,43 +170,7 @@
               </div>
             </div>
             <!--  -->
-            <!-- Status  -->
-            <div class="card-body p-3" >
-              <div class="d-flex align-items-center">
-                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                    <i class="fas fa-info-circle"></i>
-                  </div>
-                  <div class="ps-3">
-                      <h6 class="mb-0 fw-bold">Instance Status</h6>
-                      <span class=" small pt-1 ">{{ virtual_network.status|capfirst }}</span>
-                  </div>
-              </div>
-            </div>
-            <!-- Min. RAM  -->
-            
-            <div class="card-body p-3" >
-              <div class="d-flex align-items-center">
-                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                    <i class="fa-solid fa-memory"></i>
-                  </div>
-                  <div class="ps-3">
-                      <h6 class="mb-0 fw-bold">Min. RAM</h6>
-                      <span class=" small pt-1 ">{{ virtual_network.min_ram }}</span>
-                  </div>
-              </div>
-            </div>
-            <!-- Min. Disk -->
-            <div class="card-body p-3" >
-              <div class="d-flex align-items-center">
-                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                    <i class="fa-solid fa-hard-drive"></i>
-                  </div>
-                  <div class="ps-3">
-                      <h6 class="mb-0 fw-bold">Min. Disk</h6>
-                      <span class=" small pt-1 ">{{ virtual_network.min_disk }}</span>
-                  </div>
-              </div>
-            </div>
+            {%  endcomment %}
         </div>
     </div>
     <div class="col-md-6 col-lg-8">

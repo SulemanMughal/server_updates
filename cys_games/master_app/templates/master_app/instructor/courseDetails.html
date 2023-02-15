@@ -32,13 +32,11 @@
 {% block content %}
 
 
-
-{% if not course.get_virtual_network %}
 <!-- Request Virtual Network Modal -->
+{% if not course.get_virtual_network %}
   {% include 'master_app/instructor/vn_modal.html' %}
-  <!-- End : Request Virtual Network Modal -->
 {%  endif %}
-
+<!-- End : Request Virtual Network Modal -->
 
 
 
@@ -229,22 +227,18 @@ var imgref_dict={
                   else{
                     $("#id_size").val(filesize(  size[$('#id_scenarios').val()], {base: 2, standard: "jedec"}) );
                   }
-                  // 
-                  $("#id_min_ram").val(filesize( 4*1024*1024*1024, {base : 2, standard : "jedec"}) );
-                  $("#id_min_disk").val(filesize( 40*1024*1024*1024, {base : 2, standard : "jedec"})  );
-                  
-                  // if(String(ram_dict[$('#id_scenarios').val()]) == "undefined"){
-                  //   $("#id_min_ram").val(filesize( 0, {base : 2, standard : "jedec"}) );
-                  // }
-                  // else{
-                  //   $("#id_min_ram").val(filesize( ram_dict[$('#id_scenarios').val()] *1024*1024, {base : 2, standard : "jedec"}) );
-                  // }
-                  // if(String(disk_dict[$('#id_scenarios').val()]) == "undefined"){
-                  //   $("#id_min_disk").val(filesize( 0, {base : 2, standard : "jedec"})  );
-                  // }
-                  // else{
-                  //   $("#id_min_disk").val(filesize( disk_dict[$('#id_scenarios').val()] *1024*1024*1024, {base : 2, standard : "jedec"})  );
-                  // }
+                  if(String(ram_dict[$('#id_scenarios').val()]) == "undefined"){
+                    $("#id_min_ram").val(filesize( 0, {base : 2, standard : "jedec"}) );
+                  }
+                  else{
+                    $("#id_min_ram").val(filesize( ram_dict[$('#id_scenarios').val()] *1024*1024, {base : 2, standard : "jedec"}) );
+                  }
+                  if(String(disk_dict[$('#id_scenarios').val()]) == "undefined"){
+                    $("#id_min_disk").val(filesize( 0, {base : 2, standard : "jedec"})  );
+                  }
+                  else{
+                    $("#id_min_disk").val(filesize( disk_dict[$('#id_scenarios').val()] *1024*1024*1024, {base : 2, standard : "jedec"})  );
+                  }
                   $("#id_status").val("" + status_dict[$('#id_scenarios').val()]);
                   $("#id_state").val("" + state_dict[$('#id_scenarios').val()]);
                   
@@ -359,10 +353,8 @@ var imgref_dict={
     $("#modalEditor .ql-editor").html("" + description[this.value]);
     $("#id_size").val(filesize(  size[this.value], {base: 2, standard: "jedec"})   );
     $("#id_state").val("" + state_dict[this.value]);
-    // $("#id_min_ram").val(filesize( ram_dict[this.value] *1024*1024, {base : 2, standard : "jedec"}) );
-    // $("#id_min_disk").val(filesize( disk_dict[this.value] *1024*1024*1024, {base : 2, standard : "jedec"})  );
-    $("#id_min_ram").val(filesize( 4*1024*1024*1024, {base : 2, standard : "jedec"}) );
-    $("#id_min_disk").val(filesize( 40*1024*1024*1024, {base : 2, standard : "jedec"})  );
+    $("#id_min_ram").val(filesize( ram_dict[this.value] *1024*1024, {base : 2, standard : "jedec"}) );
+    $("#id_min_disk").val(filesize( disk_dict[this.value] *1024*1024*1024, {base : 2, standard : "jedec"})  );
     $("#id_imageRef").val("" + imgref_dict[this.value]);
   });
 </script>

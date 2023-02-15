@@ -10,7 +10,6 @@ User = get_user_model()
 # Remove Group Model from admin. We're not using it.
 admin.site.unregister(Group)
 
-
 class UserAdmin(BaseUserAdmin):
     # The forms to add and change user instances
     form = UserAdminChangeForm
@@ -19,28 +18,27 @@ class UserAdmin(BaseUserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ['email', 'is_superuser',
-                    'is_student', 'is_instructor', 'is_admin']
+    list_display = ['email', 'is_superuser']
     list_filter = ['is_superuser']
     fieldsets = (
-        (None, {'fields': ('username', 'email', 'password')}),
+        (None, {'fields': ('username','email', 'password')}),
         ('Personal info', {'fields': (
             'vpn_file',
         )}),
-        ('Permissions', {'fields': ('groups', 'permissions',
-         'is_superuser', 'is_student', 'is_instructor', 'is_admin')}),
+        ('Permissions', {'fields': ('groups', 'permissions',  'is_superuser', 'is_student' , 'is_instructor', 'is_admin')}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'email', 'password', 'password2')}
-         ),
+            'fields': ('username','email', 'password', 'password2')}
+        ),
     )
     search_fields = ['email']
     ordering = ['email']
     filter_horizontal = ()
+
 
 
 admin.site.register(User, UserAdmin)

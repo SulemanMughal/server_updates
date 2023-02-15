@@ -7,15 +7,11 @@
     var flag_arr = [];
     var data_arr = [];
     var series_data_arr = [];
+
 </script>
 
 <div class="col-12">
     <div class="card pb-3">
-       <!-- Filter -->
-      <div class="filter">
-        <a class="card-title " target="_blank" href="{%  url 'admin-activity-live-courses-url' %}">See Details <i class="fas fa-external-link-alt pe-5 ps-2"></i></a>
-      </div>
-      <!-- End : Filter -->
       <div class="card-body">
         <h5 class="card-title">Live Courses</h5>
 
@@ -35,6 +31,7 @@
                                 flag_arr=[];
                                 series_data_arr = [];
                             });
+                            
                         </script>
 
                         {% for student in course.assignedstudents_set.all %}
@@ -93,7 +90,7 @@
                           {% endfor %}
                         {% endcomment %}
                         <div class="row">
-                        <div class="col-7">
+                        <div class="col-6">
                             <div class="card shadow-none bg-transparent mb-0 pb-0">
                             <div class="card-body pb-0">
 
@@ -112,7 +109,7 @@
                 }],
             chart: {
                 type: 'bar',
-                height: "auto"
+                height: 200
             },
 
             plotOptions: {
@@ -162,10 +159,10 @@
             </div>
                             </div>
                         </div>
-                        <!-- Circle Live Chart -->
-                        <div class="col-5 ">
-                          <div class="card shadow-none bg-transparent mb-0 pb-0">
-                          <div class="card-body pb-0">
+                        <div class="col-6 ">
+                            <div class="card shadow-none bg-transparent mb-0 pb-0">
+                            <div class="card-body pb-0">
+                                
 
 
 <!-- Bar Chart -->
@@ -176,73 +173,72 @@
 <!-- ---------- -->
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    // console.debug(flag_arr);
-    new ApexCharts(document.querySelector("#barChart_{{ forloop.counter }}"), {
-      series: series_data_arr,
-      chart: {
-        type: 'bar',
-        height: 250
-      },
-      plotOptions: {
-        
-        bar: {
-          borderRadius: 2,
-          horizontal: false,
-          width : 2
-        }
-      },
-      dataLabels: {
-        enabled: false
-      },
-      legend: {
+    document.addEventListener("DOMContentLoaded", () => {
+      // console.debug(flag_arr);
+      new ApexCharts(document.querySelector("#barChart_{{ forloop.counter }}"), {
+        series: series_data_arr,
+        chart: {
+          type: 'bar',
+          height: 250
+
+        },
+        plotOptions: {
+          
+          bar: {
+            borderRadius: 2,
+            horizontal: false,
+            width : 2
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        legend: {
 position: 'bottom',
 },
-      xaxis: {
-        categories: flag_arr,
-      }
-    }).render();
-  });
-</script>
-                 
-                
+        xaxis: {
+          categories: flag_arr,
+        }
+      }).render();
+    });
+  </script>
+
 <!-- ---------------- -->
 
 
 
-                              {% comment %}
-              
-                              <!-- Pie Chart -->
-                              <div id="pieChart_{{ forloop.counter }}"></div>
-              
-                              <script>
-                              document.addEventListener("DOMContentLoaded", () => {
-                                  new ApexCharts(document.querySelector("#pieChart_{{ forloop.counter }}"), {
-                                  series: points,
-                                  chart: {
-                                      height: 350,
-                                      type: 'pie',
-                                      toolbar: {
-                                      show: true
-                                      },
-                                      
-                                      
-                                  },
-                                  legend: {
-          position: 'bottom',
-          },
-                                  labels: categories
-                                  }).render();
-                              });
-                              </script>
-                              <!-- End Pie Chart -->
+                                {% comment %}
+                
+                                <!-- Pie Chart -->
+                                <div id="pieChart_{{ forloop.counter }}"></div>
+                
+                                <script>
+                                document.addEventListener("DOMContentLoaded", () => {
+                                    new ApexCharts(document.querySelector("#pieChart_{{ forloop.counter }}"), {
+                                    series: points,
+                                    chart: {
+                                        height: 350,
+                                        type: 'pie',
+                                        toolbar: {
+                                        show: true
+                                        },
+                                        
+                                        
+                                    },
+                                    legend: {
+            position: 'bottom',
+            },
+                                    labels: categories
+                                    }).render();
+                                });
+                                </script>
+                                <!-- End Pie Chart -->
 
-                              {% endcomment %}
-              
-                          </div>
-                          </div>
-                      </div>
-                        <!-- ! Circle Live Chart -->
+                                {% endcomment %}
+                
+                            </div>
+                            </div>
+                        </div>
                         </div>
                         
                     </div>
@@ -256,7 +252,7 @@ position: 'bottom',
           
 
 
-        </div> 
+          </div> 
         
           
 
@@ -266,3 +262,17 @@ position: 'bottom',
     </div>
   </div>
 
+  {% comment %}
+
+
+
+
+  
+
+
+<script>
+    
+    
+</script>
+
+  {% endcomment %}
