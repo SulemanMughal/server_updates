@@ -14,6 +14,9 @@ def flag_sub_points(flag_id, *args, **kwargs):
         #     course=netFlag.course,
         #     student__id=user_id
         # )
+        print(NetworkFlagSubmission.objects.get(
+            id=flag_id
+        ).obtainedPoints)
         return NetworkFlagSubmission.objects.get(
             id=flag_id
         ).obtainedPoints

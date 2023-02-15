@@ -352,6 +352,8 @@ def AdminActivityLogs(request):
     return render(request, template_name, context)
 
 
+# TODO  :   Load Logs through AJAX
+
 @login_required
 @admin_required
 def AdminActivityLogsLoad(request):
@@ -400,9 +402,36 @@ def AdminActivityLogsLoad(request):
     return render(request, template_name, context)
 
 
+# TODO  :   Live Courses Visualization
+@login_required
+@admin_required
+def AdminLiveCourses(request):
+    template_name = "master_app/admin/live_courses_details.html"
+    context = {
+    }
+    return render(request, template_name, context)
+
+
+# TODO  :   Load Live Courses Visualization (AJAX)
+@login_required
+@admin_required
+def AdminLiveCoursesAJAX(request):
+    template_name = "master_app/admin/live_courses_ajax_details.html"
+    # TODO  :   Retrieve All Courses
+    courses = Course.objects.all().order_by("-created_timestamp")
+
+    # TODO  :   Retrieve All Local Virutal Networks
+    networks = VirtualNetwork.objects.all()
+
+    print(courses, networks)
+    context = {
+        "courses": courses,
+        "networks": networks
+    }
+    return render(request, template_name, context)
+
+
 # TODO  :   Admin Profile
-
-
 @login_required
 @admin_required
 def AdminProfile(request):

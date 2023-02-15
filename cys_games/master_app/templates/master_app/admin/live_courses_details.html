@@ -1,0 +1,82 @@
+{%  extends 'base.html' %}
+{% load static   %}
+{% block title %} Live Courses {% endblock %}
+{% block extra_css %}
+<script src="{% static 'assets/vendor/loading-overlay/loadingoverlay.min.js' %}" ></script>
+{% endblock %}
+{% block content %}
+<main id="main" class="main">
+    
+</main>
+{% endblock %}
+{% block extra_js %}
+
+<!-- load logs by ajax script -->
+<script>
+    $(function(){
+      $.LoadingOverlay("show"); 
+      $.ajax({
+                url : "{% url 'admin-activity-live-courses-load-url' %}",
+                type  : "GET",
+                processData: false,
+                contentType: false,
+                success : function(response){
+                $("#main").html(
+                  response
+                );
+                setTimeout(function(){
+                  $.LoadingOverlay("hide");  
+                }, 2500);
+                },
+                error : function(response){
+                    $.LoadingOverlay("hide");  
+                    alert("There is an error while loading page. Please try again after some time");
+                  
+                }
+              });
+  
+  
+setInterval(() => {
+          $.LoadingOverlay("show");  
+            // var fd = new FormData();
+            $.ajax({
+              url : "{% url 'admin-activity-live-courses-load-url' %}",
+              type  : "GET",
+            //   data: fd,
+              processData: false,
+              contentType: false,
+              success : function(response){
+                  // alert("successfull")
+                  $("#main").html(
+                ""
+              );
+              $("#main").html(
+                response
+              );
+              setInterval(function(){
+                $.LoadingOverlay("hide");  
+              }, 1500);
+              },
+              error : function(response){
+                  $.LoadingOverlay("hide");  
+                  alert("There is an error while loading page. Please try again after some time");
+              }
+            });
+          }, 30000);
+  
+    });
+  
+  </script>
+
+<script>
+    $(function(){
+  
+    //   new PureCounter();
+      window.dispatchEvent(new Event('resize'));
+    
+    });
+  </script>
+  
+{% endblock %}
+
+<script>

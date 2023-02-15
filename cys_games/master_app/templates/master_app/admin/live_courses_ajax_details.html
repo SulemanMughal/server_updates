@@ -1,0 +1,128 @@
+{% load student_course_points flag_sub_points %}
+<script>
+    var points = [];
+    var categories = [];
+    var flag_arr = [];
+    var data_arr = [];
+    var series_data_arr = [];
+</script>
+
+<section class="section dashboard">
+    <div class="container">
+        <div class="pagetitle">
+            <h1>Dashboard</h1>
+            <nav>
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'master_index' %}">Home</a></li>
+                <li class="breadcrumb-item "><a href="{% url 'admin-dasboard-url' %}">Dashboard</a></li>
+                <li class="breadcrumb-item active">Courses</li>
+              </ol>
+            </nav>
+          </div><!-- End Page Title -->
+          <!-- All Live Course -->
+          <div class="row justify-content-center">
+          {% for course in courses %}
+            {% if course.is_course_approved and course.course_status == 2  %}
+                <script>
+                    points = [];
+                    categories = [];
+                    flag_arr=[];
+                    series_data_arr = [];
+                </script>
+                {% for student in course.assignedstudents_set.all %}
+                    <script>
+                        data_arr = [];
+                    </script>
+                    {% for flag in student.networkflagsubmission_set.all %}
+                        <script>
+                            data_arr.push(Number("{% flag_sub_points flag.id %}"));
+                        </script>
+                    {% endfor %}
+                    <script>
+                        points.push(Number("{% student_course_points student.id %}"));
+                        categories.push("{{ student.student.username }}");
+                        series_data_arr.push(
+                        {
+                            name: '{{ student.student.username }}',
+                            data: data_arr
+                        }
+                        )
+                    </script>
+                {% endfor %}
+                {% with ''|center:course.number_of_flags as range %}
+                    {% for _ in range %}
+                    <script>
+                        flag_arr.push("flag_{{ forloop.counter }}");
+                    </script>
+                    {% endfor %}
+                {% endwith %}
+                
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-body p-4">
+                                <h5 class="card-tile"><a href="{% url 'admin-courses-details-url' course.id %}" target="_blank">{{ course }} <i class="fas fa-external-link-alt pe-5 ps-2"></i></a></h5>
+                                <div id="coursesProgress_{{ forloop.counter }}"></div>
+                            </div>
+
+                        </div>
+                        <script>
+                             new ApexCharts(document.querySelector("#coursesProgress_{{ forloop.counter }}"), {
+            series: [{
+                    name: 'Points',
+                    data: points
+                }],
+            chart: {
+                type: 'bar',
+                height: 'auto'
+                
+            },
+
+            plotOptions: {
+            bar: {
+                horizontal: true,
+                columnWidth: '100%',
+                endingShape: 'rounded'
+            },
+            },
+            title: {
+            // text: `{{ course.name }}`
+            },
+            dataLabels: {
+            enabled: false
+            },
+            stroke: {
+            show: true,
+            width: 2,
+            colors: ['transparent']
+            },
+            xaxis: {
+            categories: categories,
+            },
+            yaxis: {
+            // title: {
+            //   text: '$ (thousands)'
+            // }
+            },
+            fill: {
+            opacity: 1
+            },
+            tooltip: {
+            y: {
+                formatter: function(val) {
+                // return "$ " + val + " thousands"
+                return val
+                }
+            }
+            }
+            }).render();
+
+
+                        </script>
+                    </div>
+                
+            {% endif %}
+          {% endfor %}
+        </div>
+    </div>
+</section>
+

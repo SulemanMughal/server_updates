@@ -34,9 +34,18 @@ urlpatterns = [
     path("admin/activity-logs", views.AdminActivityLogs,
          name="admin-activity-logs-url"),
 
+
     # ?  Admin : Recent Activity Monitoring AJAX
     path("admin/activity-logs/load", views.AdminActivityLogsLoad,
          name="admin-activity-logs--load-url"),
+
+    # ?  Admin : Live Course Details
+    path("admin/live-courses", views.AdminLiveCourses,
+         name="admin-activity-live-courses-url"),
+
+    # ?  Admin : Live Course Details (AJAX)
+    path("admin/live-courses/load", views.AdminLiveCoursesAJAX,
+         name="admin-activity-live-courses-load-url"),
 
     # ? Admin Profile
     path("admin/profile", views.AdminProfile, name="admin-profile-url"),
